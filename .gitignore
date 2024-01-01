@@ -1,0 +1,19 @@
+.gradle
+build/
+out/
+
+*.iws
+*.iml
+*.ipr
+*.db
+*.p12
+
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/libraries/
+.idea/sonarlint/
+!.idea/compiler.xml
+
+### Mac OS ###
+.DS_Store
+HELP.MD
