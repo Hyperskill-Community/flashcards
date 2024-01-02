@@ -7,9 +7,8 @@ plugins {
 
 node {
     version = libs.versions.node.js
-    npmCommand = "/opt/homebrew/bin/npm"
     nodeProjectDir = projectDir
-    download = false
+    download = true
 }
 
 configurations {

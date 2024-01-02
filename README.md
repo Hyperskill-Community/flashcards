@@ -31,3 +31,6 @@ Sources for backend and frontend gradle modules with tests and configurations (t
 ## Progress
 
 01.01.24 Project started. Just setup of build and repo with gradle.
+
+02.01.24 Backend now with User management into Collection in cards databas of MongoDB. Change frontend build to download
+node 21.5 into local .gradle folder - to avoid relying on node installation on executable location.
