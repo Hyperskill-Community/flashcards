@@ -1,0 +1,59 @@
+main {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    font-family: "Open Sans", sans-serif;
+    background: hsl(210, 36%, 96%);
+    color: hsl(209, 61%, 16%);
+    line-height: 1.25;
+    font-size: 1.25rem;
+}
+header {
+    display: grid;
+    place-items: center;
+}
+.ui-width {
+    width: 80vw;
+}
+div {
+    margin-bottom: 10px;
+}
+label {
+    font: 2rem 'Fira Sans', sans-serif;
+    display: inline-block;
+    width: 40vw;
+    text-align: right;
+    padding-right: 1em;
+}
+input {
+    font: 1.5rem 'Fira Sans', sans-serif;
+}
+#div_button {
+    display: flex;
+    justify-content: center;
+}
+#register {
+    margin: 0 auto;
+    border: 0;
+    line-height: 2.5;
+    padding: 0 20px;
+    font-size: 1rem;
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px 1px black;
+    border-radius: 10px;
+    background-color: rgba(220, 0, 0, 1);
+    background-image: linear-gradient(to top left,
+        rgba(0, 0, 0, .2),
+        rgba(0, 0, 0, .2) 30%,
+        rgba(0, 0, 0, 0));
+    box-shadow: inset 2px 2px 3px rgba(255, 255, 255, .6),
+    inset -2px -2px 3px rgba(0, 0, 0, .6);
+}
+#register:hover {
+    background-color: rgba(255, 0, 0, 1);
+}
+#register:active {
+    box-shadow: inset -2px -2px 3px rgba(255, 255, 255, .6),
+    inset 2px 2px 3px rgba(0, 0, 0, .6);
+}
