@@ -1,8 +1,7 @@
 plugins {
     application
-    id("org.springframework.boot") version libs.versions.spring.boot
-    id("io.spring.dependency-management") version libs.versions.spring.dependency.management
-    id("org.graalvm.buildtools.native") version libs.versions.graalvm.buildtools
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
 }
 
 group = "org.hyperskill.community"

@@ -2,7 +2,7 @@ import com.github.gradle.node.npm.task.NpmTask
 
 plugins {
     base
-    id("com.github.node-gradle.node") version libs.versions.node.gradle
+    alias(libs.plugins.node.gradle)
 }
 
 node {
