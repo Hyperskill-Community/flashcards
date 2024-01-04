@@ -1,5 +1,7 @@
 package org.hyperskill.community.flashcards.registration;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,8 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,8 +22,10 @@ public class RegisterController {
 
     /**
      * register endpoint - unauthenticated (!).
+     * 
      * @param userDto dto containing provided user email (=username) and raw password
-     * @return empty response 200(OK) on successful register, 400(BadRequest) if dto validation fails or user exists
+     * @return empty response 200(OK) on successful register, 400(BadRequest) if dto validation
+     *         fails or user exists
      */
     @PostMapping
     public ResponseEntity<Void> registerUser(@Valid @RequestBody UserDto userDto) {

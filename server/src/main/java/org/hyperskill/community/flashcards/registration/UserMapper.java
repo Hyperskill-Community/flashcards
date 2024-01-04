@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-
 /**
  * mapper to map received UserDto on register to a User entity, hereby encoding the raw password.
  */
@@ -19,6 +18,6 @@ public class UserMapper {
      */
     public User toDocument(UserDto dto) {
         return new User().setUsername(dto.email())
-                .setPassword(passwordEncoder.encode(dto.password()));
+            .setPassword(passwordEncoder.encode(dto.password()));
     }
 }

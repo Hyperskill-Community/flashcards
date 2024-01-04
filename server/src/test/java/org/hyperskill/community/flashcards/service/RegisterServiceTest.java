@@ -1,20 +1,20 @@
 package org.hyperskill.community.flashcards.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.hyperskill.community.flashcards.registration.RegisterService;
 import org.hyperskill.community.flashcards.registration.User;
 import org.hyperskill.community.flashcards.registration.UserAlreadyExistsException;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.data.mongodb.core.MongoTemplate;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @MockitoSettings
 class RegisterServiceTest {

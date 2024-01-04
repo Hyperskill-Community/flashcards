@@ -17,7 +17,9 @@ public class TestFlashcardsApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.from(FlashcardsApplication::main).with(TestFlashcardsApplication.class).run(args);
+        SpringApplication.from(FlashcardsApplication::main)
+            .with(TestFlashcardsApplication.class)
+            .run(args);
     }
 
 }

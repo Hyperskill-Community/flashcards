@@ -9,5 +9,4 @@ import jakarta.validation.constraints.Size;
  * immutable web-layer DTO as carrier for user register requests.
  */
 public record UserDto(@NotNull @Pattern(regexp = "\\w+(\\.\\w+){0,2}@\\w+\\.\\w+") String email,
-                      @NotBlank @Size(min = 8) String password
-) { }
+        @NotBlank @Size(min = 8) String password) {}

@@ -1,9 +1,5 @@
 package org.hyperskill.community.flashcards.web;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.RecordComponent;
@@ -11,13 +7,18 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.function.Supplier;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+
 public class JpaUnitTestValidator<T> {
 
     private final Validator validator;
     private final Supplier<? extends T> getValidFunction;
     private Constructor<? extends T> recordConstructor;
 
-    public JpaUnitTestValidator(Supplier<? extends T> getValidObjectFunction, Class<? extends T> dtoClass) {
+    public JpaUnitTestValidator(Supplier<? extends T> getValidObjectFunction,
+            Class<? extends T> dtoClass) {
         try (var validatorFactory = Validation.buildDefaultValidatorFactory()) {
             this.validator = validatorFactory.getValidator();
         }
@@ -28,8 +29,8 @@ public class JpaUnitTestValidator<T> {
     private void initRecordConstructorIfNeeded(Class<? extends T> dtoClass) {
         if (dtoClass.isRecord()) {
             Class<?>[] componentTypes = Arrays.stream(dtoClass.getRecordComponents())
-                    .map(RecordComponent::getType)
-                    .toArray(Class<?>[]::new);
+                .map(RecordComponent::getType)
+                .toArray(Class<?>[]::new);
             try {
                 recordConstructor = dtoClass.getDeclaredConstructor(componentTypes);
             } catch (NoSuchMethodException e) {
@@ -38,8 +39,8 @@ public class JpaUnitTestValidator<T> {
         }
     }
 
-    public Set<ConstraintViolation<T>> getConstraintViolationsOnUpdate(String fieldToUpdate, Object newValue)
-            throws Exception {
+    public Set<ConstraintViolation<T>> getConstraintViolationsOnUpdate(String fieldToUpdate,
+            Object newValue) throws Exception {
         T object = modifyDto(getValidFunction.get(), fieldToUpdate, newValue);
         return validator.validate(object);
     }
@@ -63,8 +64,8 @@ public class JpaUnitTestValidator<T> {
         var recordComponents = dto.getClass().getRecordComponents();
         Object[] modifiedValues = new Object[recordComponents.length];
         for (int i = 0; i < recordComponents.length; i++) {
-            modifiedValues[i] = recordComponents[i].getName().equals(fieldName)
-                    ? value : recordComponents[i].getAccessor().invoke(dto);
+            modifiedValues[i] = recordComponents[i].getName().equals(fieldName) ? value
+                    : recordComponents[i].getAccessor().invoke(dto);
         }
         return recordConstructor.newInstance(modifiedValues);
     }
