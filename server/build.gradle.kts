@@ -46,3 +46,16 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+spotless {
+    java {
+        // Excludes build folder since it contains generated java classes.
+        targetExclude("build/**")
+        endWithNewline()
+        // \\# is prefix for static imports
+        // empty string covers all imports that aren't explicitly specified
+        importOrder("\\#", "java", "javax", "org.hyperskill.community", "")
+        removeUnusedImports()
+        eclipse("4.26").configFile("src/main/resources/formatting.xml")
+    }
+}
