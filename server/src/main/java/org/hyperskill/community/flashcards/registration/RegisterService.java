@@ -13,8 +13,7 @@ public class RegisterService {
     private final MongoTemplate mongoTemplate;
 
     /**
-     * method receives and saves the User entity with data mapped from the UserDto (name and encrypted
-     * password),
+     * method receives and saves the User entity with data mapped from the UserDto (name and encrypted password),
      * 
      * @param user the prepared User entity to save to the database.
      * @throws UserAlreadyExistsException if user already exists.

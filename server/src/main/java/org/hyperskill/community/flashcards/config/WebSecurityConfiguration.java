@@ -20,9 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * new Spring security 6.0 style provision of SecurityFilterChain bean with the security
- * configuration, as well as PasswordProvider and AuthenticationManager that makes use of our
- * UserDetails persistence.
+ * new Spring security 6.0 style provision of SecurityFilterChain bean with the security configuration, as well as PasswordProvider and
+ * AuthenticationManager that makes use of our UserDetails persistence.
  */
 @Configuration
 @EnableWebSecurity

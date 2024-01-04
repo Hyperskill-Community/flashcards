@@ -24,8 +24,7 @@ public class RegisterController {
      * register endpoint - unauthenticated (!).
      * 
      * @param userDto dto containing provided user email (=username) and raw password
-     * @return empty response 200(OK) on successful register, 400(BadRequest) if dto validation fails or
-     *         user exists
+     * @return empty response 200(OK) on successful register, 400(BadRequest) if dto validation fails or user exists
      */
     @PostMapping
     public ResponseEntity<Void> registerUser(@Valid @RequestBody UserDto userDto) {

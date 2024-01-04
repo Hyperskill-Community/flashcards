@@ -13,8 +13,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * entity class for registered users, that implements UserDetails and whose instances thus serve the
- * DaoAuthenticationProvider (AuthenticationManager).
+ * entity class for registered users, that implements UserDetails and whose instances thus serve the DaoAuthenticationProvider
+ * (AuthenticationManager).
  */
 @Getter
 @Setter
