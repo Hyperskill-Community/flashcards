@@ -56,6 +56,7 @@ spotless {
         // empty string covers all imports that aren't explicitly specified
         importOrder("\\#", "java", "javax", "org.hyperskill.community", "")
         removeUnusedImports()
-        eclipse("4.26").configFile("src/main/resources/formatting.xml")
+        // config docs: https://www.ibm.com/docs/en/dmrt/9.5?topic=r-api-reference-1
+        eclipse().configFile("src/main/resources/formatting.xml")
     }
 }

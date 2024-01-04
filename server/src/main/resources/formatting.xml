@@ -23,7 +23,6 @@
         <setting id="org.eclipse.jdt.core.formatter.blank_lines_after_package" value="1"/>
         <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_new_chunk" value="1"/>
         <setting id="org.eclipse.jdt.core.formatter.blank_lines_before_method" value="1"/>
-        <setting id="org.eclipse.jdt.core.formatter.blank_lines_between_import_groups" value="0"/>
         <setting id="org.eclipse.jdt.core.formatter.blank_lines_between_type_declarations" value="2"/>
         <setting id="org.eclipse.jdt.core.formatter.blank_lines_after_imports" value="1"/>
 
