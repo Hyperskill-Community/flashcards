@@ -3,8 +3,10 @@ spring-boot = "3.2.0"
 spring-dependency-management = "1.1.4"
 node-gradle = "7.0.1"
 node-js = "21.5.0"
+spotless = "6.23.3"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
 node-gradle = { id = "com.github.node-gradle.node", version.ref = "node-gradle" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

@@ -2,6 +2,7 @@ plugins {
     application
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.spotless)
 }
 
 group = "org.hyperskill.community"
