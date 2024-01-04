@@ -35,8 +35,7 @@ class RegisterServerSecurityIT {
 
     @Container
     @ServiceConnection
-    static MongoDBContainer mongoDbContainer =
-            new MongoDBContainer(DockerImageName.parse("mongo:latest"));
+    static MongoDBContainer mongoDbContainer = new MongoDBContainer(DockerImageName.parse("mongo:latest"));
 
     @Autowired
     ObjectMapper objectMapper;
@@ -55,8 +54,7 @@ class RegisterServerSecurityIT {
     void registerUnauthenticatedValidJson_AddsUser() throws Exception {
         mockMvc
             .perform(post("/api/register").contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper
-                    .writeValueAsString(new UserDto("hans.wurst@xyz.de", "12345678"))))
+                .content(objectMapper.writeValueAsString(new UserDto("hans.wurst@xyz.de", "12345678"))))
             .andExpect(status().isOk());
     }
 
@@ -68,15 +66,13 @@ class RegisterServerSecurityIT {
             .andExpect(status().isOk());
         mockMvc.perform(post("/api/register") // and again
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(new UserDto("test@xyz.de", "12345678"))))
-            .andExpect(status().isBadRequest());
+            .content(objectMapper.writeValueAsString(new UserDto("test@xyz.de", "12345678")))).andExpect(status().isBadRequest());
     }
 
     @Test
     void registerUnauthenticatedInvalidDto_Gives400() throws Exception {
         mockMvc.perform(post("/api/register") // and again
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(new UserDto("wrong", "1234"))))
-            .andExpect(status().isBadRequest());
+            .content(objectMapper.writeValueAsString(new UserDto("wrong", "1234")))).andExpect(status().isBadRequest());
     }
 }

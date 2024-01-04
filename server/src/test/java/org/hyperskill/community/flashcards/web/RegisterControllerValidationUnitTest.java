@@ -13,8 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class RegisterControllerValidationUnitTest {
 
-    JpaUnitTestValidator<UserDto> validator =
-            new JpaUnitTestValidator<>(this::getValidUser, UserDto.class);
+    JpaUnitTestValidator<UserDto> validator = new JpaUnitTestValidator<>(this::getValidUser, UserDto.class);
 
     UserDto getValidUser() {
         return new UserDto("hans.wurst@google.com", "long_password");
@@ -28,8 +27,7 @@ class RegisterControllerValidationUnitTest {
 
     static Stream<Arguments> whenValidUserDto_NoError() {
         return Stream.of(Arguments.of("email", "a@b.c"), Arguments.of("email", "hans@lmu.de"),
-                Arguments.of("email", "hans_josef.schmitz.ext4@main_google.com"),
-                Arguments.of("password", "12345678"),
+                Arguments.of("email", "hans_josef.schmitz.ext4@main_google.com"), Arguments.of("password", "12345678"),
                 Arguments.of("password", "12345678_very_long_one!\"§$%&/()=?.,-,),"));
     }
 
@@ -40,17 +38,12 @@ class RegisterControllerValidationUnitTest {
     }
 
     static Stream<Arguments> whenInvalidUserDto_ValidationError() {
-        return Stream.of(Arguments.of("email", " "), Arguments.of("email", ""),
-                Arguments.of("email", null), Arguments.of("email", "a@b"),
-                Arguments.of("email", "hans@lmu."),
-                Arguments.of("email", "hans.josef.schmitz.ext4@main_google.com"),
-                Arguments.of("email", "hans-josef@main_google.com"),
-                Arguments.of("email", ".ext4@main_google.com"),
-                Arguments.of("email", "hans.josef@.com"),
-                Arguments.of("email", "hans..josef@google.com"),
-                Arguments.of("email", "hansjosefgoogle.com"), Arguments.of("email", "hansjosef@dd"),
-                Arguments.of("password", "1234567"), Arguments.of("password", "        "),
-                Arguments.of("password", "  "), Arguments.of("password", ""),
+        return Stream.of(Arguments.of("email", " "), Arguments.of("email", ""), Arguments.of("email", null), Arguments.of("email", "a@b"),
+                Arguments.of("email", "hans@lmu."), Arguments.of("email", "hans.josef.schmitz.ext4@main_google.com"),
+                Arguments.of("email", "hans-josef@main_google.com"), Arguments.of("email", ".ext4@main_google.com"),
+                Arguments.of("email", "hans.josef@.com"), Arguments.of("email", "hans..josef@google.com"),
+                Arguments.of("email", "hansjosefgoogle.com"), Arguments.of("email", "hansjosef@dd"), Arguments.of("password", "1234567"),
+                Arguments.of("password", "        "), Arguments.of("password", "  "), Arguments.of("password", ""),
                 Arguments.of("password", null));
     }
 }

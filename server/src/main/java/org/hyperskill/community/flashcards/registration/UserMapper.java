@@ -17,7 +17,6 @@ public class UserMapper {
      * map the Dto to the entity and encode the password hereby.
      */
     public User toDocument(UserDto dto) {
-        return new User().setUsername(dto.email())
-            .setPassword(passwordEncoder.encode(dto.password()));
+        return new User().setUsername(dto.email()).setPassword(passwordEncoder.encode(dto.password()));
     }
 }
