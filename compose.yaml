@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: 'mongo:latest'
+    image: 'mongo:7.0.5-rc0-jammy'
     ports:
       - '27017:27017'
     volumes:
