@@ -7,7 +7,7 @@ public class TestFlashcardsApplication {
     public static void main(String[] args) {
         SpringApplication
                 .from(FlashcardsApplication::main)
-                .with(TestFlashcardsApplication.class)
+                .with(TestMongoConfiguration.class)
                 .run(args);
     }
 }
