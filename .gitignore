@@ -9,10 +9,10 @@ out/
 *.p12
 
 ### IntelliJ IDEA ###
-.idea/modules.xml
 .idea/libraries/
 .idea/sonarlint/
-!.idea/compiler.xml
+.idea/modules/
+.idea/*.xml
 
 ### Mac OS ###
 .DS_Store

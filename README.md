@@ -2,17 +2,35 @@
 
 Project idea came up in the Hyperskill community team and will be realized by this team.
 
+## Usage
+
+### Run the app
+To run the application including startup of MongoDB container, use the stored Run configuration in IntelliJ IDEA.
+You can transfer it to the Service tool window for convenience via Add Service -> Run configuration -> Spring.
+
+Alternatively run the following command:
+
+```shell
+./gradlew bootRun
+```
+### Purge docker resources (mongo-data volume and mongo container)
+Take care, running this  script deletes all persistent data of the mongo container.
+```shell
+.dev/remove-mongo-volume.sh
+```
+
 ## Technology / External Libraries
 
 - Java 21
 - Spring Boot 3.2.1
-- Support for Native image on GraalVM
 - Mongo DB via docker-compose
 - Vue 3 SPA-Frontend using component framework Vuetify 3
 - Packaging with Vite
 - Lombok
 - Testcontainers
 - Gradle 8.5
+
+[//]: # (- Support for Native image on GraalVM)
 
 ## Program description
 
