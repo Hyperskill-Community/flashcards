@@ -1,8 +1,9 @@
+import org.springframework.boot.gradle.tasks.run.BootRun
+
 plugins {
     application
     id("org.springframework.boot") version libs.versions.spring.boot
     id("io.spring.dependency-management") version libs.versions.spring.dependency.management
-    id("org.graalvm.buildtools.native") version libs.versions.graalvm.buildtools
 }
 
 group = "org.hyperskill.community"
@@ -41,6 +42,10 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mongodb")
+}
+
+tasks.withType<BootRun> {
+    workingDir = rootProject.projectDir
 }
 
 tasks.withType<Test> {

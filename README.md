@@ -2,6 +2,16 @@
 
 Project idea came up in the Hyperskill community team and will be realized by this team.
 
+## Usage
+To start the application including stzartuo of MongoDB container, use the stored Run configuration in IntelliJ IDEA.
+Yoiu can transfer it to the Service tool window for convenience via Add Service -> Run configuration.
+
+Alternatively run the following command in the root directory:
+
+```shell
+./gradlew bootRun
+```
+
 ## Technology / External Libraries
 
 - Java 21
