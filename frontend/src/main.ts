@@ -15,6 +15,7 @@ import { createApp } from 'vue'
 
 const app = createApp(App)
 
+// adds router and vuetify
 registerPlugins(app)
 
 app.mount('#app')
