@@ -21,17 +21,13 @@ import java.util.Set;
 public abstract sealed class Card permits QuestionAndAnswerCard, SingleChoiceQuiz, MultipleChoiceQuiz {
     @Id
     protected String id;
-    protected String author;
     protected String title;
     protected Set<String> tags;
     protected String question;
     @CreatedDate
     protected Instant createdAt;
 
-    public Card() { }
-
-    protected Card(String author, String title, Set<String> tags, String question) {
-        this.author = author;
+    protected Card(String title, Set<String> tags, String question) {
         this.title = title;
         this.tags = tags == null ? new HashSet<>() : tags;
         this.question = question;
