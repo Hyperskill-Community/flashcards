@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperskill.community.flashcards.card.model.Card;
 import org.hyperskill.community.flashcards.card.model.MultipleChoiceQuiz;
@@ -28,6 +29,7 @@ import java.util.Set;
  * Initializes the 'example' database with sample cards.
  */
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class ExampleDataInitializer {
     private static final String exampleCollection = "example";
@@ -38,11 +40,6 @@ public class ExampleDataInitializer {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final UserMapper userMapper;
     private final MongoTemplate mongoTemplate;
-
-    public ExampleDataInitializer(UserMapper userMapper, MongoTemplate mongoTemplate) {
-        this.userMapper = userMapper;
-        this.mongoTemplate = mongoTemplate;
-    }
 
     /**
      * This method checks if collections to be initialized are empty, and if yes
