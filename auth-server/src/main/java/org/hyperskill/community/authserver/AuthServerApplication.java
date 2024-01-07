@@ -1,13 +1,13 @@
-package org.hyperskill.community.flashcards;
+package org.hyperskill.community.authserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FlashcardsApplication {
+public class AuthServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FlashcardsApplication.class, args);
+        SpringApplication.run(AuthServerApplication.class, args);
     }
 
 }
