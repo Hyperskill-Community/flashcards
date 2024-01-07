@@ -8,6 +8,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Basic class for all flashcards, contains fields shared among all subclasses
@@ -16,24 +18,24 @@ import java.time.Instant;
 @Setter
 @Document
 @ToString
-public abstract class Card {
+public abstract sealed class Card permits QuestionAndAnswerCard, SingleChoiceQuiz, MultipleChoiceQuiz {
     @Id
     protected String id;
     protected String author;
     protected boolean isPublic;
     protected String title;
-    protected String category;
+    protected Set<String> tags;
     protected String question;
     @CreatedDate
     protected Instant createdAt;
 
     public Card() { }
 
-    protected Card(String author, boolean isPublic, String title, String category, String question) {
+    protected Card(String author, boolean isPublic, String title, Set<String> tags, String question) {
         this.author = author;
         this.isPublic = isPublic;
         this.title = title;
-        this.category = category;
+        this.tags = tags == null ? new HashSet<>() : tags;
         this.question = question;
     }
 }

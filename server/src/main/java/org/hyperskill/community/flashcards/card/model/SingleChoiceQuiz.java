@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.springframework.data.annotation.TypeAlias;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a single choice quiz card, i.e. where the user is provided with
@@ -17,7 +18,7 @@ import java.util.List;
 @Setter
 @ToString(callSuper = true)
 @TypeAlias("SingleChoiceQuiz")
-public class SingleChoiceQuiz extends Card {
+public final class SingleChoiceQuiz extends Card {
     private List<String> options;
     private Integer correctOption;
 
@@ -25,9 +26,9 @@ public class SingleChoiceQuiz extends Card {
     }
 
     @Builder
-    public SingleChoiceQuiz(String author, boolean isPublic, String title, String category,
+    public SingleChoiceQuiz(String author, boolean isPublic, String title, Set<String> tags,
                             String question, List<String> options, Integer correctOption) {
-        super(author, isPublic, title, category, question);
+        super(author, isPublic, title, tags, question);
         this.options = options;
         this.correctOption = correctOption;
     }

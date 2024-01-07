@@ -6,19 +6,21 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.TypeAlias;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @ToString(callSuper = true)
 @TypeAlias("QuestionAndAnswerCard")
-public class QuestionAndAnswerCard extends Card {
+public final class QuestionAndAnswerCard extends Card {
     private String answer;
 
     public QuestionAndAnswerCard() { }
 
     @Builder
     public QuestionAndAnswerCard(String author, boolean isPublic, String title,
-                                 String category, String question, String answer) {
-        super(author, isPublic, title, category, question);
+                                 Set<String> tags, String question, String answer) {
+        super(author, isPublic, title, tags, question);
         this.answer = answer;
     }
 }

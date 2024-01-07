@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 /**
  * Initializes the 'example' database with sample cards.
@@ -30,19 +30,18 @@ public class ExampleDataInitializer implements CommandLineRunner {
 
     @PostConstruct
     public void init() {
-        List<Card> cards = List.of(
+        List<Card> mathCards = List.of(
                 QuestionAndAnswerCard.builder()
                         .author("test@test.com")
                         .title("card 1")
-                        .category("Math")
                         .isPublic(true)
                         .question("Calculate 2 + 2 = ?")
                         .answer("4")
+                        .tags(Set.of("equations"))
                         .build(),
                 SingleChoiceQuiz.builder()
                         .author("test@test.com")
                         .title("card 2")
-                        .category("Math")
                         .isPublic(true)
                         .question("Solve the equation: 2x + 3 = 9")
                         .options(List.of("2", "5", "6", "3"))
@@ -51,39 +50,41 @@ public class ExampleDataInitializer implements CommandLineRunner {
                 MultipleChoiceQuiz.builder()
                         .author("test@test.com")
                         .title("card 3")
-                        .category("Math")
                         .isPublic(true)
                         .question("Select all correct statements about the equation: 2x + 3 = 9")
                         .options(List.of("It's a square equation", "It's a linear equation", "It doesn't have a root", "It's root is 3"))
                         .correctOptions(List.of(1, 3))
-                        .build(),
+                        .build()
+        );
+        var geographyCards = List.of(
                 QuestionAndAnswerCard.builder()
                         .author("test@test.com")
                         .title("card 4")
-                        .category("Geography")
                         .isPublic(true)
                         .question("Capital of Spain")
                         .answer("Madrid")
-                        .build(),
+                        .tags(Set.of("Europe", "cities"))
+                        .build()
+        );
+        var chemistryCards = List.of(
                 SingleChoiceQuiz.builder()
                         .author("test@test.com")
                         .title("card 5")
-                        .category("Chemistry")
                         .isPublic(true)
                         .question("Which of the elements has the lowest atomic weight?")
                         .options(List.of("Au", "Fe", "Li", "Pt"))
                         .correctOption(2)
+                        .tags(Set.of("elements", "atoms"))
                         .build()
         );
 
         log.info("Dropping any existing collections in 'example' database...");
-        var collections = mongoTemplate.getDb().listCollectionNames();
+        mongoTemplate.getDb().listCollectionNames().forEach(mongoTemplate::dropCollection);
 
         log.info("Inserting sample data to 'example' database...");
-        cards.forEach(card -> {
-            var category = card.getCategory();
-            mongoTemplate.insert(card, category);
-        });
+        mathCards.forEach(card -> mongoTemplate.insert(card, "Math"));
+        geographyCards.forEach(card -> mongoTemplate.insert(card, "Geography"));
+        chemistryCards.forEach(card -> mongoTemplate.insert(card, "Chemistry"));
     }
 
     public <T extends Card> List<T> getCardsByClass(Class<T> clazz, String collection) {
@@ -101,18 +102,12 @@ public class ExampleDataInitializer implements CommandLineRunner {
         var collectionNames = mongoTemplate.getDb().listCollectionNames();
         for (var collectionName : collectionNames) {
             log.info("Collection: {}", collectionName);
-            getAllCards(collectionName).stream().map(card -> {
-                        if (card instanceof QuestionAndAnswerCard qac) {
-                            return qac;
-                        } else if (card instanceof SingleChoiceQuiz scc) {
-                            return scc;
-                        } else if (card instanceof MultipleChoiceQuiz mcc) {
-                            return mcc;
-                        } else {
-                            throw new IllegalStateException("Unknown card class " + card.getClass().getName());
-                        }
+            getAllCards(collectionName).stream()
+                    .map(card -> switch (card) {
+                        case SingleChoiceQuiz scq -> scq;
+                        case MultipleChoiceQuiz mcq -> mcq;
+                        case QuestionAndAnswerCard qac -> qac;
                     })
-                    .map(Objects::toString)
                     .forEach(System.out::println);
         }
 

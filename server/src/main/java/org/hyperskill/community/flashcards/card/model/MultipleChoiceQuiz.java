@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.springframework.data.annotation.TypeAlias;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a multiple choice quiz card, i.e. where the user is provided with
@@ -17,7 +18,7 @@ import java.util.List;
 @Setter
 @ToString(callSuper = true)
 @TypeAlias("MultipleChoiceQuiz")
-public class MultipleChoiceQuiz extends Card {
+public final class MultipleChoiceQuiz extends Card {
     private List<String> options;
     private List<Integer> correctOptions;
 
@@ -25,9 +26,9 @@ public class MultipleChoiceQuiz extends Card {
     }
 
     @Builder
-    public MultipleChoiceQuiz(String author, boolean isPublic, String title, String category,
+    public MultipleChoiceQuiz(String author, boolean isPublic, String title, Set<String> tags,
                               String question, List<String> options, List<Integer> correctOptions) {
-        super(author, isPublic, title, category, question);
+        super(author, isPublic, title, tags, question);
         this.options = options;
         this.correctOptions = correctOptions;
     }
