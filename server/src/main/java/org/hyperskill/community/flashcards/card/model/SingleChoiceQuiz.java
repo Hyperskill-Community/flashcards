@@ -26,9 +26,9 @@ public final class SingleChoiceQuiz extends Card {
     }
 
     @Builder
-    public SingleChoiceQuiz(String author, boolean isPublic, String title, Set<String> tags,
-                            String question, List<String> options, Integer correctOption) {
-        super(author, isPublic, title, tags, question);
+    public SingleChoiceQuiz(String author, String title, Set<String> tags, String question,
+                            List<String> options, Integer correctOption) {
+        super(author, title, tags, question);
         this.options = options;
         this.correctOption = correctOption;
     }

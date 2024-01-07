@@ -22,7 +22,6 @@ public abstract sealed class Card permits QuestionAndAnswerCard, SingleChoiceQui
     @Id
     protected String id;
     protected String author;
-    protected boolean isPublic;
     protected String title;
     protected Set<String> tags;
     protected String question;
@@ -31,9 +30,8 @@ public abstract sealed class Card permits QuestionAndAnswerCard, SingleChoiceQui
 
     public Card() { }
 
-    protected Card(String author, boolean isPublic, String title, Set<String> tags, String question) {
+    protected Card(String author, String title, Set<String> tags, String question) {
         this.author = author;
-        this.isPublic = isPublic;
         this.title = title;
         this.tags = tags == null ? new HashSet<>() : tags;
         this.question = question;

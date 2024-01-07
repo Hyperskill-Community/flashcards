@@ -15,12 +15,12 @@ import java.util.Set;
 public final class QuestionAndAnswerCard extends Card {
     private String answer;
 
-    public QuestionAndAnswerCard() { }
+    public QuestionAndAnswerCard() {
+    }
 
     @Builder
-    public QuestionAndAnswerCard(String author, boolean isPublic, String title,
-                                 Set<String> tags, String question, String answer) {
-        super(author, isPublic, title, tags, question);
+    public QuestionAndAnswerCard(String author, String title, Set<String> tags, String question, String answer) {
+        super(author, title, tags, question);
         this.answer = answer;
     }
 }

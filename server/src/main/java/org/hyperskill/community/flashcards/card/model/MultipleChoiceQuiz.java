@@ -26,9 +26,9 @@ public final class MultipleChoiceQuiz extends Card {
     }
 
     @Builder
-    public MultipleChoiceQuiz(String author, boolean isPublic, String title, Set<String> tags,
-                              String question, List<String> options, List<Integer> correctOptions) {
-        super(author, isPublic, title, tags, question);
+    public MultipleChoiceQuiz(String author, String title, Set<String> tags, String question,
+                              List<String> options, List<Integer> correctOptions) {
+        super(author, title, tags, question);
         this.options = options;
         this.correctOptions = correctOptions;
     }
