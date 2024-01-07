@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Initializes the 'example' database with sample cards.
+ * Initializes the 'cards' database with sample cards.
  */
 @Component
 @RequiredArgsConstructor
