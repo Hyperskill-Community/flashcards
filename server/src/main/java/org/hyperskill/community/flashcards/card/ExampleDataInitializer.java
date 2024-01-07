@@ -1,5 +1,9 @@
 package org.hyperskill.community.flashcards.card;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperskill.community.flashcards.card.model.Card;
@@ -8,10 +12,15 @@ import org.hyperskill.community.flashcards.card.model.QuestionAndAnswerCard;
 import org.hyperskill.community.flashcards.card.model.SingleChoiceQuiz;
 import org.hyperskill.community.flashcards.category.model.Category;
 import org.hyperskill.community.flashcards.category.model.CategoryAccess;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.hyperskill.community.flashcards.registration.User;
+import org.hyperskill.community.flashcards.registration.UserDto;
+import org.hyperskill.community.flashcards.registration.UserMapper;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -21,63 +30,84 @@ import java.util.Set;
 @Component
 @Slf4j
 public class ExampleDataInitializer {
+    private static final String exampleCollection = "example";
+    private static final String userCollection = "user";
+    private static final String categoryCollection = "category";
+    private static final String userJsonPath = "/json/users.json";
+    private static final String flashcardsJsonPath = "/json/flashcards.json";
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final UserMapper userMapper;
     private final MongoTemplate mongoTemplate;
 
-    public ExampleDataInitializer(@Qualifier("example") MongoTemplate mongoTemplate) {
+    public ExampleDataInitializer(UserMapper userMapper, MongoTemplate mongoTemplate) {
+        this.userMapper = userMapper;
         this.mongoTemplate = mongoTemplate;
     }
 
+    /**
+     * This method checks if collections to be initialized are empty, and if yes
+     * it reads data from <code>/resources/json</code> folder and insert it
+     * in the said collections. This ensures that empty database is initialized
+     * with the same data, while non-empty database state remains unchanged.
+     */
     @PostConstruct
     public void init() {
-        List<Card> mathCards = List.of(
-                QuestionAndAnswerCard.builder()
-                        .title("card 1")
-                        .question("Calculate 2 + 2 = ?")
-                        .answer("4")
-                        .tags(Set.of("equations"))
-                        .build(),
-                SingleChoiceQuiz.builder()
-                        .title("card 2")
-                        .question("Solve the equation: 2x + 3 = 9")
-                        .options(List.of("2", "5", "6", "3"))
-                        .correctOption(3)
-                        .build(),
-                MultipleChoiceQuiz.builder()
-                        .title("card 3")
-                        .question("Select all correct statements about the equation: 2x + 3 = 9")
-                        .options(List.of("It's a square equation", "It's a linear equation", "It doesn't have a root", "It's root is 3"))
-                        .correctOptions(List.of(1, 3))
-                        .build()
-        );
-        var geographyCards = List.of(
-                QuestionAndAnswerCard.builder()
-                        .title("card 4")
-                        .question("Capital of Spain")
-                        .answer("Madrid")
-                        .tags(Set.of("Europe", "cities"))
-                        .build()
-        );
-        var chemistryCards = List.of(
-                SingleChoiceQuiz.builder()
-                        .title("card 5")
-                        .question("Which of the elements has the lowest atomic weight?")
-                        .options(List.of("Au", "Fe", "Li", "Pt"))
-                        .correctOption(2)
-                        .tags(Set.of("elements", "atoms"))
-                        .build()
-        );
+        if (isCollectionNotEmpty(userCollection)) {
+            log.warn("Collection {} is not empty, aborting database initialization", userCollection);
+            return;
+        }
+        if (isCollectionNotEmpty(categoryCollection)) {
+            log.warn("Collection {} is not empty, aborting database initialization", categoryCollection);
+            return;
+        }
+        if (isCollectionNotEmpty(exampleCollection)) {
+            log.warn("Collection {} is not empty, aborting database initialization", exampleCollection);
+            return;
+        }
 
-        log.info("Dropping any existing collections in 'example' database...");
-        mongoTemplate.getDb().listCollectionNames().forEach(mongoTemplate::dropCollection);
+        Resource usersJson = new ClassPathResource(userJsonPath);
+        Resource flashcardsJson = new ClassPathResource(flashcardsJsonPath);
 
-        log.info("Inserting sample data to 'example' database...");
-        var categoryAccess = new CategoryAccess("test@test.com", "rwd");
-        mongoTemplate.insert(new Category(null, "math", Set.of(categoryAccess)));
-        mongoTemplate.insert(new Category(null, "geography", Set.of(categoryAccess)));
-        mongoTemplate.insert(new Category(null, "chemistry", Set.of(categoryAccess)));
+        try {
+            List<UserDto> userDTOs = objectMapper.readValue(usersJson.getFile(), new TypeReference<>() {});
+            List<User> users = userDTOs.stream().map(userMapper::toDocument).toList();
+            if (users.size() == 0) {
+                throw new IllegalStateException("No users to insert");
+            }
+            mongoTemplate.insertAll(users);
 
-        mathCards.forEach(card -> mongoTemplate.insert(card, "math"));
-        geographyCards.forEach(card -> mongoTemplate.insert(card, "geography"));
-        chemistryCards.forEach(card -> mongoTemplate.insert(card, "chemistry"));
+            var categoryAccess = new CategoryAccess(users.get(0).getUsername(), "rwd");
+            mongoTemplate.insert(new Category(null, exampleCollection, Set.of(categoryAccess)));
+
+            JsonNode jsonNode = objectMapper.readTree(flashcardsJson.getFile());
+            List<SingleChoiceQuiz> scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
+            List<MultipleChoiceQuiz> mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
+            List<QuestionAndAnswerCard> qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswerCard.class);
+
+            mongoTemplate.insert(scqCards, exampleCollection);
+            mongoTemplate.insert(mcqCards, exampleCollection);
+            mongoTemplate.insert(qnaCards, exampleCollection);
+
+        } catch (Exception e) {
+            log.error("Error updating database", e);
+            mongoTemplate.getDb().drop();
+        }
+    }
+
+    private <T extends Card> List<T> parseCards(JsonNode jsonNode, Class<T> clazz) throws JsonProcessingException {
+        List<T> list = new ArrayList<>();
+        for (JsonNode node : jsonNode) {
+            T card = objectMapper.treeToValue(node, clazz);
+            list.add(card);
+        }
+        return list;
+    }
+
+    private boolean isCollectionNotEmpty(String collection) {
+        var collectionExists = mongoTemplate.getDb().listCollectionNames()
+                .into(new ArrayList<>())
+                .contains(collection);
+
+        return collectionExists && mongoTemplate.getDb().getCollection(collection).countDocuments() > 0;
     }
 }

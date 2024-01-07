@@ -22,6 +22,10 @@ public final class MultipleChoiceQuiz extends Card {
     private List<String> options;
     private List<Integer> correctOptions;
 
+    public MultipleChoiceQuiz() {
+        super(null, null, null);
+    }
+
     @Builder
     public MultipleChoiceQuiz(String title, Set<String> tags, String question,
                               List<String> options, List<Integer> correctOptions) {

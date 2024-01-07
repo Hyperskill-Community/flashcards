@@ -1,0 +1,94 @@
+{
+  "qna_cards": [
+    {
+      "title": "card 1",
+      "question": "Capital of Brazil",
+      "answer": "Brasilia",
+      "tags": [
+        "america", "cities"
+      ]
+    },
+    {
+      "title": "card 2",
+      "question": "Capital of Spain",
+      "answer": "Madrid",
+      "tags": [
+        "europe", "cities"
+      ]
+    },
+    {
+      "title": "card 3",
+      "question": "Name this chemical element: Tl",
+      "answer": "Thallium",
+      "tags": [
+        "elements", "symbols"
+      ]
+    },
+    {
+      "title": "card 4",
+      "question": "What is the square root of 144",
+      "answer": "12",
+      "tags": []
+    }
+  ],
+  "scq_cards": [
+    {
+      "title": "card 5",
+      "question": "What is the root of this equation: 3x + 2 = 14",
+      "options": ["5", "9", "3", "4"],
+      "correctOption": 3,
+      "tags": ["equations"]
+    },
+    {
+      "title": "card 6",
+      "question": "Name the largest country among the following:",
+      "options": ["Portugal", "Sweden", "Australia", "Japan"],
+      "correctOption": 2,
+      "tags": ["countries"]
+    },
+    {
+      "title": "card 7",
+      "question": "What is the type of this reaction: NaOH + HCl = NaCl + H2O",
+      "options": ["Oxidation", "Reduction", "Neutralization", "Neither"],
+      "correctOption": 3,
+      "tags": ["reactions"]
+    },
+    {
+      "title": "card 8",
+      "question": "Name the capital of Luxembourg",
+      "options": ["Luxembourg", "Strasbourg", "Andorra la Vella", "London"],
+      "correctOption": 3,
+      "tags": ["europe", "cities"]
+    }
+  ],
+  "mcq_cards": [
+    {
+      "title": "card 9",
+      "question": "Select all correct statements about this equation: ax + by = c",
+      "options": ["It's a quadratic equation", "It's a linear equation", "It describes a line", "It describes a curve"],
+      "correctOptions": [1, 2],
+      "tags": ["geometry", "equations"]
+    },
+    {
+      "title": "card 10",
+      "question": "Which of the following is true about DNA?",
+      "options": ["DNA is a double-stranded molecule", "DNA contains genetic information", "DNA stands for Deoxyribonucleic acid", "DNA is found only in animals"],
+      "correctOptions": [0, 1, 2],
+      "tags": ["genetics"]
+    },
+    {
+      "title": "card 11",
+      "question": "Which of the following elements is a noble gas?",
+      "options": ["Oxygen", "Helium", "Carbon", "Nitrogen"],
+      "correctOptions": [1],
+      "tags": ["elements"]
+    },
+    {
+      "title": "card 12",
+      "question": "Which of the following is a fundamental force in nature?",
+      "options": ["Gravity", "Friction", "Light", "Heat"],
+      "correctOptions": [0],
+      "tags": ["forces"]
+    }
+  ]
+}

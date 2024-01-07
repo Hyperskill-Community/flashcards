@@ -22,6 +22,10 @@ public final class SingleChoiceQuiz extends Card {
     private List<String> options;
     private Integer correctOption;
 
+    public SingleChoiceQuiz() {
+        super(null, null, null);
+    }
+
     @Builder
     public SingleChoiceQuiz(String title, Set<String> tags, String question,
                             List<String> options, Integer correctOption) {
