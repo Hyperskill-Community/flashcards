@@ -15,6 +15,10 @@ import java.util.Set;
 public final class QuestionAndAnswerCard extends Card {
     private String answer;
 
+    public QuestionAndAnswerCard() {
+        super(null, null, null);
+    }
+
     @Builder
     public QuestionAndAnswerCard(String title, Set<String> tags, String question, String answer) {
         super(title, tags, question);
