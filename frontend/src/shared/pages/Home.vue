@@ -1,5 +1,17 @@
 <template>
-  <HelloWorld />
+  <v-container>
+    <v-responsive class="align-center text-center fill-height">
+      <v-img height="300" src="@/assets/logo.svg" />
+
+      <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
+
+      <h1 class="text-h2 font-weight-bold">Flashcards</h1>
+
+      <div class="py-14" />
+
+
+    </v-responsive>
+  </v-container>
   <v-sheet width="230" class="mx-auto">
     <v-form @submit.prevent>
       <v-text-field
@@ -15,7 +27,6 @@
 </template>
 
 <script lang="ts" setup>
-import HelloWorld from '@/shared/components/HelloWorld.vue'
 import { ref } from 'vue'
 
 const cardId = ref('')
