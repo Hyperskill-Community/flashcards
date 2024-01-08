@@ -1,10 +1,27 @@
 services:
   mongodb:
     image: 'mongo:7.0.4-jammy'
+    container_name: mongodb
     ports:
       - '27017:27017'
     volumes:
       - 'mongo-data:/data/db'
+    networks:
+      - flashcards-network
+  authserver:
+    image: 'wisskirchenj/flashcards:0.0.1-SNAPSHOT'
+    ports:
+      - '8000:8000'
+    environment:
+      MONGO_HOST: mongodb
+    depends_on:
+      - mongodb
+    networks:
+      - flashcards-network
 
 volumes:
   mongo-data:
+
+networks:
+  flashcards-network:
+

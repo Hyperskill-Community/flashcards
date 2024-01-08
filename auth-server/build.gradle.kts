@@ -1,7 +1,10 @@
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
+
 plugins {
     java
-    id("org.springframework.boot") version "3.2.1"
+    id("org.springframework.boot") version "3.2.0"
     id("io.spring.dependency-management") version "1.1.4"
+    id("org.graalvm.buildtools.native") version "0.9.28"
 }
 
 group = "org.hyperskill.community"
@@ -27,7 +30,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+   // developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
@@ -35,4 +38,12 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+val dockerHubRepo = "wisskirchenj/"
+tasks.named<BootBuildImage>("bootBuildImage") {
+    builder.set("dashaun/builder:tiny")
+    imageName.set(dockerHubRepo + rootProject.name + ":" + version)
+    createdDate.set("now")
+    environment.put("BP_NATIVE_IMAGE", "true")
 }
