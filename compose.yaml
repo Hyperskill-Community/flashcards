@@ -1,7 +1,7 @@
 services:
   mongodb:
     image: 'mongo:7.0.4-jammy'
-    container_name: mongodb
+    container_name: flashcards-mongodb
     ports:
       - '27017:27017'
     volumes:
@@ -13,7 +13,7 @@ services:
     ports:
       - '8000:8000'
     environment:
-      MONGO_HOST: mongodb
+      MONGO_HOST: flashcards-mongodb
     depends_on:
       - mongodb
     networks:
