@@ -8,6 +8,8 @@ Project idea came up in the Hyperskill community team and will be realized by th
 To run the application including startup of MongoDB container, use the stored Run configuration in IntelliJ IDEA.
 You can transfer it to the Service tool window for convenience via Add Service -> Run configuration -> Spring.
 
+To access the app see also the video in .dev folder: [Accessing the app](.dev/run-flashcards.mp4)
+
 Alternatively run the following command:
 
 ```shell
