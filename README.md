@@ -15,6 +15,12 @@ Alternatively run the following command:
 ```shell
 ./gradlew bootRunFlashcards
 ```
+#### NOTE:
+Currently the authserver docker image is only provided for ARM64 architecture (Apple M1 chip) and will not run on Intel
+architecture. If you are on Intel architecture, you need to build your own docker image in AMD64 
+or start the AuthServerApplication before running the flashcards app 
+(in the latter case you will need to modify the compose.yml also to not run the authserver container).
+
 #### Behaviour: 
 You need to **access the flashcards-website now via http://127.0.0.1:8080 context path**, as oauth2 demands a 
 different host URLs for the login request (which is localhost of course).

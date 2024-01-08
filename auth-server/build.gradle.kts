@@ -4,7 +4,7 @@ plugins {
     java
     id("org.springframework.boot") version libs.versions.spring.boot
     id("io.spring.dependency-management") version libs.versions.spring.dependency.management
-    id("org.graalvm.buildtools.native") version "0.9.28"
+    id("org.graalvm.buildtools.native") version libs.versions.graalvm.buildtools
 }
 
 group = "org.hyperskill.community"
@@ -42,7 +42,7 @@ tasks.withType<Test> {
 val dockerHubRepo = "wisskirchenj/"
 tasks.named<BootBuildImage>("bootBuildImage") {
     builder.set("dashaun/builder:tiny")
-    imageName.set(dockerHubRepo + rootProject.name + ":" + version)
+    imageName.set(dockerHubRepo + rootProject.name + project.name + ":" + version)
     createdDate.set("now")
     environment.put("BP_NATIVE_IMAGE", "true")
 }

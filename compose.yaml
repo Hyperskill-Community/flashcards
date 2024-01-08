@@ -9,7 +9,8 @@ services:
     networks:
       - flashcards-network
   authserver:
-    image: 'wisskirchenj/flashcards:0.0.1-SNAPSHOT'
+    image: 'wisskirchenj/flashcardsauth-server:0.0.1-SNAPSHOT'
+    container_name: flashcards-authserver
     ports:
       - '8000:8000'
     environment:
