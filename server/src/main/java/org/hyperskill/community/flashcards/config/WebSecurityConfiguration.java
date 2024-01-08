@@ -30,11 +30,13 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(CsrfConfigurer::disable)
+                .oauth2ResourceServer(auth -> auth.jwt(withDefaults()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/register.html", "/js/register.js", "/css/register.css").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
                         .anyRequest().authenticated())
-                .httpBasic(withDefaults())
+                .oauth2Login(withDefaults())
+                .oauth2Client(withDefaults())
                 .build();
     }
 

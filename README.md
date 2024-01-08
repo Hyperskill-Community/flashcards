@@ -8,11 +8,32 @@ Project idea came up in the Hyperskill community team and will be realized by th
 To run the application including startup of MongoDB container, use the stored Run configuration in IntelliJ IDEA.
 You can transfer it to the Service tool window for convenience via Add Service -> Run configuration -> Spring.
 
+To access the app see also the video in .dev folder: [Accessing the app](.dev/run-flashcards.mp4)
+
 Alternatively run the following command:
 
 ```shell
-./gradlew bootRun
+./gradlew bootRunFlashcards
 ```
+#### NOTE:
+Currently the authserver docker image is only provided for ARM64 architecture (Apple M1 chip) and will not run on Intel
+architecture. If you are on Intel architecture, you need to build your own docker image in AMD64 
+or start the AuthServerApplication before running the flashcards app 
+(in the latter case you will need to modify the compose.yml also to not run the authserver container).
+
+#### Behaviour: 
+You need to **access the flashcards-website now via http://127.0.0.1:8080 context path**, as oauth2 demands a 
+different host URLs for the login request (which is localhost of course).
+The browser immediately redirects you to the authserver http://localhost:8000/login and after inserting credentials
+(of one of the test users - OR a newly registered user - via http://127.0.0.1:8080/registration.html for now) you are
+accessing the landing page - or whatever page was requested of our Vue frontend. (Authorization Code flow)
+The browser keeps the oauth token as cookie (and refreshes it on demand, if user actively uses the websites) with an
+expiration date, I set to 15 min. After expiration and no refresh, accessing a website will redirect to login page again.
+
+To start the auth-server standalone for development purposes, you need to start mongodb-container manually first
+(as usage of spring-docker-compose would conflict) and then use Run configuration "AuthServerApplication" in IntelliJ IDEA; 
+or whatever method you prefer. It will automatically connect to localhost:27017 if no MONGO_HOST environment variable is set.
+
 ### Purge docker resources (mongo-data volume and mongo container)
 Take care, running this  script deletes all persistent data of the mongo container.
 ```shell
