@@ -47,3 +47,7 @@ artifacts {
         builtBy("packageFrontend")
     }
 }
+
+tasks.withType<Delete>().named("clean") {
+    delete("dist")
+}
