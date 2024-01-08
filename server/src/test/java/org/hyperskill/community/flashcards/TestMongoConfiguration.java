@@ -7,13 +7,13 @@ import org.testcontainers.containers.MongoDBContainer;
 
 import java.util.List;
 
-@TestConfiguration
+@TestConfiguration(proxyBeanMethods = false)
 public class TestMongoConfiguration {
 
     @Bean
     @ServiceConnection
     public MongoDBContainer mongoDBContainer() {
-        var container = new MongoDBContainer("mongo:latest");
+        var container = new MongoDBContainer("mongo:7.0.4-jammy");
         container.setPortBindings(List.of("27017:27017"));
         return container;
     }
