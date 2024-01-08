@@ -1,4 +1,4 @@
-package org.hyperskill.community.flashcards.security;
+package org.hyperskill.community.flashcards.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hyperskill.community.flashcards.TestMongoConfiguration;

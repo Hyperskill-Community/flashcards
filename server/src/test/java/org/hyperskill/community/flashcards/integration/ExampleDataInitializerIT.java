@@ -1,4 +1,4 @@
-package org.hyperskill.community.flashcards.card;
+package org.hyperskill.community.flashcards.integration;
 
 import org.hyperskill.community.flashcards.TestMongoConfiguration;
 import org.junit.jupiter.api.Test;
