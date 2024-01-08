@@ -13,6 +13,15 @@ Alternatively run the following command:
 ```shell
 ./gradlew bootRun
 ```
+#### Behaviour: 
+You need to **access the flashcards-website now via http://127.0.0.1:8080 context path**, as oauth2 demands a 
+different host URLs for the login request (which is localhost of course).
+The browser immediately redirects you to the authserver http://localhost:8000/login and after inserting credentials
+(of one of the test users - OR a newly registered user - via http://127.0.0.1:8080/registration.html for now) you are
+accessing the landing page - or whatever page was requested of our Vue frontend. (Authorization Code flow)
+The browser keeps the oauth token as cookie (and refreshes it on demand, if user actively uses the websites) with an
+expiration date, I set to 15 min. After expiration and no refresh, accessing a website will redirect to login page again.
+
 ### Purge docker resources (mongo-data volume and mongo container)
 Take care, running this  script deletes all persistent data of the mongo container.
 ```shell
