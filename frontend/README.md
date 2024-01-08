@@ -10,11 +10,12 @@
 | &nbsp;&nbsp;&nbsp;&nbsp;`src`                                    | Contains all source files                         |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`assets`         | Contains static assets like images, fonts etc.    |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`feature`        | Pages, components, composables of features        |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`layouts`        | Layouts templates                                 |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`plugins`        | Contains setup of plugins (vue-router, vuetify)   |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`router`         | Contains Vue router configuration and routes      |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`shared`         | Feature-shared pages, components, composables     |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`App.vue`        | Main Vue component                                |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`main.js`        | Entry point of the application                    |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`main.ts`        | Entry point of the application                    |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`vite.config.js` | Vite configuration file                           |
 | &nbsp;&nbsp;&nbsp;&nbsp;`index.html`                             | HTML landing page for the application             |
 | &nbsp;&nbsp;&nbsp;&nbsp;`package.json`                           | Contains npm dependencies and scripts             |

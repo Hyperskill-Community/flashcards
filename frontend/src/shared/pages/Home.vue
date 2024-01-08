@@ -8,10 +8,9 @@
       <h1 class="text-h2 font-weight-bold">Flashcards</h1>
 
       <div class="py-14" />
-
-
     </v-responsive>
   </v-container>
+
   <v-sheet width="230" class="mx-auto">
     <v-form @submit.prevent>
       <v-text-field
@@ -28,6 +27,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import AxiosLineTemp from "@/shared/_temptestutils/AxiosLineTemp.vue";
 
 const cardId = ref('')
 
