@@ -11,7 +11,7 @@ You can transfer it to the Service tool window for convenience via Add Service -
 Alternatively run the following command:
 
 ```shell
-./gradlew flashcards-server:bootRun
+./gradlew bootRunFlashcards
 ```
 #### Behaviour: 
 You need to **access the flashcards-website now via http://127.0.0.1:8080 context path**, as oauth2 demands a 
