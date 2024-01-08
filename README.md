@@ -22,6 +22,10 @@ accessing the landing page - or whatever page was requested of our Vue frontend.
 The browser keeps the oauth token as cookie (and refreshes it on demand, if user actively uses the websites) with an
 expiration date, I set to 15 min. After expiration and no refresh, accessing a website will redirect to login page again.
 
+To start the auth-server standalone for development purposes, you need to start mongodb-container manually first
+(as usage of spring-docker-compose would conflict) and then use Run configuration "AuthServerApplication" in IntelliJ IDEA; 
+or whatever method you prefer. It will automatically connect to localhost:27017 if no MONGO_HOST environment variable is set.
+
 ### Purge docker resources (mongo-data volume and mongo container)
 Take care, running this  script deletes all persistent data of the mongo container.
 ```shell
