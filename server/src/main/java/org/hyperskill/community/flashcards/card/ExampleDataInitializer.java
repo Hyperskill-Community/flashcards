@@ -37,7 +37,7 @@ public class ExampleDataInitializer {
     private static final String categoryCollection = "category";
     private static final String userJsonPath = "/json/users.json";
     private static final String flashcardsJsonPath = "/json/flashcards.json";
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
     private final UserMapper userMapper;
     private final MongoTemplate mongoTemplate;
 

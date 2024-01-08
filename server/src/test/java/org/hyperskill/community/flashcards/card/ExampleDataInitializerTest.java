@@ -1,10 +1,14 @@
 package org.hyperskill.community.flashcards.card;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
 import org.bson.Document;
 import org.hyperskill.community.flashcards.registration.User;
+import org.hyperskill.community.flashcards.registration.UserDto;
 import org.hyperskill.community.flashcards.registration.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,11 +23,16 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @MockitoSettings
 class ExampleDataInitializerTest {
+    @Mock
+    ObjectMapper objectMapper;
+
     @Mock
     MongoTemplate mongoTemplate;
 
@@ -86,7 +95,58 @@ class ExampleDataInitializerTest {
     }
 
     @Test
-    void whenCollectionsEmpty_insertData() {
+    @SuppressWarnings("UncheckedAssignment")
+    void whenCollectionsEmpty_insertData() throws IOException {
+        var userJson = """
+                [
+                  {
+                    "email": "test1@test.com",
+                    "password": "12345678"
+                  }
+                ]
+                """;
+        var flashcardJson = """
+                {
+                  "qna_cards": [
+                    {
+                      "title": "card 1",
+                      "question": "Capital of Brazil",
+                      "answer": "Brasilia",
+                      "tags": ["america", "cities"]
+                    }
+                  ],
+                  "scq_cards": [
+                    {
+                      "title": "card 5",
+                      "question":"What is the root of this equation: 3x + 2 = 14",
+                      "options": ["5", "9", "3", "4"],
+                      "correctOption": 3,
+                      "tags": ["equations"]
+                    }
+                  ],
+                  "mcq_cards": [
+                    {
+                      "title": "card 9",
+                      "question": "Select all correct statements about this equation: ax + by = c",
+                      "options": [
+                        "It's a quadratic equation",
+                        "It's a linear equation",
+                        "It describes a line",
+                        "It describes a curve"
+                      ],
+                      "correctOptions": [1, 2],
+                      "tags": ["geometry", "equations"]
+                    }
+                  ]
+                }
+                """;
+        var testMapper = new ObjectMapper();
+        List<UserDto> userDTOs = testMapper.readValue(userJson, new TypeReference<>() {});
+        JsonNode jsonNode = testMapper.readTree(flashcardJson);
+        //noinspection unchecked
+        when(objectMapper.readValue(any(File.class), any(TypeReference.class))).thenReturn(userDTOs);
+        when(objectMapper.readTree(any(File.class))).thenReturn(jsonNode);
+
         when(mongoTemplate.getDb()).thenReturn(mongoDatabase);
         when(mongoDatabase.listCollectionNames()).thenReturn(mongoIterable);
         when(mongoIterable.into(any())).thenReturn(new ArrayList<>(List.of("example", "user", "category")));
@@ -94,11 +154,12 @@ class ExampleDataInitializerTest {
         when(mongoDatabase.getCollection("user")).thenReturn(mongoCollection);
         when(mongoDatabase.getCollection("category")).thenReturn(mongoCollection);
         when(mongoCollection.countDocuments()).thenReturn(0L);
+
         when(userMapper.toDocument(any())).thenReturn(new User());
 
         dataInitializer.init();
 
-        verify(userMapper, times(2)).toDocument(any());
+        verify(userMapper, times(1)).toDocument(any());
         verify(mongoTemplate, times(1)).insertAll(any());
         verify(mongoTemplate, times(3)).insert(any(), eq("example"));
     }

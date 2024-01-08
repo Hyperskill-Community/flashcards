@@ -51,6 +51,4 @@ tasks.withType<BootRun> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
-    // excluded from CI until MongoDB testcontainers is fixed
-    exclude("**/integration/**")
 }
