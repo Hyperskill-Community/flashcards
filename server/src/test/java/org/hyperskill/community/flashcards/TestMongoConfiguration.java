@@ -13,7 +13,7 @@ public class TestMongoConfiguration {
     @Bean
     @ServiceConnection
     public MongoDBContainer mongoDBContainer() {
-        var container = new MongoDBContainer("mongo:7.0.4-jammy");
+        var container = new MongoDBContainer("mongo:7.0.4-jammy").withReuse(true);
         container.setPortBindings(List.of("27017:27017"));
         return container;
     }

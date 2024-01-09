@@ -3,11 +3,13 @@ package org.hyperskill.community.flashcards.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hyperskill.community.flashcards.TestMongoConfiguration;
 import org.hyperskill.community.flashcards.registration.UserDto;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +30,14 @@ class RegisterServerSecurityIT {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    MongoTemplate mongoTemplate;
+
+    @AfterEach
+    void setup() {
+        mongoTemplate.getDb().drop();
+    }
 
     @Test
     void registerUnauthenticatedValidJson_AddsUser() throws Exception {
