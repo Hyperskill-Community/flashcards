@@ -1,5 +1,7 @@
 package org.hyperskill.community.flashcards.card;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
@@ -18,7 +20,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,6 +30,7 @@ public class CardService {
     private static final int pageSize = 20;
     private final MongoTemplate mongoTemplate;
     private final CategoryService categoryService;
+    private final ObjectMapper objectMapper;
 
     public Page<Card> getCardsByCategory(String categoryId, int page) {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
@@ -46,48 +48,26 @@ public class CardService {
 
         var count = mongoTemplate.count(new Query(), collection);
         var documents = mongoTemplate.aggregate(aggregation, collection, Document.class).getRawResults();
-        var cards = mapDocumentToCard(documents.getList("results", Document.class));
-        return new PageImpl<>(cards, Pageable.ofSize(pageSize), count);
+
+        try {
+            var cards = mapDocumentsToCards(documents.getList("results", Document.class));
+            return new PageImpl<>(cards, Pageable.ofSize(pageSize), count);
+        } catch (JsonProcessingException e) {
+            log.error("Error processing BSON document", e);
+            throw new RuntimeException(e);
+        }
     }
 
-    private List<Card> mapDocumentToCard(List<Document> documents) {
+    private List<Card> mapDocumentsToCards(List<Document> documents) throws JsonProcessingException {
         List<Card> cards = new ArrayList<>(documents.size());
         for (var document : documents) {
-            var card = switch (document.getString("_class")) {
-                case "SingleChoiceQuiz" -> {
-                    var scq = new SingleChoiceQuiz();
-                    scq.setId(document.getObjectId("_id").toHexString());
-                    scq.setTitle(document.getString("title"));
-                    scq.setQuestion(document.getString("question"));
-                    scq.setOptions(document.getList("options", String.class));
-                    scq.setCorrectOption(document.getInteger("correctOption"));
-                    scq.setCreatedAt(document.getDate("createdAt").toInstant());
-                    scq.setTags(new HashSet<>(document.getList("tags", String.class)));
-                    yield scq;
-                }
-                case "MultipleChoiceQuiz" -> {
-                    var mcq = new MultipleChoiceQuiz();
-                    mcq.setId(document.getObjectId("_id").toHexString());
-                    mcq.setTitle(document.getString("title"));
-                    mcq.setQuestion(document.getString("question"));
-                    mcq.setOptions(document.getList("options", String.class));
-                    mcq.setCorrectOptions(document.getList("correctOptions", Integer.class));
-                    mcq.setCreatedAt(document.getDate("createdAt").toInstant());
-                    mcq.setTags(new HashSet<>(document.getList("tags", String.class)));
-                    yield mcq;
-                }
-                case "QuestionAndAnswerCard" -> {
-                    var qna = new QuestionAndAnswerCard();
-                    qna.setId(document.getObjectId("_id").toHexString());
-                    qna.setTitle(document.getString("title"));
-                    qna.setQuestion(document.getString("question"));
-                    qna.setAnswer(document.getString("answer"));
-                    qna.setCreatedAt(document.getDate("createdAt").toInstant());
-                    qna.setTags(new HashSet<>(document.getList("tags", String.class)));
-                    yield qna;
-                }
+            var clazz = switch (document.getString("_class")) {
+                case "SingleChoiceQuiz" -> SingleChoiceQuiz.class;
+                case "MultipleChoiceQuiz" -> MultipleChoiceQuiz.class;
+                case "QuestionAndAnswerCard" -> QuestionAndAnswerCard.class;
                 default -> throw new IllegalStateException("Unexpected value: " + document.getString("_class"));
             };
+            var card = objectMapper.readValue(document.toJson(), clazz);
             cards.add(card);
         }
         return cards;
