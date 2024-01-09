@@ -19,8 +19,9 @@ public class CategoryController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int page,
             Authentication authentication
     ) {
-        var username = authentication.getName();
-        var categories = categoryService.getCategories(username, page);
+        // fixme
+        var username = "test1@test.com";  // authentication.getName();
+        var categories = categoryService.getCategories(page);
         var mapper = new CategoryMapper(username);
         return mapper.categoryPageToCategoryPageResponse(categories);
     }
