@@ -23,13 +23,10 @@ public class CardService {
     private final MongoTemplate mongoTemplate;
     private final CategoryService categoryService;
 
-    public Page<Card> getCardsByCategory(String categoryId, int page) {
+    public Page<Card> getCardsByCategory(String username, String categoryId, int page) {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
-        if (page < 0) {
-            throw new IllegalArgumentException("Page number is out of bounds");
-        }
 
-        var collection = categoryService.findById(categoryId).name();
+        var collection = categoryService.findById(username, categoryId).name();
 
         var aggregation = Aggregation.newAggregation(
                 Aggregation.sort(Sort.by("name")),
