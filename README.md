@@ -34,6 +34,31 @@ To start the auth-server standalone for development purposes, you need to start 
 (as usage of spring-docker-compose would conflict) and then use Run configuration "AuthServerApplication" in IntelliJ IDEA; 
 or whatever method you prefer. It will automatically connect to localhost:27017 if no MONGO_HOST environment variable is set.
 
+### Run requests against the app (development)
+Recommended way is to use the **IntelliJ IDEA http-client**.
+It's located in .dev folder. But it seems Ultimate Edition only as of now.
+
+To use the client, you have to 
+- select an environment - I provided dev (and empty prod for future)
+- run with double-arrow on top to chain token and get/post call. (see picture)
+![img.png](.dev/img.png)
+
+#### Alternatively using postman:
+Type client_id and client_secret into the Authorization tab of the request choosing Basic Authentification.
+Then switch to the Body tab and choose x-www-form-urlencoded and add key-value pair
+> grant_type: client_credentials
+
+Then submit as POST-request to http://localhost:8000/oauth2/token and you will get a token in the response body.
+```json
+{
+    "access_token": "eyJra<......>kV78Q",
+    "token_type": "Bearer",
+    "expires_in": 599
+}
+```
+Copy the access_token and paste it into the Authorization tab of the request choosing Bearer Token.
+Then submit your request of choice to the flashcards app.
+
 ### Purge docker resources (mongo-data volume and mongo container)
 Take care, running this  script deletes all persistent data of the mongo container.
 ```shell
