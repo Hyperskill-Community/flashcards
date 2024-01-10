@@ -21,13 +21,14 @@
       <router-link :to="`/display/${cardId}`">
         View card details
       </router-link>
+      <br>
+      <router-link to="/test">Test axios</router-link>
     </v-form>
   </v-sheet>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import AxiosLineTemp from "@/shared/_temptestutils/AxiosLineTemp.vue";
+import {ref} from 'vue'
 
 const cardId = ref('')
 

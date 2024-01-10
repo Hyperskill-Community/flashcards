@@ -10,8 +10,8 @@ export function useErrorService() {
   });
 
   const handleError = (error: AxiosError | any, message?: string) => {
-    errorState.errorCode = error.isAxiosError ? error.response.data.errorCode : 'Unknown Error';
-    errorState.errorMessage = error.isAxiosError ? error.response.data.message : message || 'Service Unavailable';
+    errorState.errorCode = (error.isAxiosError && error.response) ? `Error status ${error.response.status}` : 'Unknown Error';
+    errorState.errorMessage = (error.isAxiosError && error.response?.data) ? error.response.data.message : message || 'Service Unavailable';
     return errorState;
   }
 
