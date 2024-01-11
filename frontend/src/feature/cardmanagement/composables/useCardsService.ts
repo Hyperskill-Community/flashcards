@@ -5,11 +5,11 @@ import {useToastService} from "@/shared/composables/toastService";
 const useCardsService = () => {
 
   const postNewUser = async (email: string, password: string, errorResult: string = 'throw') => {
-    const postUrl = 'http://localhost:8080/api/register';
+    const postUrl = 'http://127.0.0.1:8080/api/register';
 
     const postData = {
-      email: 'email',
-      password: 'password',
+      email: email,
+      password: password,
     };
 
     try {
