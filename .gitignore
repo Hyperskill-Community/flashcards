@@ -13,6 +13,7 @@ out/
 .idea/sonarlint/
 .idea/modules/
 .idea/*.xml
+compose.yaml
 
 ### Mac OS ###
 .DS_Store
