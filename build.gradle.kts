@@ -13,6 +13,20 @@ tasks.withType<BootRun> {
     enabled = false
 }
 
+tasks.register<Copy>("select-compose-file") {
+    group = "build"
+    description = "Copy compose file for OS architecture"
+    val composeFile = if (System.getProperty("os.arch").equals("aarch64")) {
+        "compose_arm.yaml"
+    } else {
+        "compose_amd.yaml"
+    }
+    println("Using ${rootDir}/docker/$composeFile")
+    from("${rootDir}/docker/$composeFile")
+    into("${rootDir}")
+    rename(composeFile, "compose.yaml")
+}
+
 tasks.register<BootRun>("bootRunFlashcards") {
     group = "build"
     description = "Run flashcards app and start containers for mongodb and auth server"
