@@ -21,9 +21,9 @@ tasks.register<Copy>("select-compose-file") {
     } else {
         "compose_amd.yaml"
     }
-    println("Using ${rootDir}/docker/$composeFile")
-    from("${rootDir}/docker/$composeFile")
-    into("${rootDir}")
+    println("Using $composeFile")
+    from("${rootDir}/docker/arch/$composeFile")
+    into("${rootDir}/docker")
     rename(composeFile, "compose.yaml")
 }
 
