@@ -6,12 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.bson.Document;
 import org.hyperskill.community.flashcards.card.model.Card;
 import org.hyperskill.community.flashcards.card.model.MultipleChoiceQuiz;
-import org.hyperskill.community.flashcards.card.model.QuestionAndAnswerCard;
+import org.hyperskill.community.flashcards.card.model.QuestionAndAnswer;
 import org.hyperskill.community.flashcards.card.model.SingleChoiceQuiz;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.convert.ReadingConverter;
+import org.springframework.stereotype.Component;
 
-@ReadingConverter
+@Component
 @RequiredArgsConstructor
 public class CardReadConverter implements Converter<Document, Card> {
     private final ObjectMapper objectMapper;
@@ -22,7 +22,7 @@ public class CardReadConverter implements Converter<Document, Card> {
         Class<? extends Card> clazz = switch (typeAlias) {
             case "SCQ" -> SingleChoiceQuiz.class;
             case "MCQ" -> MultipleChoiceQuiz.class;
-            case "QAC" -> QuestionAndAnswerCard.class;
+            case "QNA" -> QuestionAndAnswer.class;
             default -> throw new IllegalStateException("Unknown value " + typeAlias);
         };
         try {

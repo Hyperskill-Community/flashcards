@@ -17,14 +17,10 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@TypeAlias("MultipleChoiceQuiz")
+@TypeAlias("MCQ")
 public final class MultipleChoiceQuiz extends Card {
     private List<String> options;
     private List<Integer> correctOptions;
-
-    public MultipleChoiceQuiz() {
-        super(null, null, null);
-    }
 
     @Builder
     public MultipleChoiceQuiz(String title, Set<String> tags, String question,

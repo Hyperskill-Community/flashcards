@@ -2,6 +2,8 @@ package org.hyperskill.community.flashcards.card;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
+import org.hyperskill.community.flashcards.card.mapper.CardReadConverter;
 import org.hyperskill.community.flashcards.card.model.Card;
 import org.hyperskill.community.flashcards.category.CategoryService;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,7 @@ public class CardService {
     private static final int pageSize = 20;
     private final MongoTemplate mongoTemplate;
     private final CategoryService categoryService;
+    private final CardReadConverter converter;
 
     public Page<Card> getCardsByCategory(String username, String categoryId, int page) {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
@@ -35,8 +38,10 @@ public class CardService {
         );
 
         var count = mongoTemplate.count(new Query(), collection);
-        var cards = mongoTemplate.aggregate(aggregation, collection, Card.class).getMappedResults();
-
+        var result = mongoTemplate.aggregate(aggregation, collection, Document.class)
+                .getRawResults()
+                .getList("results", Document.class);
+        var cards = result.stream().map(converter::convert).toList();
         return new PageImpl<>(cards, Pageable.ofSize(pageSize), count);
     }
 }
