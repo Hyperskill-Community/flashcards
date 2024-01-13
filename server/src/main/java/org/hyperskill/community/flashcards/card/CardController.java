@@ -3,6 +3,7 @@ package org.hyperskill.community.flashcards.card;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.hyperskill.community.flashcards.card.mapper.CardMapper;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CardController {
     private final CardService cardService;
+    private final CardMapper mapper;
 
     @GetMapping
     public CardPageResponse getCards(
@@ -28,7 +30,7 @@ public class CardController {
                 cardsPage.isLast(),
                 cardsPage.getNumber(),
                 cardsPage.getTotalPages(),
-                cardsPage.getContent()
+                cardsPage.getContent().stream().map(mapper::map).toList()
         );
     }
 }
