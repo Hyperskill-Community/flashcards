@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperskill.community.flashcards.card.model.Card;
 import org.hyperskill.community.flashcards.card.model.MultipleChoiceQuiz;
-import org.hyperskill.community.flashcards.card.model.QuestionAndAnswerCard;
+import org.hyperskill.community.flashcards.card.model.QuestionAndAnswer;
 import org.hyperskill.community.flashcards.card.model.SingleChoiceQuiz;
 import org.hyperskill.community.flashcards.category.model.Category;
 import org.hyperskill.community.flashcards.category.model.CategoryAccess;
@@ -79,7 +79,7 @@ public class ExampleDataInitializer {
             JsonNode jsonNode = objectMapper.readTree(flashcardsJson.getFile());
             List<SingleChoiceQuiz> scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
             List<MultipleChoiceQuiz> mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
-            List<QuestionAndAnswerCard> qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswerCard.class);
+            List<QuestionAndAnswer> qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
 
             mongoTemplate.insert(scqCards, exampleCollection);
             mongoTemplate.insert(mcqCards, exampleCollection);

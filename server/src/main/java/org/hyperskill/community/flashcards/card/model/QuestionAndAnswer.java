@@ -11,16 +11,12 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString(callSuper = true)
-@TypeAlias("QuestionAndAnswerCard")
-public final class QuestionAndAnswerCard extends Card {
+@TypeAlias("QNA")
+public final class QuestionAndAnswer extends Card {
     private String answer;
 
-    public QuestionAndAnswerCard() {
-        super(null, null, null);
-    }
-
     @Builder
-    public QuestionAndAnswerCard(String title, Set<String> tags, String question, String answer) {
+    public QuestionAndAnswer(String title, Set<String> tags, String question, String answer) {
         super(title, tags, question);
         this.answer = answer;
     }

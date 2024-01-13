@@ -1,6 +1,6 @@
 package org.hyperskill.community.flashcards.card;
 
-import org.hyperskill.community.flashcards.card.model.Card;
+import org.hyperskill.community.flashcards.card.response.CardResponse;
 
 import java.util.List;
 
@@ -9,7 +9,6 @@ public record CardPageResponse(
         boolean isLast,
         int currentPage,
         int totalPages,
-        // fixme change to DTO
-        List<Card> cards
+        List<CardResponse> cards
 ) {
 }
