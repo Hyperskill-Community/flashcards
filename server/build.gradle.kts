@@ -52,3 +52,7 @@ tasks.withType<BootRun> {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+tasks.named("processResources") {
+    dependsOn(":select-compose-file")
+}
