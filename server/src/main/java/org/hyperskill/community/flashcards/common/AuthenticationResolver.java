@@ -13,7 +13,7 @@ public class AuthenticationResolver {
         return switch (authentication) {
             case OidcUser oidcUser -> oidcUser.getSubject();
             // to provide access for Client Credentials Jwt-token of http-client, http or Postman
-            case Jwt jwt -> "test1@test.com"; // better use from category example (or json)
+            case Jwt jwt -> jwt.getSubject();
             default -> throw new IllegalStateException("Unexpected authentication: "
                                                        + authentication.getClass().getName());
         };
