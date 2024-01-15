@@ -1,12 +1,13 @@
 import apiClient from '@/plugins/axios';
 import {useErrorService} from "@/shared/composables/errorService";
 import {useToastService} from "@/shared/composables/toastService";
-import {Category} from "@/feature/cardmanagement/model/category";
+import apiUrl from "@/shared/composables/baseUrl";
+import {Card} from "@/feature/cards/model/card";
 
 const useCardsService = () => {
 
   const postNewUser = async (email: string, password: string, errorResult: string = 'throw') => {
-    const postUrl = 'http://127.0.0.1:8080/api/register';
+    const postUrl = apiUrl + 'register';
 
     const postData = {
       email: email,
@@ -26,30 +27,44 @@ const useCardsService = () => {
     }
   }
 
-  const getCategories = async (errorResult: string = 'throw') => {
-    const url = 'http://127.0.0.1:8080/api/categories';
+  const getCards = async (categoryId: string, page: number, errorResult: string = 'throw') : Promise<Card[]> => {
+    const url = apiUrl + 'cards?categoryId=' + categoryId + '&page=' + page;
 
     try {
       const response = await apiClient.get(url);
       if (response.status !== 200) {
         throw new Error(`Error status code ${response.status}!`);
       } else {
-        const categories = (response.data.categories as Category[]);
-        var result = 'Found categories:\n'
-        categories.forEach((category: Category) => {
-          result += `Id: ${category.id}, Name: ${category.name}, Access ${category.access}\n`;
-        });
-        useToastService().showSuccess('SUCCESS', result)
+        return (response.data.cards as Card[]);
       }
     } catch (error: any) {
       errorResult === 'throw' ? useErrorService().handleAndThrow(error)
         : useErrorService().handleAndNotify('custom error', 'custom message');
+      return [];
+    }
+  }
+
+  const getCardCount = async (categoryId: string, errorResult: string = 'throw')  => {
+    const url = apiUrl + 'cards/count?categoryId=' + categoryId;
+
+    try {
+      const response = await apiClient.get(url);
+      if (response.status !== 200) {
+        throw new Error(`Error status code ${response.status}!`);
+      } else {
+        return response.data as number;
+      }
+    } catch (error: any) {
+      errorResult === 'throw' ? useErrorService().handleAndThrow(error)
+        : useErrorService().handleAndNotify('custom error', 'custom message');
+      return 0;
     }
   }
 
   return {
     postNewUser,
-    getCategories,
+    getCards,
+    getCardCount
   }
 }
 export default useCardsService;

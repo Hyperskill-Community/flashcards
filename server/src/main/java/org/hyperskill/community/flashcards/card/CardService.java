@@ -21,20 +21,18 @@ import java.util.Objects;
 @Slf4j
 @RequiredArgsConstructor
 public class CardService {
-    private static final int pageSize = 20;
+    private static final int PAGE_SIZE = 20;
     private final MongoTemplate mongoTemplate;
     private final CategoryService categoryService;
     private final CardReadConverter converter;
 
     public Page<Card> getCardsByCategory(String username, String categoryId, int page) {
-        Objects.requireNonNull(categoryId, "Category ID cannot be null");
-
-        var collection = categoryService.findById(username, categoryId).name();
+        final var collection = getCollectionName(username, categoryId);
 
         var aggregation = Aggregation.newAggregation(
                 Aggregation.sort(Sort.by("name")),
-                Aggregation.skip((long) page * pageSize),
-                Aggregation.limit(pageSize)
+                Aggregation.skip((long) page * PAGE_SIZE),
+                Aggregation.limit(PAGE_SIZE)
         );
 
         var count = mongoTemplate.count(new Query(), collection);
@@ -42,6 +40,17 @@ public class CardService {
                 .getRawResults()
                 .getList("results", Document.class);
         var cards = result.stream().map(converter::convert).toList();
-        return new PageImpl<>(cards, Pageable.ofSize(pageSize), count);
+        return new PageImpl<>(cards, Pageable.ofSize(PAGE_SIZE), count);
+    }
+
+    private String getCollectionName(String username, String categoryId) {
+        Objects.requireNonNull(categoryId, "Category ID cannot be null");
+
+        return categoryService.findById(username, categoryId).name();
+    }
+
+    public long getCardCountOfCategory(String username, String categoryId) {
+        final var collection = getCollectionName(username, categoryId);
+        return mongoTemplate.count(new Query(), collection);
     }
 }

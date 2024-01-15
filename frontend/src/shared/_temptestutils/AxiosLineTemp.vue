@@ -28,7 +28,7 @@
       </v-row>
       <v-row>
         <v-col cols="12" sm="6" md="4">
-          <v-btn color="black" border @click="useCardsService().getCategories" variant="text">
+          <v-btn color="black" border @click="showCategories" variant="text">
             Get categories
           </v-btn>
         </v-col>
@@ -48,8 +48,11 @@
 
 <script setup lang="ts">
 import {useAxiosTestService} from "@/shared/composables/testService";
-import useCardsService from "@/feature/cardmanagement/composables/useCardsService";
+import useCardsService from "@/feature/cards/composables/useCardsService";
+import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 import {ref} from "vue";
+import {Category} from "@/feature/category/model/category";
+import {useToastService} from "@/shared/composables/toastService";
 
 const email = ref('');
 const password = ref('');
@@ -60,6 +63,15 @@ const testAxiosCall = (method: string, errorResult?: string) => {
 
 const postNewUser = () => {
   useCardsService().postNewUser(email.value, password.value);
+}
+
+const showCategories = async () => {
+  const categories = await useCategoriesService().getCategories();
+  var result = 'Found categories:\n'
+  categories.forEach((category: Category) => {
+    result += `Id: ${category.id}, Name: ${category.name}, Access ${category.access}\n`;
+  });
+  useToastService().showSuccess('SUCCESS', result);
 }
 </script>
 
