@@ -1,10 +1,11 @@
 package org.hyperskill.community.flashcards.category.mapper;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hyperskill.community.flashcards.category.CategoryDto;
-import org.hyperskill.community.flashcards.category.CategoryPageResponse;
 import org.hyperskill.community.flashcards.category.model.Category;
 import org.hyperskill.community.flashcards.category.model.CategoryAccess;
+import org.hyperskill.community.flashcards.category.response.CategoryDto;
+import org.hyperskill.community.flashcards.category.response.CategoryPageResponse;
+import org.hyperskill.community.flashcards.common.ActionsParser;
 import org.springframework.data.domain.Page;
 
 import java.util.Objects;
@@ -30,10 +31,13 @@ public class CategoryMapper {
             throw new IllegalStateException(message);
         }
 
+        var uri = "/api/categories/" + category.id();
+        var actions = ActionsParser.fromPermissions(permissions, uri);
+
         return new CategoryDto(
                 category.id(),
                 category.name(),
-                permissions
+                actions
         );
     }
 

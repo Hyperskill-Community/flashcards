@@ -3,6 +3,7 @@ package org.hyperskill.community.flashcards.card.response;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hyperskill.community.flashcards.common.response.PermittedAction;
 
 import java.time.Instant;
 import java.util.List;

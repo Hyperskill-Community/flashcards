@@ -1,4 +1,4 @@
-package org.hyperskill.community.flashcards.card.response;
+package org.hyperskill.community.flashcards.common.response;
 
 public record PermittedAction(ActionType action, String uri) {
 }
