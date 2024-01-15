@@ -31,7 +31,8 @@
             <div class="px-4">
               <v-switch
                 :model-value="isExpanded(item)"
-                :label="`${isExpanded(item) ? 'Hide' : 'Show'} details`"
+                :label="`Show details`"
+                :color="`${isExpanded(item) ? '#43A047' : '#EEEEEE'}`"
                 density="compact"
                 inset
                 @click="() => toggleExpand(item)"
@@ -43,13 +44,9 @@
             <v-expand-transition>
               <div v-if="isExpanded(item)">
                 <v-list density="compact" :lines="false">
-                  <v-list-item :title="`🔥 Calories: ${item.raw.calories}`" active></v-list-item>
-                  <v-list-item :title="`🍔 Fat: ${item.raw.fat}`"></v-list-item>
-                  <v-list-item :title="`🍞 Carbs: ${item.raw.carbs}`"></v-list-item>
-                  <v-list-item :title="`🍗 Protein: ${item.raw.protein}`"></v-list-item>
-                  <v-list-item :title="`🧂 Sodium: ${item.raw.sodium}`"></v-list-item>
-                  <v-list-item :title="`🦴 Calcium: ${item.raw.calcium}`"></v-list-item>
-                  <v-list-item :title="`🧲 Iron: ${item.raw.iron}`"></v-list-item>
+                  <v-list-item :title="`🔥 Your access: ${item.raw.access}`" active></v-list-item>
+                  <v-list-item :title="`🍔 #Cards in Category: ${item.raw.numberOfCards || 0}`"></v-list-item>
+                  <v-list-item :title="`🧲 Id: ${item.raw.id}`"></v-list-item>
                 </v-list>
               </div>
             </v-expand-transition>
@@ -64,20 +61,22 @@
 import {Category} from "@/feature/category/model/category";
 import {ref} from "vue";
 
-// const props = defineProps({
-//   categories: Array as () => Category[]
-// })
+const props = defineProps({
+  categories: Array as () => Category[]
+})
 const categories = ref([
   {
     id: 'abcdef',
     name: 'Example',
     access: 'rwd',
+    numberOfCards: 10,
     description: 'This is an example category',
   },
   {
     id: 'abcdf',
     name: 'Mathe',
     access: 'rw',
+    numberOfCards: 125,
     description: 'These are my math flashcards',
   },
   {
