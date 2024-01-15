@@ -5,11 +5,23 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperskill.community.flashcards.category.mapper.CategoryMapper;
+import org.hyperskill.community.flashcards.category.request.CategoryCreateRequest;
+import org.hyperskill.community.flashcards.category.request.CategoryUpdateRequest;
+import org.hyperskill.community.flashcards.category.response.CategoryDto;
+import org.hyperskill.community.flashcards.category.response.CategoryPageResponse;
 import org.hyperskill.community.flashcards.common.AuthenticationResolver;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(path = "/api/categories")
@@ -27,5 +39,41 @@ public class CategoryController {
         var categories = categoryService.getCategories(username, page);
         var mapper = new CategoryMapper(username);
         return mapper.categoryPageToCategoryPageResponse(categories);
+    }
+
+    @GetMapping(path = "/{categoryId}")
+    public CategoryDto getCategory(@PathVariable String categoryId) {
+
+        var username = authenticationResolver.resolveUsername();
+        var category = categoryService.findById(username, categoryId);
+        var mapper = new CategoryMapper(username);
+        return mapper.categoryToCategoryDto(category);
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> create(@Valid @RequestBody CategoryCreateRequest request) {
+
+        var username = authenticationResolver.resolveUsername();
+        var categoryId = categoryService.createCategory(username, request);
+        return ResponseEntity
+                .created(URI.create("/api/categories/" + categoryId))
+                .build();
+    }
+
+    @PutMapping(path = "/{categoryId}")
+    public CategoryDto updateCategory(@PathVariable String categoryId,
+                                      @Valid @RequestBody CategoryUpdateRequest request) {
+
+        var username = authenticationResolver.resolveUsername();
+        var updatedCategory = categoryService.updateById(username, categoryId, request);
+        var mapper = new CategoryMapper(username);
+        return mapper.categoryToCategoryDto(updatedCategory);
+    }
+
+    @DeleteMapping(path = "/{categoryId}")
+    public void deleteCategory(@PathVariable String categoryId) {
+
+        var username = authenticationResolver.resolveUsername();
+        categoryService.deleteById(username, categoryId);
     }
 }

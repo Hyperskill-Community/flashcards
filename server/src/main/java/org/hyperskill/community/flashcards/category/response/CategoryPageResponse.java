@@ -1,4 +1,4 @@
-package org.hyperskill.community.flashcards.category;
+package org.hyperskill.community.flashcards.category.response;
 
 import java.util.List;
 
