@@ -1,6 +1,6 @@
 package org.hyperskill.community.flashcards.category;
 
-import com.mongodb.BasicDBObject;
+import com.mongodb.MongoNamespace;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperskill.community.flashcards.category.model.Category;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.OutOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.access.AccessDeniedException;
@@ -56,11 +55,8 @@ public class CategoryService {
     public Category findById(String username, String categoryId) {
         var category = Optional.ofNullable(mongoTemplate.findById(categoryId, Category.class))
                 .orElseThrow(ResourceNotFound::new);
+        assertCanAccess(username, category, "r");
 
-        var canAccess = category.access().stream().anyMatch(access -> access.username().equals(username));
-        if (!canAccess) {
-            throw new AccessDeniedException("Access denied");
-        }
         return category;
     }
 
@@ -78,11 +74,14 @@ public class CategoryService {
         var newCategory = new Category(null, categoryName, Set.of(access));
         newCategory = mongoTemplate.insert(newCategory, "category");
         mongoTemplate.getDb().createCollection(categoryName);
+
         return newCategory.id();
     }
 
     public void deleteById(String username, String categoryId) {
         var category = findById(username, categoryId);
+        assertCanAccess(username, category, "d");
+
         mongoTemplate.remove(category, "category");
         mongoTemplate.dropCollection(category.name());
     }
@@ -90,14 +89,16 @@ public class CategoryService {
     public Category updateById(String username, String categoryId, CategoryUpdateRequest request) {
         // find if the requested collection exists and can be modified
         var category = findById(username, categoryId);
+        assertCanAccess(username, category, "w");
 
-        // copy all documents from the old collection to the new collection
-        var outOperation = new OutOperation(request.name());
-        var aggregation = Aggregation.newAggregation(outOperation);
-        mongoTemplate.aggregate(aggregation, category.name(), BasicDBObject.class);
+        // check if the new name is already taken
+        if (mongoTemplate.getCollectionNames().contains(request.name())) {
+            throw new ResourceAlreadyExists();
+        }
 
-        // delete old collection
-        mongoTemplate.dropCollection(category.name());
+        // rename the existing collection
+        var namespace = new MongoNamespace(mongoTemplate.getDb().getName(), request.name());
+        mongoTemplate.getCollection(category.name()).renameCollection(namespace);
 
         // update document in 'category' collection
         var query = Query.query(Criteria.where("id").is(categoryId));
@@ -105,5 +106,13 @@ public class CategoryService {
 
         // return the updated document from 'category' collection
         return mongoTemplate.findOne(query, Category.class);
+    }
+
+    private void assertCanAccess(String username, Category category, String permission) {
+        var regex = "(.*%s.*){1,3}".formatted(permission);
+        category.access().stream()
+                .filter(access -> access.username().equals(username) && access.permission().matches(regex))
+                .findFirst()
+                .orElseThrow(() -> new AccessDeniedException("Access '%s' denied".formatted(permission)));
     }
 }
