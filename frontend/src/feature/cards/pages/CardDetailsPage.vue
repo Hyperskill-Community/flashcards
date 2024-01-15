@@ -2,9 +2,10 @@
   <h2>Card Details Page for card with Id: {{ props.id }}</h2>
   <router-link to="/">Go Home</router-link>
   <v-container>
-    <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" max-width="500px" min-height="300px">
-      <v-card-title class="text-center">
-        Card title
+    <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" max-width="500px" min-height="300px"
+            color="#E0F7FA">
+      <v-card-title class="text-center text-sm-h3">
+        Card '{{ props.id }}'
       </v-card-title>
       <v-card-subtitle>
         sport, math, programming

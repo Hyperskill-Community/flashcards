@@ -1,12 +1,14 @@
 import apiClient from '@/plugins/axios';
 import {useErrorService} from "@/shared/composables/errorService";
 import {useToastService} from "@/shared/composables/toastService";
-import {Category} from "@/feature/cardmanagement/model/category";
+import {Category} from "@/feature/category/model/category";
+import {inject} from "vue";
 
+const apiBase = inject('apiBaseURL');
 const useCardsService = () => {
 
   const postNewUser = async (email: string, password: string, errorResult: string = 'throw') => {
-    const postUrl = 'http://127.0.0.1:8080/api/register';
+    const postUrl = apiBase + 'register';
 
     const postData = {
       email: email,

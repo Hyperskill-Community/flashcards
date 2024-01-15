@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import {useAxiosTestService} from "@/shared/composables/testService";
-import useCardsService from "@/feature/cardmanagement/composables/useCardsService";
+import useCardsService from "@/feature/cards/composables/useCardsService";
 import {ref} from "vue";
 
 const email = ref('');
