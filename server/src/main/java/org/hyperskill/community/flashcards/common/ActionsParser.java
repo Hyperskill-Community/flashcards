@@ -7,25 +7,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ActionsParser {
-    private static String currentUri = "";
 
     private ActionsParser() {
     }
 
-    public static void setUri(String uri) {
-        currentUri = uri;
-    }
-
-    public static Set<PermittedAction> fromPermissions(String permissions) {
+    public static Set<PermittedAction> fromPermissions(String permissions, String uri) {
         Set<PermittedAction> actions = new HashSet<>(3);
         if (permissions.contains("r")) {
-            actions.add(new PermittedAction(ActionType.READ, currentUri));
+            actions.add(new PermittedAction(ActionType.READ, uri));
         }
         if (permissions.contains("w")) {
-            actions.add(new PermittedAction(ActionType.WRITE, currentUri));
+            actions.add(new PermittedAction(ActionType.WRITE, uri));
         }
         if (permissions.contains("d")) {
-            actions.add(new PermittedAction(ActionType.DELETE, currentUri));
+            actions.add(new PermittedAction(ActionType.DELETE, uri));
         }
         return actions;
     }

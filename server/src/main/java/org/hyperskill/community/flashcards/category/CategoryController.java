@@ -55,8 +55,12 @@ public class CategoryController {
 
         var username = authenticationResolver.resolveUsername();
         var categoryId = categoryService.createCategory(username, request);
+        var uri = URI.create("/api/categories/" + categoryId);
+
+        log.debug("User '{}' created a new category '{}' created", username, uri);
+
         return ResponseEntity
-                .created(URI.create("/api/categories/" + categoryId))
+                .created(uri)
                 .build();
     }
 
@@ -66,6 +70,9 @@ public class CategoryController {
 
         var username = authenticationResolver.resolveUsername();
         var updatedCategory = categoryService.updateById(username, categoryId, request);
+
+        log.debug("User '{}' updated category '{}'", username, categoryId);
+
         var mapper = new CategoryMapper(username);
         return mapper.categoryToCategoryDto(updatedCategory);
     }
@@ -75,5 +82,7 @@ public class CategoryController {
 
         var username = authenticationResolver.resolveUsername();
         categoryService.deleteById(username, categoryId);
+
+        log.debug("User '{}' deleted category '{}'", username, categoryId);
     }
 }

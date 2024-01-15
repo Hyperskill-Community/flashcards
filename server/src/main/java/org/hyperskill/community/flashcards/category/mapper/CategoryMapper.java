@@ -31,8 +31,8 @@ public class CategoryMapper {
             throw new IllegalStateException(message);
         }
 
-        ActionsParser.setUri("/api/categories/" + category.id());
-        var actions = ActionsParser.fromPermissions(permissions);
+        var uri = "/api/categories/" + category.id();
+        var actions = ActionsParser.fromPermissions(permissions, uri);
 
         return new CategoryDto(
                 category.id(),
