@@ -1,15 +1,13 @@
 import apiClient from '@/plugins/axios';
 import {useErrorService} from "@/shared/composables/errorService";
 import {useToastService} from "@/shared/composables/toastService";
-import {inject} from "vue";
 import apiUrl from "@/shared/composables/baseUrl";
 import {Card} from "@/feature/cards/model/card";
 
-const apiBase = inject('apiBaseURL');
 const useCardsService = () => {
 
   const postNewUser = async (email: string, password: string, errorResult: string = 'throw') => {
-    const postUrl = apiBase + 'register';
+    const postUrl = apiUrl + 'register';
 
     const postData = {
       email: email,
