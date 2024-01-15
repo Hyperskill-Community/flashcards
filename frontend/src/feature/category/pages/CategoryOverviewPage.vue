@@ -15,15 +15,15 @@ import useCategoriesService from "@/feature/category/composables/useCategoriesSe
 import {ref} from "vue";
 import {Category} from "@/feature/category/model/category";
 import CategoryIterator from "@/feature/category/components/CategoryIterator.vue";
+import useCardsService from "@/feature/cards/composables/useCardsService";
 
 const categories = ref([] as Category[]);
 
 const fetchCategories = async () => {
   categories.value = await useCategoriesService().getCategories();
+  for (const category of categories.value) {
+    category.numberOfCards = await useCardsService().getCardCount(category.id);
+  }
 }
 fetchCategories();
 </script>
-
-<style scoped>
-
-</style>

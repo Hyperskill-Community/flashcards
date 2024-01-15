@@ -8,7 +8,7 @@
         <v-list-item to="/display/sample" title="Card detail sample"></v-list-item>
         <v-list-item to="/test" title="Test axios"></v-list-item>
         <v-divider></v-divider>
-        <v-list-item to="/" title="Welcome"></v-list-item>
+        <v-list-item to="/welcome" title="Welcome"></v-list-item>
       </v-navigation-drawer>
       <router-view/>
       <toast-layer/>

@@ -33,4 +33,10 @@ public class CardController {
                 cardsPage.getContent().stream().map(mapper::map).toList()
         );
     }
+
+    @GetMapping("/count")
+    public long getCardsCount(@RequestParam(name = "categoryId") String categoryId) {
+        var username = authenticationResolver.resolveUsername();
+        return cardService.getCardCountOfCategory(username, categoryId);
+    }
 }

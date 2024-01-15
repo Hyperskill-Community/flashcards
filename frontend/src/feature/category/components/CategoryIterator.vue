@@ -1,6 +1,6 @@
 <template>
   <v-data-iterator
-    :items="categories"
+    :items="props.categories"
     item-value="name"
   >
     <template v-slot:default="{ items, isExpanded, toggleExpand }">
@@ -30,19 +30,19 @@
 
             <div class="px-4">
               <v-switch
-                :model-value="isExpanded(item)"
+                :model-value="isExpanded(item as any)"
                 :label="`Show details`"
-                :color="`${isExpanded(item) ? '#43A047' : '#EEEEEE'}`"
+                :color="`${isExpanded(item as any) ? '#43A047' : '#EEEEEE'}`"
                 density="compact"
                 inset
-                @click="() => toggleExpand(item)"
+                @click="() => toggleExpand(item as any)"
               ></v-switch>
             </div>
 
             <v-divider></v-divider>
 
             <v-expand-transition>
-              <div v-if="isExpanded(item)">
+              <div v-if="isExpanded(item as any)">
                 <v-list density="compact" :lines="false">
                   <v-list-item :title="`🔥 Your access: ${item.raw.access}`" active></v-list-item>
                   <v-list-item :title="`🍔 #Cards in Category: ${item.raw.numberOfCards || 0}`"></v-list-item>
@@ -59,32 +59,10 @@
 
 <script setup lang="ts">
 import {Category} from "@/feature/category/model/category";
-import {ref} from "vue";
 
 const props = defineProps({
   categories: Array as () => Category[]
 })
-const categories = ref([
-  {
-    id: 'abcdef',
-    name: 'Example',
-    access: 'rwd',
-    numberOfCards: 10,
-    description: 'This is an example category',
-  },
-  {
-    id: 'abcdf',
-    name: 'Mathe',
-    access: 'rw',
-    numberOfCards: 125,
-    description: 'These are my math flashcards',
-  },
-  {
-    id: 'abcde',
-    name: 'Java',
-    access: 'rd',
-    description: 'These are my Java flashcards',
-  },
-] as Category[]);
+
 
 </script>

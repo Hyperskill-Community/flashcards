@@ -3,6 +3,11 @@ const routes = [
   {
     path: '/',
     name: 'Home',
+    component: () => import('@/App.vue'),
+  },
+  {
+    path: '/welcome',
+    name: 'welcome',
     component: () => import('@/shared/pages/Home.vue'),
   },
   {
