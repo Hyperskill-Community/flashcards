@@ -57,7 +57,7 @@ public class CategoryController {
         var categoryId = categoryService.createCategory(username, request);
         var uri = URI.create("/api/categories/" + categoryId);
 
-        log.debug("User '{}' created a new category '{}' created", username, uri);
+        log.debug("User '{}' created a new category '{}'", username, categoryId);
 
         return ResponseEntity
                 .created(uri)
