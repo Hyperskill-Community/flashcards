@@ -4,6 +4,10 @@ import org.hyperskill.community.flashcards.card.model.Card;
 import org.hyperskill.community.flashcards.card.model.MultipleChoiceQuiz;
 import org.hyperskill.community.flashcards.card.model.QuestionAndAnswer;
 import org.hyperskill.community.flashcards.card.model.SingleChoiceQuiz;
+import org.hyperskill.community.flashcards.card.request.CardCreateRequest;
+import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizCreateRequest;
+import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerCreateRequest;
+import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizCreateRequest;
 import org.hyperskill.community.flashcards.card.response.CardResponse;
 import org.hyperskill.community.flashcards.card.response.MultipleChoiceQuizDto;
 import org.hyperskill.community.flashcards.card.response.QuestionAndAnswerDto;
@@ -20,6 +24,43 @@ public class CardMapper {
             case SingleChoiceQuiz scq -> toDto(scq);
             case MultipleChoiceQuiz mcq -> toDto(mcq);
         };
+    }
+
+    public <T extends CardCreateRequest> Card toDocument(T request) {
+        return switch (request) {
+            case QuestionAndAnswerCreateRequest qna -> toDocument(qna);
+            case SingleChoiceQuizCreateRequest scq -> toDocument(scq);
+            case MultipleChoiceQuizCreateRequest mcq -> toDocument(mcq);
+        };
+    }
+
+    private QuestionAndAnswer toDocument(QuestionAndAnswerCreateRequest request) {
+        return new QuestionAndAnswer(
+                request.getTitle(),
+                request.getTags(),
+                request.getQuestion(),
+                request.getAnswer()
+        );
+    }
+
+    private SingleChoiceQuiz toDocument(SingleChoiceQuizCreateRequest request) {
+        return new SingleChoiceQuiz(
+                request.getTitle(),
+                request.getTags(),
+                request.getQuestion(),
+                request.getOptions(),
+                request.getCorrectOption()
+        );
+    }
+
+    private MultipleChoiceQuiz toDocument(MultipleChoiceQuizCreateRequest request) {
+        return new MultipleChoiceQuiz(
+                request.getTitle(),
+                request.getTags(),
+                request.getQuestion(),
+                request.getOptions(),
+                request.getCorrectOptions()
+        );
     }
 
     private QuestionAndAnswerDto toDto(QuestionAndAnswer card) {
