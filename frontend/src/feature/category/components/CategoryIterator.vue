@@ -44,8 +44,8 @@
             <v-expand-transition>
               <div v-if="isExpanded(item as any)">
                 <v-list density="compact" :lines="false">
-                  <v-list-item :title="`🔥 Your access: ${item.raw.access}`" active></v-list-item>
-                  <v-list-item :title="`🍔 #Cards in Category: ${item.raw.numberOfCards || 0}`"></v-list-item>
+                  <v-list-item :title="`🔥 Your access: ${getAccess(item.raw)}`"></v-list-item>
+                  <v-list-item :title="`🍔 #Cards in Category: ${item.raw.numberOfCards}`"></v-list-item>
                   <v-list-item :title="`🧲 Id: ${item.raw.id}`"></v-list-item>
                 </v-list>
               </div>
@@ -58,11 +58,10 @@
 </template>
 
 <script setup lang="ts">
-import {Category} from "@/feature/category/model/category";
+import {Category, getAccess} from "@/feature/category/model/category";
 
 const props = defineProps({
   categories: Array as () => Category[]
 })
-
 
 </script>

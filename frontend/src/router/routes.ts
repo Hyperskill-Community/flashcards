@@ -2,13 +2,8 @@
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: () => import('@/App.vue'),
-  },
-  {
-    path: '/welcome',
     name: 'welcome',
-    component: () => import('@/shared/pages/Home.vue'),
+    component: () => import('@/shared/pages/Welcome.vue'),
   },
   {
     path: '/categories',

@@ -51,7 +51,7 @@ import {useAxiosTestService} from "@/shared/composables/testService";
 import useCardsService from "@/feature/cards/composables/useCardsService";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 import {ref} from "vue";
-import {Category} from "@/feature/category/model/category";
+import {Category, getAccess} from "@/feature/category/model/category";
 import {useToastService} from "@/shared/composables/toastService";
 
 const email = ref('');
@@ -69,7 +69,7 @@ const showCategories = async () => {
   const categories = await useCategoriesService().getCategories();
   var result = 'Found categories:\n'
   categories.forEach((category: Category) => {
-    result += `Id: ${category.id}, Name: ${category.name}, Access ${category.access}\n`;
+    result += `Id: ${category.id}, Name: ${category.name}, Access ${getAccess(category)}\n`;
   });
   useToastService().showSuccess('SUCCESS', result);
 }
