@@ -49,6 +49,8 @@ public class ExampleDataInitializer {
      */
     @PostConstruct
     public void init() {
+        log.info("Inserting sample data to the database...");
+
         if (isCollectionNotEmpty(userCollection)) {
             log.warn("Collection {} is not empty, aborting database initialization", userCollection);
             return;
@@ -73,6 +75,8 @@ public class ExampleDataInitializer {
             }
             mongoTemplate.insertAll(users);
 
+            log.info("Sample users successfully inserted!");
+
             var categoryAccess = new CategoryAccess(users.get(0).getUsername(), "rwd");
             mongoTemplate.insert(new Category(null, exampleCollection, Set.of(categoryAccess)));
 
@@ -84,6 +88,8 @@ public class ExampleDataInitializer {
             mongoTemplate.insert(scqCards, exampleCollection);
             mongoTemplate.insert(mcqCards, exampleCollection);
             mongoTemplate.insert(qnaCards, exampleCollection);
+
+            log.info("Sample flashcards successfully inserted!");
 
         } catch (Exception e) {
             log.error("Error updating database", e);
