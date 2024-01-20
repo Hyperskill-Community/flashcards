@@ -17,7 +17,10 @@ public class ObservabilityConfiguration {
         return (request, response, chain) -> {
             var loggedIn = SecurityContextHolder.getContext().getAuthentication();
             MDC.put("user", loggedIn.getName());
-            log.trace("User {} is accessing {}", loggedIn.getName(), ((HttpServletRequest) request).getRequestURI());
+            var uri = ((HttpServletRequest) request).getRequestURI();
+            if (!uri.contains(".")) {
+                log.trace("User {} is accessing {}", loggedIn.getName(), uri);
+            }
             chain.doFilter(request, response);
         };
     }
