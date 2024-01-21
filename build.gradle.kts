@@ -1,7 +1,6 @@
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
-    java
     id("org.springframework.boot") version libs.versions.spring.boot
     id("io.spring.dependency-management") version libs.versions.spring.dependency.management
 }
