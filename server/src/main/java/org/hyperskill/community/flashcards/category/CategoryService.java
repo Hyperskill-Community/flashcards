@@ -7,8 +7,8 @@ import org.hyperskill.community.flashcards.category.model.Category;
 import org.hyperskill.community.flashcards.category.model.CategoryAccess;
 import org.hyperskill.community.flashcards.category.request.CategoryCreateRequest;
 import org.hyperskill.community.flashcards.category.request.CategoryUpdateRequest;
-import org.hyperskill.community.flashcards.common.exception.ResourceAlreadyExists;
-import org.hyperskill.community.flashcards.common.exception.ResourceNotFound;
+import org.hyperskill.community.flashcards.common.exception.ResourceAlreadyExistsException;
+import org.hyperskill.community.flashcards.common.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -53,9 +53,14 @@ public class CategoryService {
     }
 
     public Category findById(String username, String categoryId) {
+        return findById(username, categoryId, "r");
+    }
+
+    public Category findById(String username, String categoryId, String permission) {
         var category = Optional.ofNullable(mongoTemplate.findById(categoryId, Category.class))
-                .orElseThrow(ResourceNotFound::new);
-        assertCanAccess(username, category, "r");
+                .orElseThrow(ResourceNotFoundException::new);
+
+        assertCanAccess(username, category, permission);
 
         return category;
     }
@@ -67,7 +72,7 @@ public class CategoryService {
         var query = Query.query(Criteria.where("name").is(categoryName));
         var category = mongoTemplate.findOne(query, Category.class, "category");
         if (category != null) {
-            throw new ResourceAlreadyExists();
+            throw new ResourceAlreadyExistsException();
         }
 
         var access = new CategoryAccess(username, "rwd");
@@ -93,7 +98,7 @@ public class CategoryService {
 
         // check if the new name is already taken
         if (mongoTemplate.getCollectionNames().contains(request.name())) {
-            throw new ResourceAlreadyExists();
+            throw new ResourceAlreadyExistsException();
         }
 
         // rename the existing collection
