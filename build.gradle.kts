@@ -1,6 +1,7 @@
 import org.springframework.boot.gradle.tasks.run.BootRun
 
 plugins {
+    java
     id("org.springframework.boot") version libs.versions.spring.boot
     id("io.spring.dependency-management") version libs.versions.spring.dependency.management
 }
@@ -25,6 +26,12 @@ tasks.register<Copy>("select-compose-file") {
     from("${rootDir}/docker/arch/$composeFile")
     into("${rootDir}/docker")
     rename(composeFile, "compose.yaml")
+}
+
+tasks.register("sonar") {
+    group = "verification"
+    description = "Run sonarqube analysis - presently only for flashcards-server"
+    dependsOn(":flashcards-server:sonar")
 }
 
 tasks.register<BootRun>("bootRunFlashcards") {

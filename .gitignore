@@ -14,6 +14,7 @@ out/
 .idea/modules/
 .idea/*.xml
 compose.yaml
+gradle.properties
 
 ### Mac OS ###
 .DS_Store

@@ -4,6 +4,8 @@ plugins {
     application
     id("org.springframework.boot") version libs.versions.spring.boot
     id("io.spring.dependency-management") version libs.versions.spring.dependency.management
+    id("org.sonarqube") version libs.versions.sonar.gradle
+    jacoco
 }
 
 group = "org.hyperskill.community"
@@ -12,6 +14,30 @@ version = "0.0.1-SNAPSHOT"
 java {
     sourceCompatibility = JavaVersion.VERSION_21
 }
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+    }
+}
+
+val sonarToken: String by project
+sonar {
+    properties {
+        property("sonar.token", sonarToken)
+        property("sonar.projectKey", "flashcards-server")
+        property("sonar.projectName", "Flashcards Server")
+        property("sonar.jacoco.reportPaths", "build/reports/jacoco")
+        property("sonar.junit.reportPaths", "build/test-results/test")
+        property("sonar.host.url", "http://localhost:9000")
+    }
+}
+
+tasks.sonar {
+    dependsOn(tasks.jacocoTestReport)
+}
+
 
 configurations {
     compileOnly {
