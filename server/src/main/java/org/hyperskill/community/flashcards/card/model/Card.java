@@ -9,6 +9,7 @@ import org.hyperskill.community.flashcards.card.mapper.MongoDateConverter;
 import org.hyperskill.community.flashcards.card.mapper.MongoObjectIdConverter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
@@ -33,6 +34,8 @@ public sealed abstract class Card permits QuestionAndAnswer, SingleChoiceQuiz, M
     @CreatedDate
     @JsonDeserialize(using = MongoDateConverter.class)
     protected Instant createdAt;
+    @Transient
+    protected String permissions;
 
     protected Card(String title, Set<String> tags, String question) {
         this.title = title;
