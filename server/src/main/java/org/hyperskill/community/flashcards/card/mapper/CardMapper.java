@@ -4,58 +4,108 @@ import org.hyperskill.community.flashcards.card.model.Card;
 import org.hyperskill.community.flashcards.card.model.MultipleChoiceQuiz;
 import org.hyperskill.community.flashcards.card.model.QuestionAndAnswer;
 import org.hyperskill.community.flashcards.card.model.SingleChoiceQuiz;
+import org.hyperskill.community.flashcards.card.request.CardCreateRequest;
+import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizCreateRequest;
+import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerCreateRequest;
+import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizCreateRequest;
 import org.hyperskill.community.flashcards.card.response.CardResponse;
 import org.hyperskill.community.flashcards.card.response.MultipleChoiceQuizDto;
 import org.hyperskill.community.flashcards.card.response.QuestionAndAnswerDto;
 import org.hyperskill.community.flashcards.card.response.SingleChoiceQuizDto;
+import org.hyperskill.community.flashcards.common.ActionsParser;
+import org.hyperskill.community.flashcards.common.response.PermittedAction;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
 @Component
 public class CardMapper {
-    public CardResponse map(Card card) {
+
+    public CardResponse map(Card card, String categoryId) {
+        var uri = "/api/cards/" + card.getId() + "?categoryId=" + categoryId;
+        var actions = ActionsParser.fromPermissions(card.getPermissions(), uri);
+
         return switch (card) {
-            case QuestionAndAnswer qna -> toDto(qna);
-            case SingleChoiceQuiz scq -> toDto(scq);
-            case MultipleChoiceQuiz mcq -> toDto(mcq);
+            case QuestionAndAnswer qna -> toDto(qna, actions);
+            case SingleChoiceQuiz scq -> toDto(scq, actions);
+            case MultipleChoiceQuiz mcq -> toDto(mcq, actions);
         };
     }
 
-    private QuestionAndAnswerDto toDto(QuestionAndAnswer card) {
+    public <T extends CardCreateRequest> Card toDocument(T request) {
+        return switch (request) {
+            case QuestionAndAnswerCreateRequest qna -> toDocument(qna);
+            case SingleChoiceQuizCreateRequest scq -> toDocument(scq);
+            case MultipleChoiceQuizCreateRequest mcq -> toDocument(mcq);
+        };
+    }
+
+    private QuestionAndAnswer toDocument(QuestionAndAnswerCreateRequest request) {
+        return new QuestionAndAnswer(
+                request.getTitle(),
+                request.getTags(),
+                request.getQuestion(),
+                request.getAnswer()
+        );
+    }
+
+    private SingleChoiceQuiz toDocument(SingleChoiceQuizCreateRequest request) {
+        return new SingleChoiceQuiz(
+                request.getTitle(),
+                request.getTags(),
+                request.getQuestion(),
+                request.getOptions(),
+                request.getCorrectOption()
+        );
+    }
+
+    private MultipleChoiceQuiz toDocument(MultipleChoiceQuizCreateRequest request) {
+        return new MultipleChoiceQuiz(
+                request.getTitle(),
+                request.getTags(),
+                request.getQuestion(),
+                request.getOptions(),
+                request.getCorrectOptions()
+        );
+    }
+
+    private QuestionAndAnswerDto toDto(QuestionAndAnswer card, Set<PermittedAction> actions) {
         return QuestionAndAnswerDto.builder()
                 .id(card.getId())
+                .title(card.getTitle())
                 .type("qna")
                 .question(card.getQuestion())
                 .answer(card.getAnswer())
                 .tags(card.getTags())
-                .actions(Set.of())
+                .actions(actions)
                 .createdAt(card.getCreatedAt())
                 .build();
     }
 
-    private SingleChoiceQuizDto toDto(SingleChoiceQuiz card) {
+    private SingleChoiceQuizDto toDto(SingleChoiceQuiz card, Set<PermittedAction> actions) {
         return SingleChoiceQuizDto.builder()
                 .id(card.getId())
+                .title(card.getTitle())
                 .type("scq")
                 .question(card.getQuestion())
                 .options(card.getOptions())
                 .correctOption(card.getCorrectOption())
                 .tags(card.getTags())
-                .actions(Set.of())
+                .actions(actions)
                 .createdAt(card.getCreatedAt())
                 .build();
     }
 
-    private MultipleChoiceQuizDto toDto(MultipleChoiceQuiz card) {
+    private MultipleChoiceQuizDto toDto(MultipleChoiceQuiz card, Set<PermittedAction> actions) {
         return MultipleChoiceQuizDto.builder()
                 .id(card.getId())
+                .title(card.getTitle())
                 .type("mcq")
                 .question(card.getQuestion())
                 .options(card.getOptions())
                 .correctOptions(card.getCorrectOptions())
                 .tags(card.getTags())
-                .actions(Set.of())
+                .actions(actions)
                 .createdAt(card.getCreatedAt())
                 .build();
     }
