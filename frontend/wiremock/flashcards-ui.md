@@ -7,8 +7,8 @@ Excalidraw sketches for the UI design of the Flashcards app.
 This section contains the overview pages of the Flashcards app.
 
 #### Categories overview
-[Categories Overview Wiremock in Excalidraw](categories-overview.svg)
+![Categories Overview Wiremock in Excalidraw](categories-overview.svg)
 
 #### Cards overview
-[Cards Overview Wiremock in Excalidraw](cards-overview.svg)
+![Cards Overview Wiremock in Excalidraw](cards-overview.svg)
 
