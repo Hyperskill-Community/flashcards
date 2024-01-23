@@ -1,6 +1,5 @@
 package org.hyperskill.community.flashcards.integration;
 
-import com.mongodb.client.MongoClients;
 import org.hyperskill.community.flashcards.TestMongoConfiguration;
 import org.hyperskill.community.flashcards.category.CategoryService;
 import org.hyperskill.community.flashcards.category.model.Category;
@@ -8,6 +7,7 @@ import org.hyperskill.community.flashcards.category.model.CategoryAccess;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -29,6 +29,7 @@ class CategoryServiceIT {
     @MockBean
     ClientRegistrationRepository clientRegistrationRepository;
 
+    @Autowired
     MongoTemplate mongoTemplate;
 
     CategoryService service;
@@ -37,7 +38,6 @@ class CategoryServiceIT {
 
     @BeforeEach
     void setup() {
-        mongoTemplate = new MongoTemplate(MongoClients.create(), "cards");
         service = new CategoryService(mongoTemplate);
         setupCategories();
     }
@@ -46,7 +46,7 @@ class CategoryServiceIT {
     void teardown() {
         mongoTemplate.getDb().drop();
     }
-    
+
     @Test
     void whenUser1getsCategories_allReturned() {
         var page = service.getCategories("user1", 0);
