@@ -11,7 +11,6 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@Disabled
 @SpringBootTest(classes = TestMongoConfiguration.class)
 class ExampleDataInitializerIT {
 
