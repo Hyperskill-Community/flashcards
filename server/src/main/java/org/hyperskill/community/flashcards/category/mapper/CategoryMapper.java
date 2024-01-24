@@ -13,6 +13,7 @@ import java.util.Objects;
 @Slf4j
 public class CategoryMapper {
     private final String currentUserName;
+
     public CategoryMapper(String currentUserName) {
         Objects.requireNonNull(currentUserName, "Username cannot be null");
         this.currentUserName = currentUserName;

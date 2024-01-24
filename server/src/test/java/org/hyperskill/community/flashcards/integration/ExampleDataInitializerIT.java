@@ -1,7 +1,6 @@
 package org.hyperskill.community.flashcards.integration;
 
 import org.hyperskill.community.flashcards.TestMongoConfiguration;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +10,6 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//@Disabled
 @SpringBootTest(classes = TestMongoConfiguration.class)
 class ExampleDataInitializerIT {
 
@@ -21,11 +19,6 @@ class ExampleDataInitializerIT {
 
     @Autowired
     MongoTemplate mongoTemplate;
-
-    @AfterEach
-    void setup() {
-        mongoTemplate.getDb().drop();
-    }
 
     @Test
     void whenNewContainerStarted_insertSampleData() {

@@ -3,7 +3,6 @@ package org.hyperskill.community.flashcards.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hyperskill.community.flashcards.TestMongoConfiguration;
 import org.hyperskill.community.flashcards.registration.UserDto;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,11 +33,6 @@ class RegisterServerSecurityIT {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @AfterEach
-    void setup() {
-        mongoTemplate.getDb().drop();
-    }
-
     @Test
     void registerUnauthenticatedValidJson_AddsUser() throws Exception {
         mockMvc.perform(post("/api/register")
@@ -62,12 +56,4 @@ class RegisterServerSecurityIT {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    void registerUnauthenticatedInvalidDto_Gives400() throws Exception {
-        mockMvc.perform(post("/api/register") // and again
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(
-                                new UserDto("wrong", "1234"))))
-                .andExpect(status().isBadRequest());
-    }
 }

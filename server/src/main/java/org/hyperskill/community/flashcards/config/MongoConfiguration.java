@@ -1,7 +1,6 @@
 package org.hyperskill.community.flashcards.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mongodb.client.MongoClients;
 import org.bson.Document;
 import org.hyperskill.community.flashcards.card.mapper.CardReadConverter;
 import org.hyperskill.community.flashcards.card.model.Card;
@@ -9,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 
 import java.util.ArrayList;
@@ -18,11 +16,6 @@ import java.util.List;
 @Configuration
 @EnableMongoAuditing
 public class MongoConfiguration {
-
-    @Bean
-    public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(MongoClients.create(), "cards");
-    }
 
     @Bean
     public MongoCustomConversions mongoCustomConversions(ObjectMapper objectMapper) {

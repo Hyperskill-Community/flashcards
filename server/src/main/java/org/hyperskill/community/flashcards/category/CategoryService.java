@@ -11,45 +11,38 @@ import org.hyperskill.community.flashcards.common.exception.ResourceAlreadyExist
 import org.hyperskill.community.flashcards.common.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import static org.springframework.data.mongodb.core.query.Update.update;
-
 import java.util.Optional;
 import java.util.Set;
+
+import static org.springframework.data.mongodb.core.query.Update.update;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class CategoryService {
-    private static final String collection = "category";
-    private static final int pageSize = 20;
+    private static final String CATEGORY = "category";
+    private static final int PAGE_SIZE = 20;
+
     private final MongoTemplate mongoTemplate;
 
     public Page<Category> getCategories(String username, int page) {
         var usernameHasReadPermission = Criteria.where("username").is(username)
-                .and("permission").regex("(.*r.*){1,3}");
-        var currentUserHasAccess = Criteria.where("access").elemMatch(usernameHasReadPermission);
+                .and("permission").regex(".*r.*");
+        var categoriesQuery = new Query(Criteria.where("access").elemMatch(usernameHasReadPermission));
 
-        var count = mongoTemplate.count(new Query(currentUserHasAccess), collection);
+        var count = mongoTemplate.count(categoriesQuery, CATEGORY);
+        var pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by("name"));
+        var categories = mongoTemplate.find(categoriesQuery.with(pageRequest), Category.class, CATEGORY);
 
-        var aggregation = Aggregation.newAggregation(
-                Aggregation.match(currentUserHasAccess),
-                Aggregation.sort(Sort.by("name")),
-                Aggregation.skip((long) page * pageSize),
-                Aggregation.limit(pageSize)
-        );
-
-        var categories = mongoTemplate.aggregate(aggregation, collection, Category.class).getMappedResults();
-
-        return new PageImpl<>(categories, Pageable.ofSize(pageSize), count);
+        return new PageImpl<>(categories, pageRequest, count);
     }
 
     public Category findById(String username, String categoryId) {
@@ -59,7 +52,6 @@ public class CategoryService {
     public Category findById(String username, String categoryId, String permission) {
         var category = Optional.ofNullable(mongoTemplate.findById(categoryId, Category.class))
                 .orElseThrow(ResourceNotFoundException::new);
-
         assertCanAccess(username, category, permission);
 
         return category;
@@ -68,38 +60,28 @@ public class CategoryService {
     public String createCategory(String username, CategoryCreateRequest request) {
         // we assume that category names are unique which is still subject to discussion
         var categoryName = request.name();
-
-        var query = Query.query(Criteria.where("name").is(categoryName));
-        var category = mongoTemplate.findOne(query, Category.class, "category");
-        if (category != null) {
-            throw new ResourceAlreadyExistsException();
-        }
+        throwIfCategoryExists(categoryName);
 
         var access = new CategoryAccess(username, "rwd");
         var newCategory = new Category(null, categoryName, Set.of(access));
-        newCategory = mongoTemplate.insert(newCategory, "category");
+        newCategory = mongoTemplate.insert(newCategory, CATEGORY);
         mongoTemplate.getDb().createCollection(categoryName);
 
         return newCategory.id();
     }
 
     public void deleteById(String username, String categoryId) {
-        var category = findById(username, categoryId);
-        assertCanAccess(username, category, "d");
-
-        mongoTemplate.remove(category, "category");
+        var category = findById(username, categoryId, "d");
+        mongoTemplate.remove(category, CATEGORY);
         mongoTemplate.dropCollection(category.name());
     }
 
     public Category updateById(String username, String categoryId, CategoryUpdateRequest request) {
         // find if the requested collection exists and can be modified
-        var category = findById(username, categoryId);
-        assertCanAccess(username, category, "w");
+        var category = findById(username, categoryId, "w");
 
         // check if the new name is already taken
-        if (mongoTemplate.getCollectionNames().contains(request.name())) {
-            throw new ResourceAlreadyExistsException();
-        }
+        throwIfCategoryExists(request.name());
 
         // rename the existing collection
         var namespace = new MongoNamespace(mongoTemplate.getDb().getName(), request.name());
@@ -113,11 +95,17 @@ public class CategoryService {
         return mongoTemplate.findOne(query, Category.class);
     }
 
+    private void throwIfCategoryExists(String name) {
+        if (mongoTemplate.getCollectionNames().contains(name)) {
+            throw new ResourceAlreadyExistsException();
+        }
+    }
+
     private void assertCanAccess(String username, Category category, String permission) {
-        var regex = "(.*%s.*){1,3}".formatted(permission);
-        category.access().stream()
-                .filter(access -> access.username().equals(username) && access.permission().matches(regex))
-                .findFirst()
-                .orElseThrow(() -> new AccessDeniedException("Access '%s' denied".formatted(permission)));
+        if (category.access().stream()
+                .noneMatch(access -> access.username().equals(username)
+                                     && access.permission().contains(permission))) {
+            throw new AccessDeniedException("Access '%s' denied".formatted(permission));
+        }
     }
 }

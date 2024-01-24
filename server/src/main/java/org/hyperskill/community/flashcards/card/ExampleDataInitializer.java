@@ -32,10 +32,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Slf4j
 public class ExampleDataInitializer {
-    private static final String exampleCollection = "example";
-    private static final String userCollection = "user";
-    private static final String categoryCollection = "category";
-    private static final String userJsonPath = "/json/users.json";
+    private static final String EXAMPLE = "example";
+    private static final String USER = "user";
+    private static final String CATEGORY = "category";
+    private static final String USER_JSON_PATH = "/json/users.json";
     private static final String flashcardsJsonPath = "/json/flashcards.json";
     private final ObjectMapper objectMapper;
     private final UserMapper userMapper;
@@ -51,20 +51,20 @@ public class ExampleDataInitializer {
     public void init() {
         log.info("Inserting sample data to the database...");
 
-        if (isCollectionNotEmpty(userCollection)) {
-            log.warn("Collection {} is not empty, aborting database initialization", userCollection);
+        if (isCollectionNotEmpty(USER)) {
+            log.warn("Collection {} is not empty, aborting database initialization", USER);
             return;
         }
-        if (isCollectionNotEmpty(categoryCollection)) {
-            log.warn("Collection {} is not empty, aborting database initialization", categoryCollection);
+        if (isCollectionNotEmpty(CATEGORY)) {
+            log.warn("Collection {} is not empty, aborting database initialization", CATEGORY);
             return;
         }
-        if (isCollectionNotEmpty(exampleCollection)) {
-            log.warn("Collection {} is not empty, aborting database initialization", exampleCollection);
+        if (isCollectionNotEmpty(EXAMPLE)) {
+            log.warn("Collection {} is not empty, aborting database initialization", EXAMPLE);
             return;
         }
 
-        Resource usersJson = new ClassPathResource(userJsonPath);
+        Resource usersJson = new ClassPathResource(USER_JSON_PATH);
         Resource flashcardsJson = new ClassPathResource(flashcardsJsonPath);
 
         try {
@@ -77,17 +77,17 @@ public class ExampleDataInitializer {
 
             log.info("Sample users successfully inserted!");
 
-            var categoryAccess = new CategoryAccess(users.get(0).getUsername(), "rwd");
-            mongoTemplate.insert(new Category(null, exampleCollection, Set.of(categoryAccess)));
+            var categoryAccess = new CategoryAccess(users.getFirst().getUsername(), "rwd");
+            mongoTemplate.insert(new Category(null, EXAMPLE, Set.of(categoryAccess)));
 
             JsonNode jsonNode = objectMapper.readTree(flashcardsJson.getFile());
             List<SingleChoiceQuiz> scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
             List<MultipleChoiceQuiz> mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
             List<QuestionAndAnswer> qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
 
-            mongoTemplate.insert(scqCards, exampleCollection);
-            mongoTemplate.insert(mcqCards, exampleCollection);
-            mongoTemplate.insert(qnaCards, exampleCollection);
+            mongoTemplate.insert(scqCards, EXAMPLE);
+            mongoTemplate.insert(mcqCards, EXAMPLE);
+            mongoTemplate.insert(qnaCards, EXAMPLE);
 
             log.info("Sample flashcards successfully inserted!");
 
