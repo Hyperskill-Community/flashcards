@@ -8,7 +8,6 @@ import org.hyperskill.community.flashcards.category.request.CategoryCreateReques
 import org.hyperskill.community.flashcards.category.request.CategoryUpdateRequest;
 import org.hyperskill.community.flashcards.common.exception.ResourceAlreadyExistsException;
 import org.hyperskill.community.flashcards.common.exception.ResourceNotFoundException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +38,9 @@ class CategoryServiceIT {
 
     @BeforeEach
     void setup() {
+        mongoTemplate.getDb().drop();
         service = new CategoryService(mongoTemplate);
         setupCategories();
-    }
-
-    @AfterEach
-    void teardown() {
-        mongoTemplate.getDb().drop();
     }
 
     @Test
@@ -166,7 +161,7 @@ class CategoryServiceIT {
         addCategory("cat3", "user2", "rwd");
     }
 
-    private void addCategory(String name, String...access) {
+    private void addCategory(String name, String... access) {
         var categoryAccess = new HashSet<CategoryAccess>();
         for (var i = 0; i < access.length; i += 2) {
             categoryAccess.add(new CategoryAccess(access[i], access[i + 1]));

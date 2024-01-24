@@ -1,7 +1,5 @@
-package org.hyperskill.community.flashcards.web;
+package org.hyperskill.community.flashcards.registration;
 
-import org.hyperskill.community.flashcards.registration.UserDto;
-import org.hyperskill.community.flashcards.registration.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
