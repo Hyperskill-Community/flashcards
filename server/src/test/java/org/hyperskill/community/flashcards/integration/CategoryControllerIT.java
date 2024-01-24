@@ -20,9 +20,13 @@ import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oidcLogin;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,6 +35,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisabledInAotMode
 class CategoryControllerIT {
 
+    public static final String TEST1 = "test1@test.com";
+    public static final String TEST2 = "test2@test.com";
     // needed since otherwise test tries to connect to Authorization server on AppContext creation
     @MockBean
     ClientRegistrationRepository clientRegistrationRepository;
@@ -53,14 +59,14 @@ class CategoryControllerIT {
     @Test
     void getCategoriesValidationError_Gives400() throws Exception {
         mockMvc.perform(get("/api/categories?page=-1")
-                        .with(oidcUser("test1@test.com")))
+                        .with(oidcUser(TEST1)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void getCategoriesNotOwner_givesEmptyResponse() throws Exception {
         mockMvc.perform(get("/api/categories")
-                        .with(oidcUser("test2@test.com")))
+                        .with(oidcUser(TEST2)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(0))
                 .andExpect(jsonPath("$.isLast").value(true))
@@ -70,7 +76,7 @@ class CategoryControllerIT {
     @Test
     void getCategoriesOwnerDefaultPage0_givesExampleCategory() throws Exception {
         mockMvc.perform(get("/api/categories")
-                        .with(oidcUser("test1@test.com")))
+                        .with(oidcUser(TEST1)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categories").isArray())
                 .andExpect(jsonPath("$.categories[0].name").value("example"));
@@ -79,7 +85,7 @@ class CategoryControllerIT {
     @Test // unfortunately cannot be tested with @ParameterizedTest because of db.drop()
     void getCategoriesOwnerExplicitPage0_givesExampleCategory() throws Exception {
         mockMvc.perform(get("/api/categories?page=0")
-                        .with(oidcUser("test1@test.com")))
+                        .with(oidcUser(TEST1)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categories").isArray())
                 .andExpect(jsonPath("$.categories[0].name").value("example"));
@@ -88,27 +94,72 @@ class CategoryControllerIT {
     @Test
     void getCategoryById_WorksIfPermitted403IfNot() throws Exception {
         var category = mockMvc.perform(get("/api/categories?page=0")
-                        .with(oidcUser("test1@test.com")))
+                        .with(oidcUser(TEST1)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categories[0].name").value("example"))
                 .andReturn();
         var response = objectMapper.readValue(category.getResponse().getContentAsString(), CategoryPageResponse.class);
         var exampleId = response.categories().getFirst().id();
         mockMvc.perform(get("/api/categories/" + exampleId)
-                        .with(oidcUser("test1@test.com")))
+                        .with(oidcUser(TEST1)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("example"));
         mockMvc.perform(get("/api/categories/" + exampleId)
-                        .with(oidcUser("test2@test.com")))
+                        .with(oidcUser(TEST2)))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     void getCategoriesOwnerPage1_isEmpty() throws Exception {
         mockMvc.perform(get("/api/categories?page=1")
-                        .with(oidcUser("test1@test.com")))
+                        .with(oidcUser(TEST1)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categories").isEmpty());
+    }
+
+    @Test
+    void createCategory_creates() throws Exception {
+        var result = mockMvc.perform(post("/api/categories")
+                .with(oidcUser(TEST1)).contentType("application/json")
+                .content("{\"name\":\"test\"}"))
+                .andExpect(status().isCreated())
+                .andReturn();
+        var id = Objects.requireNonNull(result.getResponse().getHeader("Location")).split("/")[3];
+        mockMvc.perform(get("/api/categories/" + id)
+                        .with(oidcUser(TEST1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("test"));
+    }
+
+    @Test
+    void updateCategory_updates() throws Exception {
+        var result = mockMvc.perform(post("/api/categories")
+                        .with(oidcUser(TEST1)).contentType("application/json")
+                        .content("{\"name\":\"to-update\"}"))
+                .andExpect(status().isCreated())
+                .andReturn();
+        var id = Objects.requireNonNull(result.getResponse().getHeader("Location")).split("/")[3];
+        mockMvc.perform(put("/api/categories/" + id)
+                        .with(oidcUser(TEST1)).contentType("application/json")
+                .content("{\"name\":\"updated\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("updated"));
+    }
+
+    @Test
+    void deleteCategory_deletes() throws Exception {
+        var result = mockMvc.perform(post("/api/categories")
+                        .with(oidcUser(TEST1)).contentType("application/json")
+                        .content("{\"name\":\"to-delete\"}"))
+                .andExpect(status().isCreated())
+                .andReturn();
+        var id = Objects.requireNonNull(result.getResponse().getHeader("Location")).split("/")[3];
+        mockMvc.perform(delete("/api/categories/" + id)
+                        .with(oidcUser(TEST1)))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/api/categories/" + id)
+                        .with(oidcUser(TEST1)))
+                .andExpect(status().isNotFound());
     }
 
     private RequestPostProcessor oidcUser(String sub) {
