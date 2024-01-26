@@ -3,7 +3,6 @@ package org.hyperskill.community.flashcards;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
-import org.hyperskill.community.flashcards.common.RedirectController;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
@@ -48,8 +47,8 @@ public abstract class TestUtils {
     }
 
     @NotNull
-    public static List<ILoggingEvent> startLogAppender() {
-        Logger logger = (Logger) LoggerFactory.getLogger(RedirectController.class);
+    public static List<ILoggingEvent> startLogAppender(Class<?> loggerClass) {
+        Logger logger = (Logger) LoggerFactory.getLogger(loggerClass);
         ListAppender<ILoggingEvent> listAppender = new ListAppender<>();
         listAppender.start();
         logger.addAppender(listAppender);

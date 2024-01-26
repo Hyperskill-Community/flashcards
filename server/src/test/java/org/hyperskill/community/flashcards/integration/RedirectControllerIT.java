@@ -85,7 +85,7 @@ class RedirectControllerIT {
 
     @Test
     void whenForwarded_ObservabilityTraceLogged() throws Exception {
-        final var logs = startLogAppender();
+        final var logs = startLogAppender(RedirectController.class);
 
         mockMvc.perform(get("/categories")
                         .with(oidc(TEST2)))
@@ -115,7 +115,7 @@ class RedirectControllerIT {
 
     @Test
     void whenResourceServed_NoObservabilityTraceLogged() throws Exception {
-        final var logs = startLogAppender();
+        final var logs = startLogAppender(RedirectController.class);
 
         mockMvc.perform(get("/favicon.ico")
                         .with(oidc(TEST2)))
