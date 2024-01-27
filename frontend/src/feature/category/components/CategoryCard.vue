@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-title class="d-flex align-center">
-      <h4>{{ name }}</h4>
+      <h4>{{ category.name }}</h4>
     </v-card-title>
 
     <v-card-text>
@@ -15,7 +15,7 @@
         :color="`${expanded ? '#43A047' : '#EEEEEE'}`"
         density="compact"
         inset
-        @click="() => toggleExpand(expanded)"
+        @click="() => emit('update:expanded', !expanded)"
       ></v-switch>
     </div>
 
@@ -37,7 +37,6 @@
 import {Category, getAccess} from "@/feature/category/model/category";
 
 defineProps<({
-  name: string
   category: Category
   expanded: boolean
 })>();
@@ -46,9 +45,6 @@ const emit = defineEmits<{
   'update:expanded': [val: boolean]
 }>();
 
-const toggleExpand = (expanded: boolean) => {
-  emit('update:expanded', !expanded);
-}
 </script>
 
 <style scoped lang="scss">
