@@ -24,12 +24,11 @@ class CategoryMapperTest {
 
     @Test
     void permittedUser_mapsCorrectly() {
-        var category = createCategory("user", "rwd");
+        var category = createCategory("user", "wd");
         var dto = mapper.categoryToCategoryDto(category);
         assertEquals(category.id(), dto.id());
         assertEquals(category.name(), dto.name());
         var expectedPermissions = Set.of(
-                new PermittedAction(ActionType.READ, "/api/categories/12345"),
                 new PermittedAction(ActionType.WRITE, "/api/categories/12345"),
                 new PermittedAction(ActionType.DELETE, "/api/categories/12345"));
         assertEquals(expectedPermissions, dto.actions());

@@ -155,7 +155,7 @@ class CategoryServiceIT {
 
     private void setupCategories() {
         mongoTemplate.getCollection("category");
-        addCategory("cat2", "user1", "r", "user2", "rw");
+        addCategory("cat2", "user1", "r", "user2", "w");
         addCategory("cat4", "user1", "rw", "user2", "r");
         addCategory("cat1", "user1", "rwd");
         addCategory("cat3", "user2", "rwd");
