@@ -9,19 +9,19 @@
       <v-row class="justify-center mb-2">
         <v-col cols="auto">
           <v-btn color="red" border @click="testAxiosCall('get')" variant="text">
-            <v-icon icon="mdi-account-group" size="large" start/>
+            <v-icon icon="mdi-account-group" size="large" :start="true"/>
             test axios GET
           </v-btn>
           <v-btn color="red" border @click="testAxiosCall('post')" variant="text">
-            <v-icon icon="mdi-account-group" size="large" start/>
+            <v-icon icon="mdi-account-group" size="large" :start="true"/>
             test axios POST
           </v-btn>
           <v-btn color="red" border @click="testAxiosCall('error', 'throw')" variant="text">
-            <v-icon icon="mdi-account-group" size="large" start/>
+            <v-icon icon="mdi-account-group" size="large" :start="true"/>
             test throw ERROR
           </v-btn>
           <v-btn color="red" border @click="testAxiosCall('error', 'toast/console')" variant="text">
-            <v-icon icon="mdi-account-group" size="large" start/>
+            <v-icon icon="mdi-account-group" size="large" :start="true"/>
             test custom notify ERROR
           </v-btn>
         </v-col>

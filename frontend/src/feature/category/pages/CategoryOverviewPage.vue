@@ -4,7 +4,7 @@
       <v-card-title class="text-center">
         Your categories
       </v-card-title>
-      <CategoryIterator :categories="categories"/>
+      <category-iterator :categories="categories"/>
     </v-card>
   </v-container>
 </template>
@@ -26,4 +26,18 @@ const fetchCategories = async () => {
   }
 }
 fetchCategories();
+categories.value.push({
+  id: 'new',
+  name: 'New Category',
+  description: 'New Category',
+  numberOfCards: 0,
+  actions: [{action:"READ", uri:"/categories/new"}]
+});
+categories.value.push({
+  id: 'new2',
+  name: 'New Category2',
+  description: 'New Category2',
+  numberOfCards: 7,
+  actions: [{action:"READ", uri:"/categories/new"}]
+});
 </script>
