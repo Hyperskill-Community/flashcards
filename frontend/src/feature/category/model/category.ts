@@ -1,5 +1,11 @@
+export enum ActionType {
+  READ = 'READ',
+  WRITE = 'WRITE',
+  DELETE = 'DELETE'
+}
+
 export type Action = {
-  action: string,
+  action: ActionType,
   uri: string
 }
 
@@ -9,8 +15,4 @@ export type Category = {
   actions: Action[],
   numberOfCards?: number,
   description?: string,
-}
-
-export const getAccess = (category: Category): string => {
-  return category.actions.map(item => item.action).join(', ');
 }

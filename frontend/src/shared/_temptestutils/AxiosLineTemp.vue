@@ -51,7 +51,8 @@ import {useAxiosTestService} from "@/shared/composables/testService";
 import useCardsService from "@/feature/cards/composables/useCardsService";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 import {ref} from "vue";
-import {Category, getAccess} from "@/feature/category/model/category";
+import {Category} from "@/feature/category/model/category";
+import {getAccess} from "@/feature/category/composables/useCategory";
 import {useToastService} from "@/shared/composables/toastService";
 
 const email = ref('');
