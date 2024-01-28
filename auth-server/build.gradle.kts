@@ -40,6 +40,7 @@ tasks.withType<Test> {
 }
 
 val dockerHubRepo = "wisskirchenj/"
+// On ARM64 (!) uncomment the following lines to build JVM AMD64 image, since then default paketo builder is used
 tasks.named<BootBuildImage>("bootBuildImage") {
     builder.set("dashaun/builder:tiny")
     imageName.set(dockerHubRepo + rootProject.name + project.name + ":" + version)

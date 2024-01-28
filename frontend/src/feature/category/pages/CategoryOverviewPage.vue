@@ -4,7 +4,7 @@
       <v-card-title class="text-center">
         Your categories
       </v-card-title>
-      <CategoryIterator :categories="categories"/>
+      <category-iterator :categories="items"/>
     </v-card>
   </v-container>
 </template>
@@ -17,11 +17,14 @@ import {Category} from "@/feature/category/model/category";
 import CategoryIterator from "@/feature/category/components/CategoryIterator.vue";
 import useCardsService from "@/feature/cards/composables/useCardsService";
 
-const categories = ref([] as Category[]);
+const items = ref([] as
+  {category: Category, expanded: boolean}[]
+);
 
 const fetchCategories = async () => {
-  categories.value = await useCategoriesService().getCategories();
-  for (const category of categories.value) {
+  const categories = await useCategoriesService().getCategories();
+  for (const category of categories) {
+    items.value.push({category: category, expanded: false});
     category.numberOfCards = await useCardsService().getCardCount(category.id);
   }
 }
