@@ -2,7 +2,7 @@
   <v-container>
     <h2 class="text-center">Card Details Page for card with Id: {{ props.id }}</h2>
     <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" max-width="500px" min-height="300px"
-            color="#E0F7FA">
+            color="#f0f8ff">
       <v-card-title class="text-center text-sm-h3">
         Card '{{ props.id }}'
       </v-card-title>

@@ -2,7 +2,26 @@
   <v-data-iterator
     :items="categories"
     item-value="category.name"
+    items-per-page="6"
   >
+    <template v-slot:header>
+      <v-row>
+        <v-col cols="12" sm="12" md="11">
+          <v-form v-if="addRequested" @submit.prevent class="d-flex align-center">
+            <v-text-field v-model="newCategory.name" label="Category name" class="v-col-sm-4">
+            </v-text-field>
+            <v-text-field v-model="newCategory.description" label="Description (optional)" class="v-col-sm-6">
+            </v-text-field>
+            <submit-mdi-button :disabled="!newCategory.name"
+                               :clickHandler="postNewCategory"/>
+          </v-form>
+        </v-col>
+        <v-col cols="12" sm="12" md="1">
+            <add-mdi-button :click-handler="addCategory"
+                            tooltipText="Create new category"/>
+        </v-col>
+      </v-row>
+    </template>
     <template v-slot:default="{items}">
       <v-row>
         <v-col
@@ -11,6 +30,7 @@
         >
           <category-card :category="item.raw.category"
                          v-model:expanded="item.raw.expanded"
+                         @reload="emit('reload', true)"
           />
         </v-col>
       </v-row>
@@ -21,10 +41,32 @@
 <script setup lang="ts">
 import {Category} from "@/feature/category/model/category";
 import CategoryCard from "@/feature/category/components/CategoryCard.vue";
+import AddMdiButton from "@/shared/components/AddMdiButton.vue";
+import {ref} from "vue";
+import SubmitMdiButton from "@/shared/components/SubmitMdiButton.vue";
+import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 
 defineProps<({
-  categories: { category: Category, expanded: boolean }[]
+  categories: { category: Category, expanded: boolean }[],
 })>();
+const emit = defineEmits<{
+  'reload': [val: boolean]
+}>();
 
+const newCategory = ref(
+  {name: "", description: "", actions: []}
+);
+
+const addRequested = ref(false);
+const addCategory = () => {
+  newCategory.value = {name: "", description: "", actions: []};
+  addRequested.value = true;
+};
+
+const postNewCategory = async () => {
+  addRequested.value = false;
+  await useCategoriesService().postNewCategory(newCategory.value.name);
+  emit('reload', true);
+};
 
 </script>
