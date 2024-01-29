@@ -38,6 +38,7 @@ const useCategoriesService = () => {
       errorResult === 'throw' ? useErrorService().handleAndThrow(error)
         : useErrorService().handleAndNotify('custom error', 'custom message');
     }
+    return "posted";
   }
 
   const putCategory = async (id: string, newName: string, errorResult: string = 'throw')  => {
