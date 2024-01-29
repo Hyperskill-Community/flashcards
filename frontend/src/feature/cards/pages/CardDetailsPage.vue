@@ -25,7 +25,7 @@ const card = ref<Card | null>({
   id: "a",
   title: "title",
   question: "what is title",
-  correctOption:"",
+  correctOption: "",
   tags: []
 });
 

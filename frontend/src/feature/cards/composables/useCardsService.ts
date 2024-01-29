@@ -27,8 +27,8 @@ const useCardsService = () => {
     }
   }
 
-  const getCards = async (categoryId: string, page: number, errorResult: string = 'throw'): Promise<Card[]> => {
-    const url = apiUrl + 'cards?categoryId=' + categoryId + '&page=' + page;
+  const getCards = async (categoryId: string, page: number, errorResult: string = 'throw') : Promise<Card[]> => {
+    const url = `${apiUrl}cards?categoryId=${categoryId}&page=${page}`;
 
     try {
       const response = await apiClient.get(url);

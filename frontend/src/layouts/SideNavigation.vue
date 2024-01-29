@@ -1,6 +1,6 @@
 <template>
-  <v-navigation-drawer color="#F0F4C3">
-    <v-list-item title="Flashcards" subtitle="Navigation"></v-list-item>
+  <v-navigation-drawer>
+    <v-list-item title="Flashcards" subtitle="Menu"></v-list-item>
     <v-divider></v-divider>
     <v-list-item to="/categories" title="Your card categories"></v-list-item>
     <v-list-item to="/display/sample" title="Card detail sample"></v-list-item>
@@ -12,3 +12,9 @@
 
 <script setup lang="ts">
 </script>
+
+<style scoped lang="scss">
+.v-navigation-drawer {
+  background-color: #add8e6;
+}
+</style>

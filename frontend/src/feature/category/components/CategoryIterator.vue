@@ -1,49 +1,37 @@
 <template>
   <v-data-iterator
-    :items="props.categories"
-    item-value="name"
+    :items="categories"
+    item-value="category.name"
+    items-per-page="6"
   >
-    <template v-slot:default="{ items, isExpanded, toggleExpand }">
+    <template v-slot:header>
+      <v-row>
+        <v-col cols="12" sm="12" md="11">
+          <v-form v-if="addRequested" @submit.prevent class="d-flex align-center">
+            <v-text-field v-model="newCategory.name" label="Category name" class="v-col-sm-4">
+            </v-text-field>
+            <v-text-field v-model="newCategory.description" label="Description (optional)" class="v-col-sm-6">
+            </v-text-field>
+            <submit-mdi-button :disabled="!newCategory.name"
+                               :clickHandler="postNewCategory"/>
+          </v-form>
+        </v-col>
+        <v-col cols="12" sm="12" md="1">
+            <add-mdi-button :click-handler="addCategory"
+                            tooltipText="Create new category"/>
+        </v-col>
+      </v-row>
+    </template>
+    <template v-slot:default="{items}">
       <v-row>
         <v-col
-          v-for="item in items"
-          :key="item.raw.name"
-          cols="12"
-          sm="12"
-          md="6"
+          v-for="item in items" :key="item.raw.category.name"
+          cols="12" sm="12" md="6"
         >
-          <v-card>
-            <v-card-title class="d-flex align-center">
-              <h4>{{ item.raw.name }}</h4>
-            </v-card-title>
-
-            <v-card-text>
-              {{ item.raw.description }}
-            </v-card-text>
-
-            <div class="px-4">
-              <v-switch
-                :model-value="isExpanded(item as any)"
-                :label="`Show details`"
-                :color="`${isExpanded(item as any) ? '#43A047' : '#EEEEEE'}`"
-                density="compact"
-                inset
-                @click="() => toggleExpand(item as any)"
-              ></v-switch>
-            </div>
-
-            <v-divider></v-divider>
-
-            <v-expand-transition>
-              <div v-if="isExpanded(item as any)">
-                <v-list density="compact" :lines="false">
-                  <v-list-item :title="`🔥 Your access: ${getAccess(item.raw)}`"></v-list-item>
-                  <v-list-item :title="`🍔 #Cards in Category: ${item.raw.numberOfCards}`"></v-list-item>
-                  <v-list-item :title="`🧲 Id: ${item.raw.id}`"></v-list-item>
-                </v-list>
-              </div>
-            </v-expand-transition>
-          </v-card>
+          <category-card :category="item.raw.category"
+                         v-model:expanded="item.raw.expanded"
+                         @reload="emit('reload', true)"
+          />
         </v-col>
       </v-row>
     </template>
@@ -51,10 +39,34 @@
 </template>
 
 <script setup lang="ts">
-import {Category, getAccess} from "@/feature/category/model/category";
+import {Category} from "@/feature/category/model/category";
+import CategoryCard from "@/feature/category/components/CategoryCard.vue";
+import AddMdiButton from "@/shared/components/AddMdiButton.vue";
+import {ref} from "vue";
+import SubmitMdiButton from "@/shared/components/SubmitMdiButton.vue";
+import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 
-const props = defineProps({
-  categories: Array as () => Category[]
-})
+defineProps<({
+  categories: { category: Category, expanded: boolean }[],
+})>();
+const emit = defineEmits<{
+  'reload': [val: boolean]
+}>();
+
+const newCategory = ref(
+  {name: "", description: "", actions: []}
+);
+
+const addRequested = ref(false);
+const addCategory = () => {
+  newCategory.value = {name: "", description: "", actions: []};
+  addRequested.value = true;
+};
+
+const postNewCategory = async () => {
+  addRequested.value = false;
+  await useCategoriesService().postNewCategory(newCategory.value.name);
+  emit('reload', true);
+};
 
 </script>
