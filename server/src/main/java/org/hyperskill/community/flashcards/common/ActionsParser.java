@@ -12,7 +12,7 @@ public class ActionsParser {
     }
 
     public static Set<PermittedAction> fromPermissions(String permissions, String uri) {
-        Set<PermittedAction> actions = new HashSet<>(3);
+        Set<PermittedAction> actions = HashSet.newHashSet(3);
         if (permissions.contains("r")) {
             actions.add(new PermittedAction(ActionType.READ, uri));
         }

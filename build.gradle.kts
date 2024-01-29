@@ -27,6 +27,12 @@ tasks.register<Copy>("select-compose-file") {
     rename(composeFile, "compose.yaml")
 }
 
+tasks.register("sonar") {
+    group = "verification"
+    description = "Run sonarqube analysis - presently only for flashcards-server"
+    dependsOn(":flashcards-server:sonar")
+}
+
 tasks.register<BootRun>("bootRunFlashcards") {
     group = "build"
     description = "Run flashcards app and start containers for mongodb and auth server"

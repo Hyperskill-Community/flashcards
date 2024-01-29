@@ -1,5 +1,7 @@
 export type Card = {
   id: string,
+  title: string,
+  correctOption:string,
   question: string,
   tags: string[],
 }

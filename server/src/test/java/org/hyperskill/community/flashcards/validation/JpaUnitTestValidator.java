@@ -1,4 +1,4 @@
-package org.hyperskill.community.flashcards.web;
+package org.hyperskill.community.flashcards.validation;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;

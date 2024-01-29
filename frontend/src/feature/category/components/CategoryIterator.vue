@@ -14,13 +14,6 @@
         >
           <v-card>
             <v-card-title class="d-flex align-center">
-              <v-icon
-                :color="item.raw.color"
-                :icon="item.raw.icon"
-                start
-                size="18"
-              ></v-icon>
-
               <h4>{{ item.raw.name }}</h4>
             </v-card-title>
 

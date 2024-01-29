@@ -4,9 +4,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.utility.TestcontainersConfiguration;
-
-import java.util.List;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class TestMongoConfiguration {
@@ -14,9 +11,6 @@ public class TestMongoConfiguration {
     @Bean
     @ServiceConnection
     public MongoDBContainer mongoDBContainer() {
-        TestcontainersConfiguration.getInstance().updateUserConfig("testcontainers.reuse.enable", "true");
-        var container = new MongoDBContainer("mongo:7.0.4-jammy").withReuse(true);
-        container.setPortBindings(List.of("27017:27017"));
-        return container;
+        return new MongoDBContainer("mongo:7.0.4-jammy");
     }
 }

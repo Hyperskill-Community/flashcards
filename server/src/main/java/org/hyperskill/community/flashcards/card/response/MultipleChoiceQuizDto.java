@@ -16,9 +16,10 @@ public final class MultipleChoiceQuizDto extends CardResponse {
     private final List<Integer> correctOptions;
 
     @Builder
-    public MultipleChoiceQuizDto(String id, String question, Set<String> tags, String type, List<String> options,
-                                 List<Integer> correctOptions, Instant createdAt, Set<PermittedAction> actions) {
-        super(id, question, tags, type, createdAt, actions);
+    public MultipleChoiceQuizDto(String id, String question, String title, Set<String> tags, String type,
+                                 List<String> options, List<Integer> correctOptions, Instant createdAt,
+                                 Set<PermittedAction> actions) {
+        super(id, question, title, tags, type, createdAt, actions);
         this.options = options;
         this.correctOptions = correctOptions;
     }

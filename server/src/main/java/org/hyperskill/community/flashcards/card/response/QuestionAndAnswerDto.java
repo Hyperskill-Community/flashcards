@@ -14,9 +14,9 @@ public final class QuestionAndAnswerDto extends CardResponse {
     private final String answer;
 
     @Builder
-    public QuestionAndAnswerDto(String id, String question, Set<String> tags, String type,
+    public QuestionAndAnswerDto(String id, String title, String question, Set<String> tags, String type,
                                 Instant createdAt, String answer, Set<PermittedAction> actions) {
-        super(id, question, tags, type, createdAt, actions);
+        super(id, question, title, tags, type, createdAt, actions);
         this.answer = answer;
     }
 }
