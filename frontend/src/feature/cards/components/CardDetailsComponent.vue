@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" max-width="500px" min-height="300px">
-    <v-card-title class="text-center">
+    <v-card-title>
       {{ card.title }}
     </v-card-title>
     <v-card-subtitle>
@@ -20,14 +20,19 @@
       <p>
         {{ card.question }}
       </p>
+      <ol>
+        <li v-for="(option, index) in card.options">
+          {{ index }}./{{ option }}
+        </li>
+      </ol>
       <p>
         Answer: {{ card.correctOption }}
       </p>
     </v-card-text>
     <v-container>
       <v-card-actions class="pa-0 ma-0">
-        <v-btn class="bg-blue-accent-1 font-weight-medium">Edit</v-btn>
-        <v-btn class="bg-blue-accent-1 font-weight-medium">Delete</v-btn>
+        <edit-mdi-button>Edit</edit-mdi-button>
+        <delete-mdi-button>Delete</delete-mdi-button>
       </v-card-actions>
     </v-container>
   </v-card>
@@ -35,23 +40,35 @@
 
 <script setup lang="ts">
 
+import EditMdiButton from "@/shared/components/EditMdiButton.vue";
+import DeleteMdiButton from "@/shared/components/DeleteMdiButton.vue";
+
 const card = defineProps({
   id: String,
   title: String,
   question: String,
   correctOption: String,
   tags: Array as () => String[],
+  options: Array as () => String[]
 });
 
 </script>
 
 <style scoped lang="scss">
-.tags {
-  gap: 0.5rem;
-  display: flex;
+
+ul, li {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.tags {
+  gap: 0.5rem;
+  display: flex;
+}
+
+.v-card {
+  background-color: #f0f8ff;
 }
 
 </style>

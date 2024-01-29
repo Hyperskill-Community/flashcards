@@ -1,8 +1,9 @@
 export type Card = {
   id: string,
   title: string,
-  correctOption:string,
+  correctOption: string,
   question: string,
+  options: string[],
   tags: string[],
 }
 // "id": "65a5677d296bf15455f0b868",

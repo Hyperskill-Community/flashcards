@@ -1,6 +1,5 @@
 <template>
   <v-container>
-    <h2 class="text-center">Card Details Page for card with Id: {{ props.id }}</h2>
     <div v-if="!error">
       <CardDetailsComponent v-bind="card"></CardDetailsComponent>
     </div>
@@ -17,6 +16,8 @@ import {ref} from "vue";
 import {Card} from "@/feature/cards/model/card";
 import useCardsService from "@/feature/cards/composables/useCardsService";
 
+const CATEGORY_ID = "65b7f591f51c4b418123768e";
+
 const props = defineProps({
   id: String,
 })
@@ -26,14 +27,15 @@ const card = ref<Card | null>({
   title: "title",
   question: "what is title",
   correctOption: "",
-  tags: []
+  tags: [],
+  options: []
 });
 
 const error = ref(null);
 
 async function fetchCardWithId() {
   try {
-    card.value = await useCardsService().getCardById(props.id!, "65a55ebf7adc427432d46fe1");
+    card.value = await useCardsService().getCardById(props.id!, CATEGORY_ID);
     error.value = null;
   } catch (e: any) {
     error.value = e.message;
