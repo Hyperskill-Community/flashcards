@@ -1,12 +1,6 @@
 <template>
   <v-container>
-    <div v-if="!Object.keys(card).length">
-      <p>no card with {{id}}</p>
-    </div>
-    <div v-else>
-      <CardDetailsComponent v-bind="card"></CardDetailsComponent>
-    </div>
-
+    <CardDetailsComponent v-bind="card"></CardDetailsComponent>
   </v-container>
 </template>
 
@@ -17,22 +11,18 @@ import {ref} from "vue";
 import {Card} from "@/feature/cards/model/card";
 import useCardsService from "@/feature/cards/composables/useCardsService";
 
-const CATEGORY_ID = "65b7f591f51c4b418123768e";
-
-const props = defineProps({
-  id: String,
-})
+const props = defineProps<({
+  categoryId: string,
+  cardId: string,
+})>()
 
 const card = ref<Card>(
   {} as Card
 );
 
 async function fetchCardWithId() {
-  card.value = await useCardsService().getCardById(props.id!, CATEGORY_ID);
+  card.value = await useCardsService().getCardById(props.cardId, props.categoryId);
 }
 
 fetchCardWithId();
-
 </script>
-<style scoped>
-</style>
