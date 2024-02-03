@@ -63,6 +63,29 @@ public class CardService {
         return new PageImpl<>(cards, Pageable.ofSize(PAGE_SIZE), count);
     }
 
+    public Page<Card> getCardsWithDetailsByCategory(String username, String categoryId, int page) {
+        Objects.requireNonNull(categoryId, "Category ID cannot be null");
+
+        final var category = categoryService.findById(username, categoryId);
+
+        var aggregation = Aggregation.newAggregation(
+                Aggregation.sort(Sort.by("name")),
+                Aggregation.skip((long) page * PAGE_SIZE),
+                Aggregation.limit(PAGE_SIZE)
+        );
+
+        var count = mongoTemplate.count(new Query(), category.name());
+        var result = mongoTemplate.aggregate(aggregation, category.name(), Document.class)
+                .getRawResults()
+                .getList("results", Document.class);
+        var cards = result.stream().map(converter::convert).toList();
+
+        var permissions = getPermissions(username, category);
+        cards.forEach(card -> card.setPermissions(permissions));
+
+        return new PageImpl<>(cards, Pageable.ofSize(PAGE_SIZE), count);
+    }
+
     public long getCardCountOfCategory(String username, String categoryId) {
         final var collection = getCollectionName(username, categoryId);
         return mongoTemplate.count(new Query(), collection);

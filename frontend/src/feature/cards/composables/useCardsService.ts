@@ -2,7 +2,7 @@ import apiClient from '@/plugins/axios';
 import {useErrorService} from "@/shared/composables/errorService";
 import {useToastService} from "@/shared/composables/toastService";
 import apiUrl from "@/shared/composables/baseUrl";
-import {Card, CardItem} from "@/feature/cards/model/card";
+import {Card, CardResponse} from "@/feature/cards/model/card";
 
 const useCardsService = () => {
 
@@ -27,7 +27,7 @@ const useCardsService = () => {
     }
   }
 
-  const getCards = async (categoryId: string, page: number, errorResult: string = 'throw') : Promise<CardItem[]> => {
+  const getCards = async (categoryId: string, page: number, errorResult: string = 'throw') : Promise<CardResponse> => {
     const url = `${apiUrl}cards?categoryId=${categoryId}&page=${page}`;
 
     try {
@@ -35,12 +35,12 @@ const useCardsService = () => {
       if (response.status !== 200) {
         throw new Error(`Error status code ${response.status}!`);
       } else {
-        return (response.data.cards as CardItem[]);
+        return (response.data as CardResponse);
       }
     } catch (error: any) {
       errorResult === 'throw' ? useErrorService().handleAndThrow(error)
         : useErrorService().handleAndNotify('custom error', 'custom message');
-      return [];
+      return {isLast: true, cards: [], currentPage: 0} as CardResponse;
     }
   }
 

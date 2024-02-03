@@ -1,14 +1,16 @@
 package org.hyperskill.community.flashcards.card;
 
-import org.hyperskill.community.flashcards.card.response.CardResponse;
-
 import java.util.List;
 
-public record CardPageResponse(
+/**
+ * Represents a page of cards retrieved.
+ * @param <I> type of the Item in the card page
+ */
+public record CardPageResponse<I>(
         boolean isFirst,
         boolean isLast,
         int currentPage,
         int totalPages,
-        List<CardResponse> cards
+        List<I> cards
 ) {
 }

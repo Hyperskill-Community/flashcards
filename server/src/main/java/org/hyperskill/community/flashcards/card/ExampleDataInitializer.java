@@ -90,6 +90,35 @@ public class ExampleDataInitializer {
             mongoTemplate.insert(mcqCards, EXAMPLE);
             mongoTemplate.insert(qnaCards, EXAMPLE);
 
+            scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
+            mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
+            qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
+            // TODO remove this after testing
+            mongoTemplate.insert(scqCards, EXAMPLE);
+            mongoTemplate.insert(mcqCards, EXAMPLE);
+            mongoTemplate.insert(qnaCards, EXAMPLE);
+
+            scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
+            mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
+            qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
+            mongoTemplate.insert(scqCards, EXAMPLE);
+            mongoTemplate.insert(mcqCards, EXAMPLE);
+            mongoTemplate.insert(qnaCards, EXAMPLE);
+
+            scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
+            mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
+            qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
+            mongoTemplate.insert(scqCards, EXAMPLE);
+            mongoTemplate.insert(mcqCards, EXAMPLE);
+            mongoTemplate.insert(qnaCards, EXAMPLE);
+
+            scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
+            mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
+            qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
+            mongoTemplate.insert(scqCards, EXAMPLE);
+            mongoTemplate.insert(mcqCards, EXAMPLE);
+            mongoTemplate.insert(qnaCards, EXAMPLE);
+
             log.info("Sample flashcards successfully inserted!");
 
         } catch (Exception e) {

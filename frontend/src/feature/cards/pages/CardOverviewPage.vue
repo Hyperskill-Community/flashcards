@@ -27,7 +27,7 @@ import SubmitMdiButton from "@/shared/components/SubmitMdiButton.vue";
 import CardItemScroller from "@/feature/cards/components/CardItemScroller.vue";
 
 const props = defineProps<({
-  categoryId: String
+  categoryId: string
 })>();
 const categoryName = ref("");
 const filter = ref("");

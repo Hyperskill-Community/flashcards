@@ -8,7 +8,9 @@ import org.hyperskill.community.flashcards.card.request.CardCreateRequest;
 import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizCreateRequest;
 import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerCreateRequest;
 import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizCreateRequest;
+import org.hyperskill.community.flashcards.card.response.CardItemProjection;
 import org.hyperskill.community.flashcards.card.response.CardResponse;
+import org.hyperskill.community.flashcards.card.response.CardType;
 import org.hyperskill.community.flashcards.card.response.MultipleChoiceQuizDto;
 import org.hyperskill.community.flashcards.card.response.QuestionAndAnswerDto;
 import org.hyperskill.community.flashcards.card.response.SingleChoiceQuizDto;
@@ -20,6 +22,16 @@ import java.util.Set;
 
 @Component
 public class CardMapper {
+
+    public CardItemProjection map(Card card) {
+
+        var type = switch (card) {
+            case QuestionAndAnswer c -> CardType.SQA;
+            case SingleChoiceQuiz c -> CardType.SCQ;
+            case MultipleChoiceQuiz c -> CardType.MCQ;
+        };
+        return new CardItemProjection(card.getId(), card.getTitle(), type);
+    }
 
     public CardResponse map(Card card, String categoryId) {
         var uri = "/api/cards/" + card.getId() + "?categoryId=" + categoryId;
