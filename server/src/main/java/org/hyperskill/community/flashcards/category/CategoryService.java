@@ -18,6 +18,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 import java.util.Set;
@@ -79,21 +80,31 @@ public class CategoryService {
     public Category updateById(String username, String categoryId, CategoryUpdateRequest request) {
         // find if the requested collection exists and can be modified
         var category = findById(username, categoryId, "w");
+        renameCategoryIfNameChanged(category, request);
+        return updateCategoryDocument(categoryId, request);
+    }
 
+    private Category updateCategoryDocument(String categoryId, CategoryUpdateRequest request) {
+        var query = Query.query(Criteria.where("id").is(categoryId));
+        var update = update("description", request.description());
+        // update name only if it's not blank in the request
+        if (StringUtils.hasText(request.name())) {
+            update.set("name", request.name());
+        }
+
+        mongoTemplate.updateFirst(query, update, Category.class);
+        return mongoTemplate.findOne(query, Category.class);
+    }
+
+    private void renameCategoryIfNameChanged(Category category, CategoryUpdateRequest request) {
+        if (category.name().equals(request.name()) || !StringUtils.hasText(request.name())) {
+            return;
+        }
         // check if the new name is already taken
         throwIfCategoryExists(request.name());
-
         // rename the existing collection
         var namespace = new MongoNamespace(mongoTemplate.getDb().getName(), request.name());
         mongoTemplate.getCollection(category.name()).renameCollection(namespace);
-
-        // update document in 'category' collection
-        var query = Query.query(Criteria.where("id").is(categoryId));
-        mongoTemplate.updateFirst(query,
-                update("name", request.name()).set("description", request.description()), Category.class);
-
-        // return the updated document from 'category' collection
-        return mongoTemplate.findOne(query, Category.class);
     }
 
     private void throwIfCategoryExists(String name) {

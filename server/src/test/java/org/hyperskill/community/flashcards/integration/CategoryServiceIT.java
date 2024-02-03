@@ -10,6 +10,9 @@ import org.hyperskill.community.flashcards.common.exception.ResourceAlreadyExist
 import org.hyperskill.community.flashcards.common.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -19,6 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -120,6 +124,28 @@ class CategoryServiceIT {
         assertEquals("brandnew", page.getContent().getLast().description());
         assertFalse(mongoTemplate.getCollectionNames().contains("cat1"));
         assertTrue(mongoTemplate.getCollectionNames().contains("new"));
+    }
+
+    static Stream<Arguments> whenNoNameOrSameName_updateDoesNotRename() {
+        return Stream.of(
+                Arguments.of("cat1"),
+                Arguments.of(""),
+                Arguments.of("  "),
+                Arguments.of((String) null)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void whenNoNameOrSameName_updateDoesNotRename(String name) {
+        var id = idMaps.get("cat1");
+        var update = new CategoryUpdateRequest(name, "brandnew");
+        service.updateById("user1", id, update);
+        var page = service.getCategories("user1", 0);
+        assertEquals(3, page.getTotalElements());
+        assertEquals("cat1", page.getContent().getFirst().name());
+        assertEquals("brandnew", page.getContent().getFirst().description());
+        assertTrue(mongoTemplate.getCollectionNames().contains("cat1"));
     }
 
     @Test
