@@ -28,6 +28,7 @@ class CategoryMapperTest {
         var dto = mapper.categoryToCategoryDto(category);
         assertEquals(category.id(), dto.id());
         assertEquals(category.name(), dto.name());
+        assertEquals(category.description(), dto.description());
         var expectedPermissions = Set.of(
                 new PermittedAction(ActionType.WRITE, "/api/categories/12345"),
                 new PermittedAction(ActionType.DELETE, "/api/categories/12345"));
@@ -41,7 +42,8 @@ class CategoryMapperTest {
     }
 
     private Category createCategory( String username, String permissions) {
-        return new Category("12345", "test", Set.of(new CategoryAccess(username, permissions)));
+        return new Category("12345", "test", "description",
+                Set.of(new CategoryAccess(username, permissions)));
     }
 
 }

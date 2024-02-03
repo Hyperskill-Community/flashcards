@@ -65,7 +65,7 @@ const addCategory = () => {
 
 const postNewCategory = async () => {
   addRequested.value = false;
-  await useCategoriesService().postNewCategory(newCategory.value.name);
+  await useCategoriesService().postNewCategory(newCategory.value);
   emit('reload', true);
 };
 

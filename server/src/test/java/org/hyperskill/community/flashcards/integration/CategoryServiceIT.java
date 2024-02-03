@@ -75,7 +75,7 @@ class CategoryServiceIT {
     void whenCategoryNotExists_AllMethodsThrowAccessDenied() {
         assertThrows(ResourceNotFoundException.class,
                 () -> service.findById("user1", "no-existing-id"));
-        var request = new CategoryUpdateRequest("new");
+        var request = new CategoryUpdateRequest("new", null);
         assertThrows(ResourceNotFoundException.class,
                 () -> service.updateById("user1", "no-existing-id", request));
         assertThrows(ResourceNotFoundException.class,
@@ -85,10 +85,10 @@ class CategoryServiceIT {
     @Test
     void whenCategoryExists_CreateAndRenameThrow() {
         var id = idMaps.get("cat1");
-        var update = new CategoryUpdateRequest("cat3");
+        var update = new CategoryUpdateRequest("cat3", "some");
         assertThrows(ResourceAlreadyExistsException.class,
                 () -> service.updateById("user1", id, update));
-        var create = new CategoryCreateRequest("cat1");
+        var create = new CategoryCreateRequest("cat1", "description");
         assertThrows(ResourceAlreadyExistsException.class,
                 () -> service.createCategory("user1", create));
     }
@@ -112,11 +112,12 @@ class CategoryServiceIT {
     @Test
     void whenPermissionOk_updateUpdates() {
         var id = idMaps.get("cat1");
-        service.updateById("user1", id, new CategoryUpdateRequest("new"));
+        service.updateById("user1", id, new CategoryUpdateRequest("new", "brandnew"));
         var page = service.getCategories("user1", 0);
         assertEquals(3, page.getTotalElements());
         assertEquals("cat2", page.getContent().getFirst().name());
         assertEquals("new", page.getContent().getLast().name());
+        assertEquals("brandnew", page.getContent().getLast().description());
         assertFalse(mongoTemplate.getCollectionNames().contains("cat1"));
         assertTrue(mongoTemplate.getCollectionNames().contains("new"));
     }
@@ -124,17 +125,18 @@ class CategoryServiceIT {
     @Test
     void whenNoWritePermission_updateThrowsAccessDenied() {
         var id = idMaps.get("cat2");
-        var update = new CategoryUpdateRequest("new");
+        var update = new CategoryUpdateRequest("new", null);
         assertThrows(AccessDeniedException.class, () -> service.updateById("user1", id, update));
     }
 
     @Test
     void whenNoCollisions_createCreates() {
-        var newId = service.createCategory("user1", new CategoryCreateRequest("new"));
+        var newId = service.createCategory("user1", new CategoryCreateRequest("new", "descr"));
         var page = service.getCategories("user1", 0);
         assertEquals(4, page.getTotalElements());
         assertEquals("new", page.getContent().getLast().name());
-        var expectedCategory = new Category(newId, "new", Set.of(new CategoryAccess("user1", "rwd")));
+        var expectedCategory = new Category(newId, "new", "descr",
+                Set.of(new CategoryAccess("user1", "rwd")));
         assertEquals(expectedCategory, mongoTemplate.findById(newId, Category.class));
     }
 
@@ -142,7 +144,7 @@ class CategoryServiceIT {
     void whenManyCategories_pagingWorks() {
         var access = Set.of(new CategoryAccess("user1", "rwd"));
         for (int i = 0; i < 20; i++) {
-            mongoTemplate.save(new Category(null, "new%d".formatted(i), access), "category");
+            mongoTemplate.save(new Category(null, "new%d".formatted(i), null, access), "category");
 
         }
         // 20 new and 3 previous - visible for user1
@@ -166,7 +168,7 @@ class CategoryServiceIT {
         for (var i = 0; i < access.length; i += 2) {
             categoryAccess.add(new CategoryAccess(access[i], access[i + 1]));
         }
-        var saved = mongoTemplate.save(new Category(null, name, categoryAccess), "category");
+        var saved = mongoTemplate.save(new Category(null, name, "descr",  categoryAccess), "category");
         idMaps.put(name, saved.id());
         mongoTemplate.getDb().createCollection(name);
     }

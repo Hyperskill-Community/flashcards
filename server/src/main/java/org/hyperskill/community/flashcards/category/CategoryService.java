@@ -63,7 +63,7 @@ public class CategoryService {
         throwIfCategoryExists(categoryName);
 
         var access = new CategoryAccess(username, "rwd");
-        var newCategory = new Category(null, categoryName, Set.of(access));
+        var newCategory = new Category(null, categoryName, request.description(), Set.of(access));
         newCategory = mongoTemplate.insert(newCategory, CATEGORY);
         mongoTemplate.getDb().createCollection(categoryName);
 
@@ -89,7 +89,8 @@ public class CategoryService {
 
         // update document in 'category' collection
         var query = Query.query(Criteria.where("id").is(categoryId));
-        mongoTemplate.updateFirst(query, update("name", request.name()), Category.class);
+        mongoTemplate.updateFirst(query,
+                update("name", request.name()).set("description", request.description()), Category.class);
 
         // return the updated document from 'category' collection
         return mongoTemplate.findOne(query, Category.class);

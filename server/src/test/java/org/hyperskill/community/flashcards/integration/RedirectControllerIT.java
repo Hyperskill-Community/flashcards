@@ -65,7 +65,7 @@ class RedirectControllerIT {
     @Test
     void whenExistingApiEndpointCalledAuthenticated_200ReturnedAndNoForward() throws Exception {
         when(categoryService.findById(TEST2, "id")).thenReturn(
-                new Category("id", "test-cat", Set.of(new CategoryAccess(TEST2, "r")))
+                new Category("id", "test-cat", null, Set.of(new CategoryAccess(TEST2, "r")))
         );
         mockMvc.perform(get("/api/categories/id")
                         .with(oidc(TEST2)))
