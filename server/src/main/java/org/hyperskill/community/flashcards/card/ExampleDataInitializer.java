@@ -78,7 +78,8 @@ public class ExampleDataInitializer {
             log.info("Sample users successfully inserted!");
 
             var categoryAccess = new CategoryAccess(users.getFirst().getUsername(), "rwd");
-            mongoTemplate.insert(new Category(null, EXAMPLE, Set.of(categoryAccess)));
+            mongoTemplate.insert(new Category(null, EXAMPLE,
+                    "This is a sample card set", Set.of(categoryAccess)));
 
             JsonNode jsonNode = objectMapper.readTree(flashcardsJson.getFile());
             List<SingleChoiceQuiz> scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);

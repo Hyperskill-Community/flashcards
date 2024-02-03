@@ -16,7 +16,7 @@
     </v-card-title>
 
     <v-card-text>
-      {{ category.description }}
+      {{ category.description || "No description given" }}
     </v-card-text>
 
     <div class="px-4">
@@ -42,9 +42,11 @@
       </div>
       <v-container v-if="editRequested">
         <v-form @submit.prevent class="d-flex justify-space-between align-center">
-          <v-text-field density="compact" v-model="categoryName" label="Category name">
+          <v-text-field density="compact" v-model="updateRequest.name" label="Category name">
           </v-text-field>
-          <submit-mdi-button :disabled="!categoryName"
+          <v-text-field density="compact" v-model="updateRequest.description" label="Description">
+          </v-text-field>
+          <submit-mdi-button :disabled="!updateRequest.name && ! updateRequest.description"
                              :clickHandler="performUpdate"/>
         </v-form>
       </v-container>
@@ -75,7 +77,7 @@ const emit = defineEmits<{
 const putUri = getPutUri(props.category);
 const deleteUri = getDeleteUri(props.category);
 const editRequested = ref(false);
-const categoryName = ref("");
+const updateRequest = ref({name: "", description: ""});
 
 const router = useRouter();
 const openCategory = () => {
@@ -84,7 +86,7 @@ const openCategory = () => {
 };
 
 const performUpdate = async () => {
-  await categoryService().putCategory(props.category.id, categoryName.value);
+  await categoryService().putCategory(props.category.id, updateRequest.value);
   emit('reload', true);
 };
 
