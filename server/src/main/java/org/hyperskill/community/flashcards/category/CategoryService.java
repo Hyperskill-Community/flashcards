@@ -86,8 +86,13 @@ public class CategoryService {
 
     private Category updateCategoryDocument(String categoryId, CategoryUpdateRequest request) {
         var query = Query.query(Criteria.where("id").is(categoryId));
-        mongoTemplate.updateFirst(query,
-                update("name", request.name()).set("description", request.description()), Category.class);
+        var update = update("description", request.description());
+        // update name only if it's not blank in the request
+        if (StringUtils.hasText(request.name())) {
+            update.set("name", request.name());
+        }
+
+        mongoTemplate.updateFirst(query, update, Category.class);
         return mongoTemplate.findOne(query, Category.class);
     }
 
@@ -97,6 +102,7 @@ public class CategoryService {
         }
         // check if the new name is already taken
         throwIfCategoryExists(request.name());
+        // rename the existing collection
         var namespace = new MongoNamespace(mongoTemplate.getDb().getName(), request.name());
         mongoTemplate.getCollection(category.name()).renameCollection(namespace);
     }
