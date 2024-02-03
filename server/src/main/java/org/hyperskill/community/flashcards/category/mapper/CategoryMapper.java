@@ -38,6 +38,7 @@ public class CategoryMapper {
         return new CategoryDto(
                 category.id(),
                 category.name(),
+                category.description(),
                 actions
         );
     }

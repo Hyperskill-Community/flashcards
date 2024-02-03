@@ -25,27 +25,25 @@ class CategoryControllerValidationUnitTest {
 
     @Test
     void whenNullName_ValidationError()  {
-        var createRequest = new CategoryCreateRequest(null);
+        var createRequest = new CategoryCreateRequest(null, null);
         assertFalse(validator.validate(createRequest).isEmpty());
-        var updateRequest = new CategoryUpdateRequest(null);
-        assertFalse(validator.validate(updateRequest).isEmpty());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "  "})
     void whenBlankName_ValidationError(String name)  {
-        var createRequest = new CategoryCreateRequest(name);
+        var createRequest = new CategoryCreateRequest(name, null);
         assertFalse(validator.validate(createRequest).isEmpty());
-        var updateRequest = new CategoryUpdateRequest(name);
-        assertFalse(validator.validate(updateRequest).isEmpty());
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"a", "category", "a+-3§"})
-    void whenNonBlankName_ValidationOk(String name)  {
-        var createRequest = new CategoryCreateRequest(name);
+    void whenNonBlankNameAnyDescription_ValidationOk(String name)  {
+        var createRequest = new CategoryCreateRequest(name, "description");
         assertTrue(validator.validate(createRequest).isEmpty());
-        var updateRequest = new CategoryUpdateRequest(name);
+        var updateRequest = new CategoryUpdateRequest(name, null);
+        assertTrue(validator.validate(updateRequest).isEmpty());
+        updateRequest = new CategoryUpdateRequest(null, "some");
         assertTrue(validator.validate(updateRequest).isEmpty());
     }
 }

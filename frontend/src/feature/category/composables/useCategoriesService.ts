@@ -1,6 +1,6 @@
 import apiClient from '@/plugins/axios';
 import {useErrorService} from "@/shared/composables/errorService";
-import {Category} from "@/feature/category/model/category";
+import {Category, CategoryRequest} from "@/feature/category/model/category";
 import apiUrl from "@/shared/composables/baseUrl";
 import {useToastService} from "@/shared/composables/toastService";
 
@@ -21,18 +21,15 @@ const useCategoriesService = () => {
     }
   }
 
-  const postNewCategory = async (name: string, errorResult: string = 'throw')  => {
+  const postNewCategory = async (data: CategoryRequest, errorResult: string = 'throw')  => {
     const url = `${apiUrl}categories`;
-    const postData = {
-      name: name
-    };
 
     try {
-      const response = await apiClient.post(url, postData);
+      const response = await apiClient.post(url, data);
       if (response.status !== 201) {
         throw new Error(`Error status code ${response.status}!`);
       } else {
-        useToastService().showSuccess('SUCCESS', `Category ${name} successfully created!`)
+        useToastService().showSuccess('SUCCESS', `Category ${data.name} successfully created!`)
       }
     } catch (error: any) {
       errorResult === 'throw' ? useErrorService().handleAndThrow(error)
@@ -41,18 +38,15 @@ const useCategoriesService = () => {
     return "posted";
   }
 
-  const putCategory = async (id: string, newName: string, errorResult: string = 'throw')  => {
+  const putCategory = async (id: string, data: CategoryRequest, errorResult: string = 'throw')  => {
     const url = `${apiUrl}categories/${id}`;
-    const putData = {
-      name: newName
-    };
 
     try {
-      const response = await apiClient.put(url, putData);
+      const response = await apiClient.put(url, data);
       if (response.status !== 200) {
         throw new Error(`Error status code ${response.status}!`);
       } else {
-        useToastService().showSuccess('SUCCESS', `Category successfully renamed to ${newName}!`)
+        useToastService().showSuccess('SUCCESS', `Category ${data.name} successfully updated!`)
       }
     } catch (error: any) {
       errorResult === 'throw' ? useErrorService().handleAndThrow(error)
