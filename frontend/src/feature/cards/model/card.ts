@@ -1,3 +1,15 @@
+export enum CardType {
+  SIMPLEQA = 'sqa',
+  SINGLE_CHOICE = 'scq',
+  MULTIPLE_CHOICE = 'mcq'
+}
+
+export type CardItem = {
+  id: string,
+  title: string,
+  type: CardType,
+}
+
 export type Card = {
   id: string,
   title: string,

@@ -2,7 +2,7 @@
   <v-container>
     <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between"
             fill-height
-            color="#f0f0f0">
+            :color="containerBackground()">
       <v-card-title class="text-center text-h4">
         Your accessible categories
       </v-card-title>
@@ -18,6 +18,7 @@ import {Category} from "@/feature/category/model/category";
 import CategoryIterator from "@/feature/category/components/CategoryIterator.vue";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 import useCardsService from "@/feature/cards/composables/useCardsService";
+import {containerBackground} from "@/styles/currentTheme";
 
 const items = ref([] as
   { category: Category, expanded: boolean }[]

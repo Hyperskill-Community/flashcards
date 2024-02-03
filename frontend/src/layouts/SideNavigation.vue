@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer>
+  <v-navigation-drawer :color="primary()">
     <v-list-item title="Flashcards" subtitle="Menu"></v-list-item>
     <v-divider></v-divider>
     <v-list-item to="/categories" title="Your card categories"></v-list-item>
@@ -11,10 +11,8 @@
 </template>
 
 <script setup lang="ts">
+import {primary} from "@/styles/currentTheme";
 </script>
 
 <style scoped lang="scss">
-.v-navigation-drawer {
-  background-color: #add8e6;
-}
 </style>

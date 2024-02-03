@@ -21,6 +21,24 @@ const useCategoriesService = () => {
     }
   }
 
+  const getCategoryById = async (id: String, errorResult: string = 'throw') : Promise<Category> => {
+    const url = `${apiUrl}categories/${id}`;
+    try {
+      const response = await apiClient.get(url);
+      if (response.status !== 200) {
+        throw new Error(`Error status code ${response.status}!`);
+      } else {
+        console.log(response.data);
+        return (response.data as Category);
+      }
+    } catch (error: any) {
+      errorResult === 'throw' ? useErrorService().handleAndThrow(error)
+        : useErrorService().handleAndNotify('custom error', 'custom message');
+      return {} as Category;
+    }
+  }
+
+
   const postNewCategory = async (data: CategoryRequest, errorResult: string = 'throw')  => {
     const url = `${apiUrl}categories`;
 
@@ -74,7 +92,8 @@ const useCategoriesService = () => {
     getCategories,
     postNewCategory,
     putCategory,
-    deleteCategory
+    deleteCategory,
+    getCategoryById
   }
 }
 export default useCategoriesService;
