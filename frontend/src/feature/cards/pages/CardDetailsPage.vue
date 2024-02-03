@@ -1,11 +1,12 @@
 <template>
   <v-container>
-    <div v-if="!error">
-      <CardDetailsComponent v-bind="card"></CardDetailsComponent>
+    <div v-if="!Object.keys(card).length">
+      <p>no card with {{id}}</p>
     </div>
     <div v-else>
-      <p class="no-card-found">{{ error }}</p>
+      <CardDetailsComponent v-bind="card"></CardDetailsComponent>
     </div>
+
   </v-container>
 </template>
 
@@ -22,32 +23,16 @@ const props = defineProps({
   id: String,
 })
 
-const card = ref<Card | null>({
-  id: "a",
-  title: "title",
-  question: "what is title",
-  correctOption: "",
-  tags: [],
-  options: []
-});
-
-const error = ref(null);
+const card = ref<Card>(
+  {} as Card
+);
 
 async function fetchCardWithId() {
-  try {
-    card.value = await useCardsService().getCardById(props.id!, CATEGORY_ID);
-    error.value = null;
-  } catch (e: any) {
-    error.value = e.message;
-  }
+  card.value = await useCardsService().getCardById(props.id!, CATEGORY_ID);
 }
 
 fetchCardWithId();
-</script>
 
+</script>
 <style scoped>
-.no-card-found {
-  text-align: center;
-  font-weight: bold;
-}
 </style>

@@ -27,7 +27,7 @@ const useCardsService = () => {
     }
   }
 
-  const getCards = async (categoryId: string, page: number, errorResult: string = 'throw') : Promise<Card[]> => {
+  const getCards = async (categoryId: string, page: number, errorResult: string = 'throw'): Promise<Card[]> => {
     const url = `${apiUrl}cards?categoryId=${categoryId}&page=${page}`;
 
     try {
@@ -44,7 +44,7 @@ const useCardsService = () => {
     }
   }
 
-  const getCardById = async (cardId: string, categoryId: string, errorResult: string = 'throw'): Promise<Card | null> => {
+  const getCardById = async (cardId: string, categoryId: string, errorResult: string = 'throw'): Promise<Card> => {
     const url = apiUrl + 'cards/' + cardId + '?categoryId=' + categoryId;
     try {
       const response = await apiClient.get(url);
@@ -56,7 +56,7 @@ const useCardsService = () => {
     } catch (error: any) {
       errorResult === 'throw' ? useErrorService().handleAndThrow(error)
         : useErrorService().handleAndNotify('custom error', 'custom message');
-      return null;
+      return {} as Card;
     }
   }
 

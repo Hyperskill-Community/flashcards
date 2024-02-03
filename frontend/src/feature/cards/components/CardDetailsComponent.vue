@@ -1,41 +1,51 @@
 <template>
-  <v-card
-    class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" max-width="500px" min-height="300px">
-    <v-card-title>
-      {{ card.title }}
-    </v-card-title>
-    <v-card-subtitle>
-      <ul class="tags">
-        <li v-for="(tag, index) in card.tags">
-          <template v-if="index < card.tags!.length-1 ">
-            {{ tag }},
-          </template>
-          <template v-else>
-            {{ tag }}
-          </template>
-        </li>
-      </ul>
-    </v-card-subtitle>
-    <v-card-text>
-      <p>
-        {{ card.question }}
-      </p>
-      <ol>
-        <li v-for="(option, index) in card.options">
-          {{ index }}./{{ option }}
-        </li>
-      </ol>
-      <p>
-        Answer: {{ card.correctOption }}
-      </p>
-    </v-card-text>
-    <v-container>
-      <v-card-actions class="pa-0 ma-0">
-        <edit-mdi-button>Edit</edit-mdi-button>
-        <delete-mdi-button>Delete</delete-mdi-button>
-      </v-card-actions>
-    </v-container>
-  </v-card>
+  <v-container fluid>
+    <v-row justify="center">
+      <v-col cols="12" md="8" lg="6">
+        <v-card
+          class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between">
+          <v-card-title>
+            {{ card.title }}
+          </v-card-title>
+          <v-card-subtitle>
+            <v-list class="ma-0 pa-0 d-flex flex-row flex-wrap">
+              <v-list-item
+                v-for="tag in card.tags"
+                :title="tag as string"
+              >
+              </v-list-item>
+            </v-list>
+          </v-card-subtitle>
+          <v-card-text>
+            {{ card.question }}
+            <v-container class="pa-0 mt-2">
+              <v-container class="pa-0">
+                Choices:
+              </v-container>
+              <v-list class="pa-0 d-flex flex-column flex-wrap">
+                <v-list-item
+                  v-for="(option, index) in card.options"
+                  :title="(index + 1) + './' + option as string"
+                >
+                </v-list-item>
+              </v-list>
+            </v-container>
+            <v-container class="pa-0 mt-2">
+              Answer: {{ card.correctOption }}
+            </v-container>
+
+          </v-card-text>
+          <v-container>
+            <v-card-actions class="pa-0 ma-0">
+              <edit-mdi-button>Edit</edit-mdi-button>
+              <delete-mdi-button>Delete</delete-mdi-button>
+            </v-card-actions>
+          </v-container>
+        </v-card>
+      </v-col>
+    </v-row>
+
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -55,17 +65,6 @@ const card = defineProps({
 </script>
 
 <style scoped lang="scss">
-
-ul, li {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.tags {
-  gap: 0.5rem;
-  display: flex;
-}
 
 .v-card {
   background-color: #f0f8ff;
