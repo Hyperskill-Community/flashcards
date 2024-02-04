@@ -44,21 +44,21 @@ public class CardService {
 
         final var category = categoryService.findById(username, categoryId);
         var pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by("title"));
-        var query = createFilterQuery(titleFilter, pageRequest);
+        var query = createFilterQuery(titleFilter);
+        var count = mongoTemplate.count(query, category.name());
         var cards = mongoTemplate
-                .find(query, Document.class, category.name())
+                .find(query.with(pageRequest), Document.class, category.name())
                 .stream()
                 .map(converter::convert)
                 .toList();
 
         var permissions = getPermissions(username, category);
         cards.forEach(card -> card.setPermissions(permissions));
-        var count = mongoTemplate.count(new Query(), category.name());
         return new PageImpl<>(cards, pageRequest, count);
     }
 
-    private Query createFilterQuery(String titleFilter, PageRequest pageRequest) {
-        var query = new Query().with(pageRequest);
+    private Query createFilterQuery(String titleFilter) {
+        var query = new Query();
         if (Objects.nonNull(titleFilter)) {
             var criteria = Criteria.where("title").regex(".*" + titleFilter + ".*", "i");
             query.addCriteria(criteria);

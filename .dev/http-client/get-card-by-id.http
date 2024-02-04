@@ -1,0 +1,4 @@
+###
+# @no-cookie-jar
+GET {{backendUrl}}/api/cards/65bed1da46781f2a9e9cfa2c?categoryId=65bed1da46781f2a9e9cf9ff
+Authorization: Bearer {{$auth.token("auth-id")}}
