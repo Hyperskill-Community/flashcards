@@ -10,7 +10,8 @@ const useCategoriesService = () => {
     try {
       const response = await apiClient.get(url);
       if (response.status !== 200) {
-        throw new Error(`Error status code ${response.status}!`);
+        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to load categories');
+        return [];
       } else {
         return (response.data.categories as Category[]);
       }
@@ -26,7 +27,8 @@ const useCategoriesService = () => {
     try {
       const response = await apiClient.get(url);
       if (response.status !== 200) {
-        throw new Error(`Error status code ${response.status}!`);
+        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to load category');
+        return {} as Category;
       } else {
         console.log(response.data);
         return (response.data as Category);
@@ -45,7 +47,7 @@ const useCategoriesService = () => {
     try {
       const response = await apiClient.post(url, data);
       if (response.status !== 201) {
-        throw new Error(`Error status code ${response.status}!`);
+        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to post card');
       } else {
         useToastService().showSuccess('SUCCESS', `Category ${data.name} successfully created!`)
       }
@@ -53,7 +55,6 @@ const useCategoriesService = () => {
       errorResult === 'throw' ? useErrorService().handleAndThrow(error)
         : useErrorService().handleAndNotify('custom error', 'custom message');
     }
-    return "posted";
   }
 
   const putCategory = async (id: string, data: CategoryRequest, errorResult: string = 'throw')  => {
@@ -62,7 +63,7 @@ const useCategoriesService = () => {
     try {
       const response = await apiClient.put(url, data);
       if (response.status !== 200) {
-        throw new Error(`Error status code ${response.status}!`);
+        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to update card');
       } else {
         useToastService().showSuccess('SUCCESS', `Category ${data.name} successfully updated!`)
       }
@@ -78,7 +79,7 @@ const useCategoriesService = () => {
     try {
       const response = await apiClient.delete(url);
       if (response.status !== 200) {
-        throw new Error(`Error status code ${response.status}!`);
+        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to delete card');
       } else {
         useToastService().showSuccess('SUCCESS', `Category successfully removed`)
       }
