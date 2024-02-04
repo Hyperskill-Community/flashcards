@@ -16,17 +16,17 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @MockitoSettings
 class ExampleDataInitializerTest {
@@ -161,6 +161,8 @@ class ExampleDataInitializerTest {
 
         verify(userMapper, times(1)).toDocument(any());
         verify(mongoTemplate, times(1)).insertAll(any());
-        verify(mongoTemplate, times(3)).insert(any(), eq("example"));
+        // TODO replace next line by the following as soon as 5 times load is removed
+        verify(mongoTemplate, times(15)).insert(any(), eq("example"));
+        //verify(mongoTemplate, times(3)).insert(any(), eq("example"));
     }
 }

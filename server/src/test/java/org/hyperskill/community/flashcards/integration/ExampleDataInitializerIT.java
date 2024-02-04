@@ -30,6 +30,8 @@ class ExampleDataInitializerIT {
         assertThat(categories).isEqualTo(1);
 
         var flashcards = db.getCollection("example").countDocuments();
-        assertThat(flashcards).isEqualTo(12);
+        // TODO replace next line by the following as soon as 5 times load is removed
+        assertThat(flashcards).isEqualTo(60);
+        //assertThat(flashcards).isEqualTo(12);
     }
 }
