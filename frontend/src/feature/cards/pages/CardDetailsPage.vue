@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <CardDetailsComponent v-bind="card"></CardDetailsComponent>
+    <card-details-component :card="card"></card-details-component>
   </v-container>
 </template>
 
@@ -23,6 +23,5 @@ const card = ref<Card>(
 async function fetchCardWithId() {
   card.value = await useCardsService().getCardById(props.cardId, props.categoryId);
 }
-
 fetchCardWithId();
 </script>

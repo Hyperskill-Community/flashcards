@@ -2,8 +2,8 @@
   <v-container fluid>
     <v-row justify="center">
       <v-col cols="12" md="8" lg="6">
-        <v-card
-          class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between">
+        <v-card color="secondary"
+                class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between">
           <v-card-title>
             {{ card.title }}
           </v-card-title>
@@ -37,8 +37,11 @@
           </v-card-text>
           <v-container>
             <v-card-actions class="pa-0 ma-0">
-              <edit-mdi-button>Edit</edit-mdi-button>
-              <delete-mdi-button>Delete</delete-mdi-button>
+              <edit-mdi-button tooltip-text="Edit Card - not implemented"/>
+              <delete-mdi-button tooltip-text="Delete Card - not implemented"/>
+              <v-spacer></v-spacer>
+              <back-mdi-button tooltip-text="Back to Category"
+                               :click-handler="$router.back"/>
             </v-card-actions>
           </v-container>
         </v-card>
@@ -49,25 +52,12 @@
 </template>
 
 <script setup lang="ts">
-
 import EditMdiButton from "@/shared/components/EditMdiButton.vue";
 import DeleteMdiButton from "@/shared/components/DeleteMdiButton.vue";
+import {Card} from "@/feature/cards/model/card";
+import BackMdiButton from "@/shared/components/BackMdiButton.vue";
 
-const card = defineProps({
-  id: String,
-  title: String,
-  question: String,
-  correctOption: String,
-  tags: Array as () => String[],
-  options: Array as () => String[]
-});
-
+defineProps<({
+  card: Card,
+})>()
 </script>
-
-<style scoped lang="scss">
-
-.v-card {
-  background-color: #f0f8ff;
-}
-
-</style>

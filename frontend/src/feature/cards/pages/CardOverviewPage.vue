@@ -2,7 +2,7 @@
   <v-container>
     <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between"
             fill-height
-            :color="containerBackground()">
+            color="containerBackground">
       <v-card-title class="text-center text-h4">
         Cards in {{ categoryName }}
       </v-card-title>
@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import {containerBackground} from "@/styles/currentTheme";
 import {ref} from "vue";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 import SubmitMdiButton from "@/shared/components/SubmitMdiButton.vue";
