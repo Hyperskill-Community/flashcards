@@ -35,8 +35,7 @@ public class ExampleDataInitializer {
     private static final String EXAMPLE = "example";
     private static final String USER = "user";
     private static final String CATEGORY = "category";
-    private static final String USER_JSON_PATH = "/json/users.json";
-    private static final String flashcardsJsonPath = "/json/flashcards.json";
+    public static final String ABORTING_DATABASE_INITIALIZATION = "Collection {} is not empty, aborting database initialization";
     private final ObjectMapper objectMapper;
     private final UserMapper userMapper;
     private final MongoTemplate mongoTemplate;
@@ -50,25 +49,25 @@ public class ExampleDataInitializer {
     @PostConstruct
     public void init() {
         log.info("Inserting sample data to the database...");
-
         if (isCollectionNotEmpty(USER)) {
-            log.warn("Collection {} is not empty, aborting database initialization", USER);
+            log.warn(ABORTING_DATABASE_INITIALIZATION, USER);
             return;
         }
         if (isCollectionNotEmpty(CATEGORY)) {
-            log.warn("Collection {} is not empty, aborting database initialization", CATEGORY);
+            log.warn(ABORTING_DATABASE_INITIALIZATION, CATEGORY);
             return;
         }
         if (isCollectionNotEmpty(EXAMPLE)) {
-            log.warn("Collection {} is not empty, aborting database initialization", EXAMPLE);
+            log.warn(ABORTING_DATABASE_INITIALIZATION, EXAMPLE);
             return;
         }
 
-        Resource usersJson = new ClassPathResource(USER_JSON_PATH);
-        Resource flashcardsJson = new ClassPathResource(flashcardsJsonPath);
+        Resource usersJson = new ClassPathResource("/json/users.json");
+        Resource flashcardsJson = new ClassPathResource("/json/flashcards.json");
 
         try {
-            List<UserDto> userDTOs = objectMapper.readValue(usersJson.getFile(), new TypeReference<>() {});
+            List<UserDto> userDTOs = objectMapper.readValue(usersJson.getFile(), new TypeReference<>() {
+            });
             List<User> users = userDTOs.stream().map(userMapper::toDocument).toList();
             if (users.isEmpty()) {
                 throw new IllegalStateException("No users to insert");
@@ -82,43 +81,17 @@ public class ExampleDataInitializer {
                     "This is a sample card set", Set.of(categoryAccess)));
 
             JsonNode jsonNode = objectMapper.readTree(flashcardsJson.getFile());
-            List<SingleChoiceQuiz> scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
-            List<MultipleChoiceQuiz> mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
-            List<QuestionAndAnswer> qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
 
-            mongoTemplate.insert(scqCards, EXAMPLE);
-            mongoTemplate.insert(mcqCards, EXAMPLE);
-            mongoTemplate.insert(qnaCards, EXAMPLE);
+            // TODO remove loop after testing
+            for (int i = 0; i < 5; i++) {
+                List<SingleChoiceQuiz> scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
+                List<MultipleChoiceQuiz> mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
+                List<QuestionAndAnswer> qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
 
-            scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
-            mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
-            qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
-            // TODO remove this after testing
-            mongoTemplate.insert(scqCards, EXAMPLE);
-            mongoTemplate.insert(mcqCards, EXAMPLE);
-            mongoTemplate.insert(qnaCards, EXAMPLE);
-
-            scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
-            mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
-            qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
-            mongoTemplate.insert(scqCards, EXAMPLE);
-            mongoTemplate.insert(mcqCards, EXAMPLE);
-            mongoTemplate.insert(qnaCards, EXAMPLE);
-
-            scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
-            mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
-            qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
-            mongoTemplate.insert(scqCards, EXAMPLE);
-            mongoTemplate.insert(mcqCards, EXAMPLE);
-            mongoTemplate.insert(qnaCards, EXAMPLE);
-
-            scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
-            mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
-            qnaCards = parseCards(jsonNode.get("qna_cards"), QuestionAndAnswer.class);
-            mongoTemplate.insert(scqCards, EXAMPLE);
-            mongoTemplate.insert(mcqCards, EXAMPLE);
-            mongoTemplate.insert(qnaCards, EXAMPLE);
-
+                mongoTemplate.insert(scqCards, EXAMPLE);
+                mongoTemplate.insert(mcqCards, EXAMPLE);
+                mongoTemplate.insert(qnaCards, EXAMPLE);
+            }
             log.info("Sample flashcards successfully inserted!");
 
         } catch (Exception e) {
