@@ -28,7 +28,6 @@ const items = ref([] as CardItem[]);
 const router = useRouter();
 const pagePointer = ref({current: 0, isLast: false});
 
-
 const fetchCardsPage = async ({done} : {done: Function}) => {
   if (pagePointer.value.isLast) {
     done('empty');
@@ -40,9 +39,8 @@ const fetchCardsPage = async ({done} : {done: Function}) => {
   for (const cardItem of cardResponse.cards) {
     items.value.push(cardItem);
   }
-  done(cardResponse.cards.length ? 'ok' : 'empty');
+  done('ok');
 }
-fetchCardsPage({done: console.log});
 
 const openCard = (id: string) => {
   console.log("Opening card with id: " + id);
