@@ -31,7 +31,7 @@ const pagePointer = ref({current: 0, isLast: false});
 
 const fetchCardsPage = async ({done} : {done: Function}) => {
   if (pagePointer.value.isLast) {
-    done('ok');
+    done('empty');
     return;
   }
   const cardResponse = await useCardsService().getCards(props.categoryId, pagePointer.value.current);
@@ -40,7 +40,7 @@ const fetchCardsPage = async ({done} : {done: Function}) => {
   for (const cardItem of cardResponse.cards) {
     items.value.push(cardItem);
   }
-  done('ok');
+  done(cardResponse.cards.length ? 'ok' : 'empty');
 }
 fetchCardsPage({done: console.log});
 

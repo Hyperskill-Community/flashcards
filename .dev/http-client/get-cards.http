@@ -1,5 +1,5 @@
 ###
 # @no-cookie-jar
-GET {{backendUrl}}/api/cards?categoryId=65bed1da46781f2a9e9cf9ff&page=2
+GET {{backendUrl}}/api/cards?categoryId=65bed74746781f2a9e9cfa3e&page=0
 Authorization: Bearer {{$auth.token("auth-id")}}
 
