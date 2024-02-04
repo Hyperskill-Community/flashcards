@@ -39,22 +39,31 @@ public class CardService {
     private final CardReadConverter converter;
     private final CardMapper mapper;
 
-    public Page<Card> getCardsByCategory(String username, String categoryId, int page) {
+    public Page<Card> getCardsByCategory(String username, String categoryId, int page, String titleFilter) {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
         final var category = categoryService.findById(username, categoryId);
-
-        var count = mongoTemplate.count(new Query(), category.name());
         var pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by("title"));
+        var query = createFilterQuery(titleFilter, pageRequest);
         var cards = mongoTemplate
-                .find(new Query().with(pageRequest), Document.class, category.name())
+                .find(query, Document.class, category.name())
                 .stream()
                 .map(converter::convert)
                 .toList();
 
         var permissions = getPermissions(username, category);
         cards.forEach(card -> card.setPermissions(permissions));
+        var count = mongoTemplate.count(new Query(), category.name());
         return new PageImpl<>(cards, pageRequest, count);
+    }
+
+    private Query createFilterQuery(String titleFilter, PageRequest pageRequest) {
+        var query = new Query().with(pageRequest);
+        if (Objects.nonNull(titleFilter)) {
+            var criteria = Criteria.where("title").regex(".*" + titleFilter + ".*", "i");
+            query.addCriteria(criteria);
+        }
+        return query;
     }
 
     public long getCardCountOfCategory(String username, String categoryId) {

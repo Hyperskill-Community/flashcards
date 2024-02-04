@@ -7,14 +7,14 @@
         Cards in {{ categoryName }}
       </v-card-title>
       <v-form @submit.prevent class="d-flex justify-space-between align-center">
-        <v-text-field label="Filter on title or tags"
+        <v-text-field label="Filter on title"
                       prepend-inner-icon="mdi-magnify"
-                      v-model="filter">
+                      v-model="filter.input">
         </v-text-field>
-        <submit-mdi-button :disabled="!filter"
+        <submit-mdi-button :disabled="!filter.input"
                            :clickHandler="filterOnTitle"/>
       </v-form>
-      <card-item-scroller :categoryId="categoryId" :filter="filter"/>
+      <card-item-scroller :categoryId="categoryId" :titleFilter="filter.title"/>
     </v-card>
   </v-container>
 </template>
@@ -29,9 +29,13 @@ const props = defineProps<({
   categoryId: string
 })>();
 const categoryName = ref("");
-const filter = ref("");
+const filter = ref({
+  input: "",
+  title: "", // more to come
+});
 const filterOnTitle = () => {
-  console.log("Filtering on title: " + filter.value);
+  filter.value.title = filter.value.input;
+  console.log("Filtering on title: " + filter.value.title);
 }
 const fetchCategoryName = async () => {
   categoryName.value = (await useCategoriesService().getCategoryById(props.categoryId)).name;

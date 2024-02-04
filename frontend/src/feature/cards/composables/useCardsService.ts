@@ -27,8 +27,9 @@ const useCardsService = () => {
     }
   }
 
-  const getCards = async (categoryId: string, page: number, errorResult: string = 'throw') : Promise<CardResponse> => {
-    const url = `${apiUrl}cards?categoryId=${categoryId}&page=${page}`;
+  const getCards = async (categoryId: string, titleFilter: string, page: number, errorResult: string = 'throw') : Promise<CardResponse> => {
+    const filterQuery = titleFilter ? `&titleFilter=${titleFilter}` : '';
+    const url = `${apiUrl}cards?categoryId=${categoryId}&page=${page}${filterQuery}`;
 
     try {
       const response = await apiClient.get(url);

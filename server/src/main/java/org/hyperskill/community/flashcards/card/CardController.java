@@ -34,10 +34,11 @@ public class CardController {
     @SuppressWarnings("java:S1854")
     public CardPageResponse<CardItemProjection> getCards(
             @RequestParam(name = "categoryId") String categoryId,
+            @RequestParam(name = "titleFilter", required = false) String titleFilter,
             @Valid @Min(0) @RequestParam(name = "page", required = false, defaultValue = "0") int page) {
 
         var username = authenticationResolver.resolveUsername();
-        var cardsPage = cardService.getCardsByCategory(username, categoryId, page);
+        var cardsPage = cardService.getCardsByCategory(username, categoryId, page, titleFilter);
         return new CardPageResponse<>(
                 cardsPage.isFirst(),
                 cardsPage.isLast(),
@@ -54,7 +55,7 @@ public class CardController {
             @Valid @Min(0) @RequestParam(name = "page", required = false, defaultValue = "0") int page) {
 
         var username = authenticationResolver.resolveUsername();
-        var cardsPage = cardService.getCardsByCategory(username, categoryId, page);
+        var cardsPage = cardService.getCardsByCategory(username, categoryId, page, null);
         return new CardPageResponse<>(
                 cardsPage.isFirst(),
                 cardsPage.isLast(),
