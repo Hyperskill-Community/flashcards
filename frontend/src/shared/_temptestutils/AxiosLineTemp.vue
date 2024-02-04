@@ -9,26 +9,26 @@
       <v-row class="justify-center mb-2">
         <v-col cols="auto">
           <v-btn color="red" border @click="testAxiosCall('get')" variant="text">
-            <v-icon icon="mdi-account-group" size="large" :start="true"/>
+            <v-icon icon="mdi-account-group" size="large" start/>
             test axios GET
           </v-btn>
           <v-btn color="red" border @click="testAxiosCall('post')" variant="text">
-            <v-icon icon="mdi-account-group" size="large" :start="true"/>
+            <v-icon icon="mdi-account-group" size="large" start/>
             test axios POST
           </v-btn>
           <v-btn color="red" border @click="testAxiosCall('error', 'throw')" variant="text">
-            <v-icon icon="mdi-account-group" size="large" :start="true"/>
+            <v-icon icon="mdi-account-group" size="large" start/>
             test throw ERROR
           </v-btn>
           <v-btn color="red" border @click="testAxiosCall('error', 'toast/console')" variant="text">
-            <v-icon icon="mdi-account-group" size="large" :start="true"/>
+            <v-icon icon="mdi-account-group" size="large" start/>
             test custom notify ERROR
           </v-btn>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" sm="6" md="4">
-          <v-btn color="black" border @click="showCategories" variant="text">
+          <v-btn color="black" border @click="showCategories()" variant="text">
             Get categories
           </v-btn>
         </v-col>
@@ -51,7 +51,6 @@ import {useAxiosTestService} from "@/shared/composables/testService";
 import useCardsService from "@/feature/cards/composables/useCardsService";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 import {ref} from "vue";
-import {Category} from "@/feature/category/model/category";
 import {getAccess} from "@/feature/category/composables/useCategory";
 import {useToastService} from "@/shared/composables/toastService";
 
@@ -68,10 +67,10 @@ const postNewUser = () => {
 
 const showCategories = async () => {
   const categories = await useCategoriesService().getCategories();
-  var result = 'Found categories:\n'
-  categories.forEach((category: Category) => {
-    result += `Id: ${category.id}, Name: ${category.name}, Access ${getAccess(category)}\n`;
-  });
+  console.log(categories)
+  const result = `<b>Found categories:<br></b>` +
+    categories.map(cat => `Id: ${cat.id}<br> Name: ${cat.name}<br> Access ${getAccess(cat)}<br>`).join('<br>');
+  console.log(result)
   useToastService().showSuccess('SUCCESS', result);
 }
 </script>
