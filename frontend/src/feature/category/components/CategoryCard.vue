@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card color="secondary" >
     <v-card-title class="d-flex justify-space-between align-center">
       <h4>{{ category.name }}</h4>
       <div class="mr-n6">
@@ -82,7 +82,7 @@ const updateRequest = ref({name: "", description: ""});
 const router = useRouter();
 const openCategory = () => {
   resetRequests();
-  router.push(`/display/${props.category.id}`);
+  router.push(`/category/${props.category.id}`);
 };
 
 const performUpdate = async () => {
@@ -104,9 +104,3 @@ const resetRequests = () => {
   editRequested.value = false;
 }
 </script>
-
-<style scoped lang="scss">
-.v-card {
-  background-color: #f0f8ff;
-}
-</style>

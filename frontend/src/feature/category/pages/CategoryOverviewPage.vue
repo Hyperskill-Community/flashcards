@@ -2,7 +2,7 @@
   <v-container>
     <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between"
             fill-height
-            color="#f0f0f0">
+            color="containerBackground">
       <v-card-title class="text-center text-h4">
         Your accessible categories
       </v-card-title>

@@ -11,7 +11,13 @@ const routes = [
     component: () => import("@/feature/category/pages/CategoryOverviewPage.vue"),
   },
   {
-    path: '/display/:id',
+    path: '/category/:categoryId',
+    name: 'cards-by-category',
+    component: () => import("@/feature/cards/pages/CardOverviewPage.vue"),
+    props: true,
+  },
+  {
+    path: '/card/:categoryId/:cardId',
     name: 'card-details',
     component: () => import("@/feature/cards/pages/CardDetailsPage.vue"),
     props: true,

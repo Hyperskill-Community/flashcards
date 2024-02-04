@@ -2,7 +2,7 @@ import apiClient from '@/plugins/axios';
 import {useErrorService} from "@/shared/composables/errorService";
 import {useToastService} from "@/shared/composables/toastService";
 import apiUrl from "@/shared/composables/baseUrl";
-import {Card} from "@/feature/cards/model/card";
+import {Card, CardResponse} from "@/feature/cards/model/card";
 
 const useCardsService = () => {
 
@@ -17,7 +17,7 @@ const useCardsService = () => {
     try {
       const response = await apiClient.post(postUrl, postData);
       if (response.status !== 200) {
-        throw new Error(`Error status code ${response.status}!`);
+        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to register user');
       } else {
         useToastService().showSuccess('SUCCESS', `User ${email} registered successfully!`)
       }
@@ -27,20 +27,22 @@ const useCardsService = () => {
     }
   }
 
-  const getCards = async (categoryId: string, page: number, errorResult: string = 'throw'): Promise<Card[]> => {
-    const url = `${apiUrl}cards?categoryId=${categoryId}&page=${page}`;
+  const getCards = async (categoryId: string, titleFilter: string, page: number, errorResult: string = 'throw'): Promise<CardResponse> => {
+    const filterQuery = titleFilter ? `&titleFilter=${titleFilter}` : '';
+    const url = `${apiUrl}cards?categoryId=${categoryId}&page=${page}${filterQuery}`;
 
     try {
       const response = await apiClient.get(url);
       if (response.status !== 200) {
-        throw new Error(`Error status code ${response.status}!`);
+        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to load cards');
+        return {isLast: true, cards: [], currentPage: 0} as CardResponse;
       } else {
-        return (response.data.cards as Card[]);
+        return (response.data as CardResponse);
       }
     } catch (error: any) {
       errorResult === 'throw' ? useErrorService().handleAndThrow(error)
         : useErrorService().handleAndNotify('custom error', 'custom message');
-      return [];
+      return {isLast: true, cards: [], currentPage: 0} as CardResponse;
     }
   }
 
@@ -49,7 +51,8 @@ const useCardsService = () => {
     try {
       const response = await apiClient.get(url);
       if (response.status !== 200) {
-        throw new Error(`Error status code ${response.status}!`);
+        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to load card');
+        return {} as Card;
       } else {
         return (response.data as Card);
       }
@@ -66,7 +69,7 @@ const useCardsService = () => {
     try {
       const response = await apiClient.get(url);
       if (response.status !== 200) {
-        throw new Error(`Error status code ${response.status}!`);
+        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to load card count');
       } else {
         return response.data as number;
       }

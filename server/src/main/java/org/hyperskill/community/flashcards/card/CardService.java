@@ -18,10 +18,9 @@ import org.hyperskill.community.flashcards.category.model.CategoryAccess;
 import org.hyperskill.community.flashcards.common.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -40,27 +39,31 @@ public class CardService {
     private final CardReadConverter converter;
     private final CardMapper mapper;
 
-    public Page<Card> getCardsByCategory(String username, String categoryId, int page) {
+    public Page<Card> getCardsByCategory(String username, String categoryId, int page, String titleFilter) {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
         final var category = categoryService.findById(username, categoryId);
-
-        var aggregation = Aggregation.newAggregation(
-                Aggregation.sort(Sort.by("name")),
-                Aggregation.skip((long) page * PAGE_SIZE),
-                Aggregation.limit(PAGE_SIZE)
-        );
-
-        var count = mongoTemplate.count(new Query(), category.name());
-        var result = mongoTemplate.aggregate(aggregation, category.name(), Document.class)
-                .getRawResults()
-                .getList("results", Document.class);
-        var cards = result.stream().map(converter::convert).toList();
+        var pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by("title"));
+        var query = createFilterQuery(titleFilter);
+        var count = mongoTemplate.count(query, category.name());
+        var cards = mongoTemplate
+                .find(query.with(pageRequest), Document.class, category.name())
+                .stream()
+                .map(converter::convert)
+                .toList();
 
         var permissions = getPermissions(username, category);
         cards.forEach(card -> card.setPermissions(permissions));
+        return new PageImpl<>(cards, pageRequest, count);
+    }
 
-        return new PageImpl<>(cards, Pageable.ofSize(PAGE_SIZE), count);
+    private Query createFilterQuery(String titleFilter) {
+        var query = new Query();
+        if (Objects.nonNull(titleFilter)) {
+            var criteria = Criteria.where("title").regex(".*" + titleFilter + ".*", "i");
+            query.addCriteria(criteria);
+        }
+        return query;
     }
 
     public long getCardCountOfCategory(String username, String categoryId) {
