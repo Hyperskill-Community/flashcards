@@ -26,9 +26,9 @@ public class CardMapper {
     public CardItemProjection map(Card card) {
 
         var type = switch (card) {
-            case QuestionAndAnswer c -> CardType.QNA;
-            case SingleChoiceQuiz c -> CardType.SCQ;
-            case MultipleChoiceQuiz c -> CardType.MCQ;
+            case QuestionAndAnswer ignoredC -> CardType.QNA;
+            case SingleChoiceQuiz ignoredC -> CardType.SCQ;
+            case MultipleChoiceQuiz ignoredC -> CardType.MCQ;
         };
         return new CardItemProjection(card.getId(), card.getTitle(), type);
     }
