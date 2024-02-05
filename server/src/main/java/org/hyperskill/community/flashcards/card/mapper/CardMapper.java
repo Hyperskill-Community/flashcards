@@ -26,7 +26,7 @@ public class CardMapper {
     public CardItemProjection map(Card card) {
 
         var type = switch (card) {
-            case QuestionAndAnswer c -> CardType.SQA;
+            case QuestionAndAnswer c -> CardType.QNA;
             case SingleChoiceQuiz c -> CardType.SCQ;
             case MultipleChoiceQuiz c -> CardType.MCQ;
         };
@@ -53,32 +53,32 @@ public class CardMapper {
     }
 
     private QuestionAndAnswer toDocument(QuestionAndAnswerCreateRequest request) {
-        return new QuestionAndAnswer(
-                request.getTitle(),
-                request.getTags(),
-                request.getQuestion(),
-                request.getAnswer()
-        );
+        return QuestionAndAnswer.builder()
+                .title(request.getTitle())
+                .tags(request.getTags())
+                .question(request.getQuestion())
+                .answer(request.getAnswer())
+                .build();
     }
 
     private SingleChoiceQuiz toDocument(SingleChoiceQuizCreateRequest request) {
-        return new SingleChoiceQuiz(
-                request.getTitle(),
-                request.getTags(),
-                request.getQuestion(),
-                request.getOptions(),
-                request.getCorrectOption()
-        );
+        return SingleChoiceQuiz.builder()
+                .title(request.getTitle())
+                .tags(request.getTags())
+                .question(request.getQuestion())
+                .options(request.getOptions())
+                .correctOption(request.getCorrectOption())
+                .build();
     }
 
     private MultipleChoiceQuiz toDocument(MultipleChoiceQuizCreateRequest request) {
-        return new MultipleChoiceQuiz(
-                request.getTitle(),
-                request.getTags(),
-                request.getQuestion(),
-                request.getOptions(),
-                request.getCorrectOptions()
-        );
+        return MultipleChoiceQuiz.builder()
+                .title(request.getTitle())
+                .tags(request.getTags())
+                .question(request.getQuestion())
+                .options(request.getOptions())
+                .correctOptions(request.getCorrectOptions())
+                .build();
     }
 
     private QuestionAndAnswerDto toDto(QuestionAndAnswer card, Set<PermittedAction> actions) {
