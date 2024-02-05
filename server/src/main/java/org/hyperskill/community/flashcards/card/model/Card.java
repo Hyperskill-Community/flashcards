@@ -1,13 +1,13 @@
 package org.hyperskill.community.flashcards.card.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.hyperskill.community.flashcards.card.mapper.MongoDateConverter;
-import org.hyperskill.community.flashcards.card.mapper.MongoObjectIdConverter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -21,19 +21,29 @@ import java.util.Set;
  */
 @Getter
 @Setter
-@Document
 @ToString
+@NoArgsConstructor
 @SuperBuilder
+@Document
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.EXISTING_PROPERTY,
+        property = "type",
+        visible = true
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = QuestionAndAnswer.class, name = "qna"),
+        @JsonSubTypes.Type(value = SingleChoiceQuiz.class, name = "scq"),
+        @JsonSubTypes.Type(value = MultipleChoiceQuiz.class, name = "mcq"),
+})
 public abstract sealed class Card permits QuestionAndAnswer, SingleChoiceQuiz, MultipleChoiceQuiz {
     @Id
-    @JsonDeserialize(using = MongoObjectIdConverter.class)
     @JsonAlias({"id", "_id"})
     private String id;
     private String title;
     private Set<String> tags;
     private String question;
     @CreatedDate
-    @JsonDeserialize(using = MongoDateConverter.class)
     private Instant createdAt;
     @Transient
     private String permissions;

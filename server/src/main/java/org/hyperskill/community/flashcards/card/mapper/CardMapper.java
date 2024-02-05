@@ -4,10 +4,10 @@ import org.hyperskill.community.flashcards.card.model.Card;
 import org.hyperskill.community.flashcards.card.model.MultipleChoiceQuiz;
 import org.hyperskill.community.flashcards.card.model.QuestionAndAnswer;
 import org.hyperskill.community.flashcards.card.model.SingleChoiceQuiz;
-import org.hyperskill.community.flashcards.card.request.CardCreateRequest;
-import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizCreateRequest;
-import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerCreateRequest;
-import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizCreateRequest;
+import org.hyperskill.community.flashcards.card.request.CardRequestDto;
+import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizRequestDto;
+import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerRequestDto;
+import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizRequestDto;
 import org.hyperskill.community.flashcards.card.response.CardItemProjection;
 import org.hyperskill.community.flashcards.card.response.CardResponse;
 import org.hyperskill.community.flashcards.card.response.CardType;
@@ -44,40 +44,40 @@ public class CardMapper {
         };
     }
 
-    public <T extends CardCreateRequest> Card toDocument(T request) {
+    public <T extends CardRequestDto> Card toDocument(T request) {
         return switch (request) {
-            case QuestionAndAnswerCreateRequest qna -> toDocument(qna);
-            case SingleChoiceQuizCreateRequest scq -> toDocument(scq);
-            case MultipleChoiceQuizCreateRequest mcq -> toDocument(mcq);
+            case QuestionAndAnswerRequestDto qna -> toDocument(qna);
+            case SingleChoiceQuizRequestDto scq -> toDocument(scq);
+            case MultipleChoiceQuizRequestDto mcq -> toDocument(mcq);
         };
     }
 
-    private QuestionAndAnswer toDocument(QuestionAndAnswerCreateRequest request) {
+    private QuestionAndAnswer toDocument(QuestionAndAnswerRequestDto request) {
         return QuestionAndAnswer.builder()
-                .title(request.getTitle())
-                .tags(request.getTags())
-                .question(request.getQuestion())
-                .answer(request.getAnswer())
+                .title(request.title())
+                .tags(request.tags())
+                .question(request.question())
+                .answer(request.answer())
                 .build();
     }
 
-    private SingleChoiceQuiz toDocument(SingleChoiceQuizCreateRequest request) {
+    private SingleChoiceQuiz toDocument(SingleChoiceQuizRequestDto request) {
         return SingleChoiceQuiz.builder()
-                .title(request.getTitle())
-                .tags(request.getTags())
-                .question(request.getQuestion())
-                .options(request.getOptions())
-                .correctOption(request.getCorrectOption())
+                .title(request.title())
+                .tags(request.tags())
+                .question(request.question())
+                .options(request.options())
+                .correctOption(request.correctOption())
                 .build();
     }
 
-    private MultipleChoiceQuiz toDocument(MultipleChoiceQuizCreateRequest request) {
+    private MultipleChoiceQuiz toDocument(MultipleChoiceQuizRequestDto request) {
         return MultipleChoiceQuiz.builder()
-                .title(request.getTitle())
-                .tags(request.getTags())
-                .question(request.getQuestion())
-                .options(request.getOptions())
-                .correctOptions(request.getCorrectOptions())
+                .title(request.title())
+                .tags(request.tags())
+                .question(request.question())
+                .options(request.options())
+                .correctOptions(request.correctOptions())
                 .build();
     }
 

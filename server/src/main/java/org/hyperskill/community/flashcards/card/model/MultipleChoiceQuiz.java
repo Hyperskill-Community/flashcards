@@ -1,6 +1,7 @@
 package org.hyperskill.community.flashcards.card.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString(callSuper = true)
+@NoArgsConstructor
 @SuperBuilder
 @TypeAlias("MCQ")
 public final class MultipleChoiceQuiz extends Card {
