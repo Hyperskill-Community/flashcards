@@ -10,5 +10,5 @@ public record QuestionAndAnswerRequestDto(
         @NotNull Set<@NotBlank String>tags,
         @NotBlank String question,
         @NotBlank String answer
-) implements CardRequestDto {
+) implements CardRequest {
 }

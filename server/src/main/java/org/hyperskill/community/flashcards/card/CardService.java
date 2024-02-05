@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hyperskill.community.flashcards.card.mapper.CardMapper;
 import org.hyperskill.community.flashcards.card.model.Card;
-import org.hyperskill.community.flashcards.card.request.CardRequestDto;
+import org.hyperskill.community.flashcards.card.request.CardRequest;
 import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizRequestDto;
 import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerRequestDto;
 import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizRequestDto;
@@ -62,7 +62,7 @@ public class CardService {
         return mongoTemplate.count(new Query(), collection);
     }
 
-    public String createCard(String username, CardRequestDto request, String categoryId) {
+    public String createCard(String username, CardRequest request, String categoryId) {
         var collection = getCollectionName(username, categoryId, "w");
         var card = mapper.toDocument(request);
         return mongoTemplate.insert(card, collection).getId();
@@ -87,7 +87,7 @@ public class CardService {
         mongoTemplate.remove(query, collection);
     }
 
-    public Card updateCardById(String username, String cardId, CardRequestDto request, String categoryId) {
+    public Card updateCardById(String username, String cardId, CardRequest request, String categoryId) {
         Objects.requireNonNull(cardId, "Card ID cannot be null");
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
@@ -119,7 +119,7 @@ public class CardService {
         return categoryService.findById(username, categoryId, permission).name();
     }
 
-    private Update updateFrom(CardRequestDto request) {
+    private Update updateFrom(CardRequest request) {
         Objects.requireNonNull(request, "Update request cannot be null");
 
         var update = new Update()

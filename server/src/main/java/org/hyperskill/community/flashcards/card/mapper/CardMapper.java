@@ -4,16 +4,16 @@ import org.hyperskill.community.flashcards.card.model.Card;
 import org.hyperskill.community.flashcards.card.model.MultipleChoiceQuiz;
 import org.hyperskill.community.flashcards.card.model.QuestionAndAnswer;
 import org.hyperskill.community.flashcards.card.model.SingleChoiceQuiz;
-import org.hyperskill.community.flashcards.card.request.CardRequestDto;
+import org.hyperskill.community.flashcards.card.request.CardRequest;
 import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizRequestDto;
 import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerRequestDto;
 import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizRequestDto;
 import org.hyperskill.community.flashcards.card.response.CardItemProjection;
 import org.hyperskill.community.flashcards.card.response.CardResponse;
 import org.hyperskill.community.flashcards.card.response.CardType;
-import org.hyperskill.community.flashcards.card.response.MultipleChoiceQuizDto;
-import org.hyperskill.community.flashcards.card.response.QuestionAndAnswerDto;
-import org.hyperskill.community.flashcards.card.response.SingleChoiceQuizDto;
+import org.hyperskill.community.flashcards.card.response.MultipleChoiceQuizResponseDto;
+import org.hyperskill.community.flashcards.card.response.QuestionAndAnswerResponseDto;
+import org.hyperskill.community.flashcards.card.response.SingleChoiceQuizResponseDto;
 import org.hyperskill.community.flashcards.common.ActionsParser;
 import org.hyperskill.community.flashcards.common.response.PermittedAction;
 import org.springframework.stereotype.Component;
@@ -44,7 +44,7 @@ public class CardMapper {
         };
     }
 
-    public <T extends CardRequestDto> Card toDocument(T request) {
+    public <T extends CardRequest> Card toDocument(T request) {
         return switch (request) {
             case QuestionAndAnswerRequestDto qna -> toDocument(qna);
             case SingleChoiceQuizRequestDto scq -> toDocument(scq);
@@ -81,11 +81,11 @@ public class CardMapper {
                 .build();
     }
 
-    private QuestionAndAnswerDto toDto(QuestionAndAnswer card, Set<PermittedAction> actions) {
-        return QuestionAndAnswerDto.builder()
+    private QuestionAndAnswerResponseDto toDto(QuestionAndAnswer card, Set<PermittedAction> actions) {
+        return QuestionAndAnswerResponseDto.builder()
                 .id(card.getId())
                 .title(card.getTitle())
-                .type("qna")
+                .type(CardType.QNA)
                 .question(card.getQuestion())
                 .answer(card.getAnswer())
                 .tags(card.getTags())
@@ -94,11 +94,11 @@ public class CardMapper {
                 .build();
     }
 
-    private SingleChoiceQuizDto toDto(SingleChoiceQuiz card, Set<PermittedAction> actions) {
-        return SingleChoiceQuizDto.builder()
+    private SingleChoiceQuizResponseDto toDto(SingleChoiceQuiz card, Set<PermittedAction> actions) {
+        return SingleChoiceQuizResponseDto.builder()
                 .id(card.getId())
                 .title(card.getTitle())
-                .type("scq")
+                .type(CardType.SCQ)
                 .question(card.getQuestion())
                 .options(card.getOptions())
                 .correctOption(card.getCorrectOption())
@@ -108,11 +108,11 @@ public class CardMapper {
                 .build();
     }
 
-    private MultipleChoiceQuizDto toDto(MultipleChoiceQuiz card, Set<PermittedAction> actions) {
-        return MultipleChoiceQuizDto.builder()
+    private MultipleChoiceQuizResponseDto toDto(MultipleChoiceQuiz card, Set<PermittedAction> actions) {
+        return MultipleChoiceQuizResponseDto.builder()
                 .id(card.getId())
                 .title(card.getTitle())
-                .type("mcq")
+                .type(CardType.MCQ)
                 .question(card.getQuestion())
                 .options(card.getOptions())
                 .correctOptions(card.getCorrectOptions())

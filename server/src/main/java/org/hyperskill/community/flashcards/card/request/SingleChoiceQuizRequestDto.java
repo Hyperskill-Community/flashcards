@@ -14,5 +14,5 @@ public record SingleChoiceQuizRequestDto(
         @NotBlank String question,
         @NotNull @NotEmpty List<@NotBlank String> options,
         @NotNull @Min(0) Integer correctOption
-) implements CardRequestDto {
+) implements CardRequest {
 }

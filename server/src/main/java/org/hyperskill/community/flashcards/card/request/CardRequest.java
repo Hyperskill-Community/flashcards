@@ -16,7 +16,7 @@ import java.util.Set;
         @JsonSubTypes.Type(value = SingleChoiceQuizRequestDto.class, name = "scq"),
         @JsonSubTypes.Type(value = MultipleChoiceQuizRequestDto.class, name = "mcq"),
 })
-public sealed interface CardRequestDto permits MultipleChoiceQuizRequestDto, QuestionAndAnswerRequestDto, SingleChoiceQuizRequestDto {
+public sealed interface CardRequest permits MultipleChoiceQuizRequestDto, QuestionAndAnswerRequestDto, SingleChoiceQuizRequestDto {
 
     String title();
 

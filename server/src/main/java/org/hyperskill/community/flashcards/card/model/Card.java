@@ -1,6 +1,5 @@
 package org.hyperskill.community.flashcards.card.model;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Getter;
@@ -38,7 +37,6 @@ import java.util.Set;
 })
 public abstract sealed class Card permits QuestionAndAnswer, SingleChoiceQuiz, MultipleChoiceQuiz {
     @Id
-    @JsonAlias({"id", "_id"})
     private String id;
     private String title;
     private Set<String> tags;
