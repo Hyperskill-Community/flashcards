@@ -95,7 +95,7 @@ class ExampleDataInitializerTest {
     }
 
     @Test
-    @SuppressWarnings("UncheckedAssignment")
+    @SuppressWarnings("unchecked")
     void whenCollectionsEmpty_insertData() throws IOException {
         var userJson = """
                 [

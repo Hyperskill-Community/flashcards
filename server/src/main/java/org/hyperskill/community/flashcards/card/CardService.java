@@ -82,13 +82,10 @@ public class CardService {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
         var category = categoryService.findById(username, categoryId);
-
         var card = Optional.ofNullable(mongoTemplate.findById(cardId, Document.class, category.name()))
                 .map(converter::convert)
                 .orElseThrow(ResourceNotFoundException::new);
-
-        var permissions = getPermissions(username, category);
-        card.setPermissions(permissions);
+        card.setPermissions(getPermissions(username, category));
 
         return card;
     }
@@ -106,16 +103,13 @@ public class CardService {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
         var category = categoryService.findById(username, categoryId, "w");
-
         var query = Query.query(Criteria.where("_id").is(cardId));
         mongoTemplate.updateFirst(query, updateFrom(request), category.name());
 
         var updatedCard = Optional.ofNullable(mongoTemplate.findOne(query, Document.class, category.name()))
                 .map(converter::convert)
                 .orElseThrow(ResourceNotFoundException::new);
-
-        var permissions = getPermissions(username, category);
-        updatedCard.setPermissions(permissions);
+        updatedCard.setPermissions(getPermissions(username, category));
 
         return updatedCard;
     }
@@ -135,7 +129,6 @@ public class CardService {
      */
     private String getCollectionName(String username, String categoryId, String permission) {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
-
         return categoryService.findById(username, categoryId, permission).name();
     }
 

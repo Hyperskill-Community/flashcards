@@ -23,7 +23,7 @@ import java.util.Set;
 @Setter
 @Document
 @ToString
-public sealed abstract class Card permits QuestionAndAnswer, SingleChoiceQuiz, MultipleChoiceQuiz {
+public abstract sealed class Card permits QuestionAndAnswer, SingleChoiceQuiz, MultipleChoiceQuiz {
     @Id
     @JsonDeserialize(using = MongoObjectIdConverter.class)
     @JsonAlias({"id", "_id"})
