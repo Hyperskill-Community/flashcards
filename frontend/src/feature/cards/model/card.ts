@@ -1,5 +1,5 @@
 export enum CardType {
-  SIMPLEQA = 'sqa',
+  SIMPLEQA = 'qna',
   SINGLE_CHOICE = 'scq',
   MULTIPLE_CHOICE = 'mcq'
 }
@@ -14,9 +14,12 @@ export type Card = {
   id: string,
   title: string,
   correctOption: string,
+  correctOptions: string[],
+  answer: string,
   question: string,
   options: string[],
   tags: string[],
+  type: string,
 }
 
 export type CardResponse = {

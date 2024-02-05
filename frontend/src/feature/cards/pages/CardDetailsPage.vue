@@ -7,8 +7,8 @@
 
 <script setup lang="ts">
 import CardDetailsComponent from "@/feature/cards/components/CardDetailsComponent.vue";
-import {ref} from "vue";
-import {Card} from "@/feature/cards/model/card";
+import {onMounted, ref} from "vue";
+import {Card, CardItem, CardResponse} from "@/feature/cards/model/card";
 import useCardsService from "@/feature/cards/composables/useCardsService";
 
 const props = defineProps<({
@@ -20,8 +20,8 @@ const card = ref<Card>(
   {} as Card
 );
 
-async function fetchCardWithId() {
+onMounted(async () => {
   card.value = await useCardsService().getCardById(props.cardId, props.categoryId);
-}
-fetchCardWithId();
+});
+
 </script>

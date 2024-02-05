@@ -28,7 +28,7 @@
       "title": "card 4",
       "question": "What is the square root of 144",
       "answer": "12",
-      "tags": []
+      "tags": ["math"]
     }
   ],
   "scq_cards": [
@@ -50,14 +50,14 @@
       "title": "card 7",
       "question": "What is the type of this reaction: NaOH + HCl = NaCl + H2O",
       "options": ["Oxidation", "Reduction", "Neutralization", "Neither"],
-      "correctOption": 3,
+      "correctOption": 2,
       "tags": ["reactions"]
     },
     {
       "title": "card 8",
       "question": "Name the capital of Luxembourg",
       "options": ["Luxembourg", "Strasbourg", "Andorra la Vella", "London"],
-      "correctOption": 3,
+      "correctOption": 0,
       "tags": ["europe", "cities"]
     }
   ],
@@ -86,7 +86,7 @@
     {
       "title": "card 12",
       "question": "Which of the following is a fundamental force in nature?",
-      "options": ["Gravity", "Friction", "Light", "Heat"],
+      "options": ["Electromagnetism", "Friction", "Light", "Heat"],
       "correctOptions": [0],
       "tags": ["forces"]
     }
