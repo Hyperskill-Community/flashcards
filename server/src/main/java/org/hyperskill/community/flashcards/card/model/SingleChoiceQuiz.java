@@ -1,13 +1,13 @@
 package org.hyperskill.community.flashcards.card.model;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.TypeAlias;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Represents a single choice quiz card, i.e. where the user is provided with
@@ -17,16 +17,10 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString(callSuper = true)
+@NoArgsConstructor
+@SuperBuilder
 @TypeAlias("SCQ")
 public final class SingleChoiceQuiz extends Card {
     private List<String> options;
     private Integer correctOption;
-
-    @Builder
-    public SingleChoiceQuiz(String title, Set<String> tags, String question,
-                            List<String> options, Integer correctOption) {
-        super(title, tags, question);
-        this.options = options;
-        this.correctOption = correctOption;
-    }
 }

@@ -2,16 +2,12 @@ package org.hyperskill.community.flashcards.card;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
 import org.hyperskill.community.flashcards.card.mapper.CardMapper;
-import org.hyperskill.community.flashcards.card.mapper.CardReadConverter;
 import org.hyperskill.community.flashcards.card.model.Card;
-import org.hyperskill.community.flashcards.card.request.BaseCardUpdateRequest;
-import org.hyperskill.community.flashcards.card.request.CardCreateRequest;
-import org.hyperskill.community.flashcards.card.request.CardUpdateRequest;
-import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizUpdateRequest;
-import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerUpdateRequest;
-import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizUpdateRequest;
+import org.hyperskill.community.flashcards.card.request.CardRequest;
+import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizRequestDto;
+import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerRequestDto;
+import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizRequestDto;
 import org.hyperskill.community.flashcards.category.CategoryService;
 import org.hyperskill.community.flashcards.category.model.Category;
 import org.hyperskill.community.flashcards.category.model.CategoryAccess;
@@ -36,7 +32,6 @@ public class CardService {
     private static final int PAGE_SIZE = 20;
     private final MongoTemplate mongoTemplate;
     private final CategoryService categoryService;
-    private final CardReadConverter converter;
     private final CardMapper mapper;
 
     public Page<Card> getCardsByCategory(String username, String categoryId, int page, String titleFilter) {
@@ -46,11 +41,7 @@ public class CardService {
         var pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by("title"));
         var query = createFilterQuery(titleFilter);
         var count = mongoTemplate.count(query, category.name());
-        var cards = mongoTemplate
-                .find(query.with(pageRequest), Document.class, category.name())
-                .stream()
-                .map(converter::convert)
-                .toList();
+        var cards = mongoTemplate.find(query.with(pageRequest), Card.class, category.name());
 
         var permissions = getPermissions(username, category);
         cards.forEach(card -> card.setPermissions(permissions));
@@ -71,7 +62,7 @@ public class CardService {
         return mongoTemplate.count(new Query(), collection);
     }
 
-    public String createCard(String username, CardCreateRequest request, String categoryId) {
+    public String createCard(String username, CardRequest request, String categoryId) {
         var collection = getCollectionName(username, categoryId, "w");
         var card = mapper.toDocument(request);
         return mongoTemplate.insert(card, collection).getId();
@@ -82,14 +73,9 @@ public class CardService {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
         var category = categoryService.findById(username, categoryId);
-
-        var card = Optional.ofNullable(mongoTemplate.findById(cardId, Document.class, category.name()))
-                .map(converter::convert)
+        var card = Optional.ofNullable(mongoTemplate.findById(cardId, Card.class, category.name()))
                 .orElseThrow(ResourceNotFoundException::new);
-
-        var permissions = getPermissions(username, category);
-        card.setPermissions(permissions);
-
+        card.setPermissions(getPermissions(username, category));
         return card;
     }
 
@@ -101,22 +87,17 @@ public class CardService {
         mongoTemplate.remove(query, collection);
     }
 
-    public Card updateCardById(String username, String cardId, CardUpdateRequest request, String categoryId) {
+    public Card updateCardById(String username, String cardId, CardRequest request, String categoryId) {
         Objects.requireNonNull(cardId, "Card ID cannot be null");
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
         var category = categoryService.findById(username, categoryId, "w");
-
         var query = Query.query(Criteria.where("_id").is(cardId));
         mongoTemplate.updateFirst(query, updateFrom(request), category.name());
 
-        var updatedCard = Optional.ofNullable(mongoTemplate.findOne(query, Document.class, category.name()))
-                .map(converter::convert)
+        var updatedCard = Optional.ofNullable(mongoTemplate.findOne(query, Card.class, category.name()))
                 .orElseThrow(ResourceNotFoundException::new);
-
-        var permissions = getPermissions(username, category);
-        updatedCard.setPermissions(permissions);
-
+        updatedCard.setPermissions(getPermissions(username, category));
         return updatedCard;
     }
 
@@ -135,25 +116,23 @@ public class CardService {
      */
     private String getCollectionName(String username, String categoryId, String permission) {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
-
         return categoryService.findById(username, categoryId, permission).name();
     }
 
-    private Update updateFrom(CardUpdateRequest request) {
+    private Update updateFrom(CardRequest request) {
         Objects.requireNonNull(request, "Update request cannot be null");
 
-        var baseUpdateRequest = (BaseCardUpdateRequest) request;
         var update = new Update()
-                .set("title", baseUpdateRequest.getTitle())
-                .set("question", baseUpdateRequest.getQuestion())
-                .set("tags", baseUpdateRequest.getTags());
+                .set("title", request.title())
+                .set("question", request.question())
+                .set("tags", request.tags());
 
         return switch (request) {
-            case QuestionAndAnswerUpdateRequest qna -> update.set("answer", qna.getAnswer());
-            case SingleChoiceQuizUpdateRequest scq -> update.set("options", scq.getOptions())
-                    .set("correctOption", scq.getCorrectOption());
-            case MultipleChoiceQuizUpdateRequest mcq -> update.set("options", mcq.getOptions())
-                    .set("correctOptions", mcq.getCorrectOptions());
+            case QuestionAndAnswerRequestDto qna -> update.set("answer", qna.answer());
+            case SingleChoiceQuizRequestDto scq -> update.set("options", scq.options())
+                    .set("correctOption", scq.correctOption());
+            case MultipleChoiceQuizRequestDto mcq -> update.set("options", mcq.options())
+                    .set("correctOptions", mcq.correctOptions());
         };
     }
 

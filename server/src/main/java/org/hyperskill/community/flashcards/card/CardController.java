@@ -4,9 +4,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.hyperskill.community.flashcards.card.mapper.CardMapper;
-import org.hyperskill.community.flashcards.card.request.CardCreateRequest;
-import org.hyperskill.community.flashcards.card.request.CardUpdateRequest;
+import org.hyperskill.community.flashcards.card.request.CardRequest;
 import org.hyperskill.community.flashcards.card.response.CardItemProjection;
+import org.hyperskill.community.flashcards.card.response.CardPageResponse;
 import org.hyperskill.community.flashcards.card.response.CardResponse;
 import org.hyperskill.community.flashcards.common.AuthenticationResolver;
 import org.springframework.http.ResponseEntity;
@@ -87,7 +87,7 @@ public class CardController {
     @PostMapping
     public ResponseEntity<Void> createCard(
             @RequestParam String categoryId,
-            @Valid @RequestBody CardCreateRequest request
+            @Valid @RequestBody CardRequest request
     ) {
         var username = authenticationResolver.resolveUsername();
         var id = cardService.createCard(username, request, categoryId);
@@ -99,7 +99,7 @@ public class CardController {
     public CardResponse updateCardById(
             @PathVariable String cardId,
             @RequestParam String categoryId,
-            @Valid @RequestBody CardUpdateRequest request
+            @Valid @RequestBody CardRequest request
     ) {
         var username = authenticationResolver.resolveUsername();
         var card = cardService.updateCardById(username, cardId, request, categoryId);

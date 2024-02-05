@@ -30,7 +30,11 @@ class RegisterControllerValidationUnitTest {
                 Arguments.of("email", "hans@lmu.de"),
                 Arguments.of("email", "hans_josef.schmitz.ext4@main_google.com"),
                 Arguments.of("password", "12345678"),
-                Arguments.of("password", "12345678_very_long_one!\"§$%&/()=?.,-,),")
+                Arguments.of("password", "12345678_very_long_one!\"§$%&/()=?.,-,),"),
+                Arguments.of("email", "a@b"),
+                Arguments.of("email", "hans.josef.schmitz.ext4@main_google.com"),
+                Arguments.of("email", "hans-josef@main_google.com"),
+                Arguments.of("email", "hansjosef@dd")
         );
     }
 
@@ -45,15 +49,11 @@ class RegisterControllerValidationUnitTest {
                 Arguments.of("email", " "),
                 Arguments.of("email", ""),
                 Arguments.of("email", null),
-                Arguments.of("email", "a@b"),
                 Arguments.of("email", "hans@lmu."),
-                Arguments.of("email", "hans.josef.schmitz.ext4@main_google.com"),
-                Arguments.of("email", "hans-josef@main_google.com"),
                 Arguments.of("email", ".ext4@main_google.com"),
                 Arguments.of("email", "hans.josef@.com"),
                 Arguments.of("email", "hans..josef@google.com"),
                 Arguments.of("email", "hansjosefgoogle.com"),
-                Arguments.of("email", "hansjosef@dd"),
                 Arguments.of("password", "1234567"),
                 Arguments.of("password", "        "),
                 Arguments.of("password", "  "),
