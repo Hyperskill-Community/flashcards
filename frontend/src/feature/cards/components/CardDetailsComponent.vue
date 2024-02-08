@@ -34,7 +34,8 @@
           <v-container>
             <v-row class="pa-0 d-flex w-100 justify-space-between align-center">
               <v-btn color="green" :disabled="!selected && !providedAnswer"
-                     @click="checkCorrectAnswer(card, selected.length ? selected : [providedAnswer])" variant="text" border>
+                     @click="checkCorrectAnswer(card, selected.length ? selected : [providedAnswer])" variant="text"
+                     border>
                 <v-icon icon="mdi-check" size="large" start/>
                 Check Answer
               </v-btn>
@@ -98,16 +99,19 @@ const toggleOption = (option: string, card: Card) => {
 const checkCorrectAnswer = (card: Card, answers: string[]) => {
   answerShown.value = !answerShown.value;
   const correctAnswer = getCorrectAnswer(card);
+  console.log(correctAnswer);
   isCorrectAnswer.value = answers.every(answer => correctAnswer?.includes(answer));
 };
 
 const getCorrectAnswer = (card: Card) => {
+  console.log("card type is " , card.type);
   switch (card.type) {
     case CardType.SINGLE_CHOICE:
       return card.options[Number(card.correctOption)];
     case CardType.SIMPLEQA:
       return [card.answer];
     case CardType.MULTIPLE_CHOICE:
+      console.log("correct options are here ", card.correctOptions);
       return card.correctOptions.map(i => card.options[Number(i)]).join(", ");
   }
 };
