@@ -79,12 +79,12 @@ public class CardService {
         return card;
     }
 
-    public void deleteCardById(String username, String cardId, String categoryId) {
+    public long deleteCardById(String username, String cardId, String categoryId) {
         Objects.requireNonNull(cardId, "Card ID cannot be null");
 
         var collection = getCollectionName(username, categoryId, "d");
-        var query = Query.query(Criteria.where("id").is(cardId));
-        mongoTemplate.remove(query, collection);
+        var query = Query.query(Criteria.where(Card.ID_KEY).is(cardId));
+        return mongoTemplate.remove(query, collection).getDeletedCount();
     }
 
     public Card updateCardById(String username, String cardId, CardRequest request, String categoryId) {
@@ -92,7 +92,7 @@ public class CardService {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
         var category = categoryService.findById(username, categoryId, "w");
-        var query = Query.query(Criteria.where("_id").is(cardId));
+        var query = Query.query(Criteria.where(Card.ID_KEY).is(cardId));
         mongoTemplate.updateFirst(query, updateFrom(request), category.name());
 
         var updatedCard = Optional.ofNullable(mongoTemplate.findOne(query, Card.class, category.name()))

@@ -4,10 +4,12 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 import java.util.List;
 import java.util.Set;
 
+@Builder
 public record  MultipleChoiceQuizRequestDto(
         @NotBlank String title,
         @NotNull Set<@NotBlank String> tags,

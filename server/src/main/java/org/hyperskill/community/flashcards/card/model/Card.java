@@ -2,10 +2,12 @@ package org.hyperskill.community.flashcards.card.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -21,8 +23,10 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 @SuperBuilder
+@Accessors(chain = true)
 @Document
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -36,6 +40,8 @@ import java.util.Set;
         @JsonSubTypes.Type(value = MultipleChoiceQuiz.class, name = "mcq"),
 })
 public abstract sealed class Card permits QuestionAndAnswer, SingleChoiceQuiz, MultipleChoiceQuiz {
+    public static final String ID_KEY = "_id";
+
     @Id
     private String id;
     private String title;

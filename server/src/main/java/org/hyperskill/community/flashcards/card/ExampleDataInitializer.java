@@ -82,7 +82,6 @@ public class ExampleDataInitializer {
 
             JsonNode jsonNode = objectMapper.readTree(flashcardsJson.getFile());
 
-            // TODO remove loop after testing
             for (int i = 0; i < 5; i++) {
                 List<SingleChoiceQuiz> scqCards = parseCards(jsonNode.get("scq_cards"), SingleChoiceQuiz.class);
                 List<MultipleChoiceQuiz> mcqCards = parseCards(jsonNode.get("mcq_cards"), MultipleChoiceQuiz.class);
