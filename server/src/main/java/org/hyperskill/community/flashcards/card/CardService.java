@@ -44,7 +44,7 @@ public class CardService {
         var cards = mongoTemplate.find(query.with(pageRequest), Card.class, category.name());
 
         var permissions = getPermissions(username, category);
-        cards.forEach(card -> card.setPermissions(permissions));
+        cards = cards.stream().map(card -> card.setPermissions(permissions)).toList();
         return new PageImpl<>(cards, pageRequest, count);
     }
 
@@ -65,7 +65,7 @@ public class CardService {
     public String createCard(String username, CardRequest request, String categoryId) {
         var collection = getCollectionName(username, categoryId, "w");
         var card = mapper.toDocument(request);
-        return mongoTemplate.insert(card, collection).getId();
+        return mongoTemplate.insert(card, collection).id();
     }
 
     public Card getCardById(String username, String cardId, String categoryId) {
@@ -75,8 +75,7 @@ public class CardService {
         var category = categoryService.findById(username, categoryId);
         var card = Optional.ofNullable(mongoTemplate.findById(cardId, Card.class, category.name()))
                 .orElseThrow(ResourceNotFoundException::new);
-        card.setPermissions(getPermissions(username, category));
-        return card;
+        return card.setPermissions(getPermissions(username, category));
     }
 
     public long deleteCardById(String username, String cardId, String categoryId) {
@@ -97,8 +96,7 @@ public class CardService {
 
         var updatedCard = Optional.ofNullable(mongoTemplate.findOne(query, Card.class, category.name()))
                 .orElseThrow(ResourceNotFoundException::new);
-        updatedCard.setPermissions(getPermissions(username, category));
-        return updatedCard;
+        return updatedCard.setPermissions(getPermissions(username, category));
     }
 
     private String getCollectionName(String username, String categoryId) {

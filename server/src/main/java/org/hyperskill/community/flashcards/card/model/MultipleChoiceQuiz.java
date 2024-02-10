@@ -1,30 +1,40 @@
 package org.hyperskill.community.flashcards.card.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.TypeAlias;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a multiple choice quiz card, i.e. where the user is provided with
  * multiple options of which at least one is correct. Commonly visualized as
  * having options with checkboxes
  */
-@Getter
-@Setter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-@NoArgsConstructor
-@SuperBuilder
+@Builder
 @TypeAlias("MCQ")
-public final class MultipleChoiceQuiz extends Card {
-    private List<String> options;
-    private List<Integer> correctOptions;
+public record MultipleChoiceQuiz(
+    @Id String id,
+    String title,
+    Set<String> tags,
+    String question,
+    @CreatedDate Instant createdAt,
+    @Transient String permissions,
+    List<String> options,
+    List<Integer> correctOptions
+)  implements Card {
+
+    public MultipleChoiceQuiz setPermissions(String permissions) {
+        return new MultipleChoiceQuiz(id, title, tags, question, createdAt, permissions, options, correctOptions);
+    }
+    @PersistenceCreator
+    public MultipleChoiceQuiz(String id, String title, Set<String> tags, String question, List<String> options,
+                                     List<Integer> correctOptions, Instant createdAt) {
+        this(id, title, tags, question, createdAt, null, options, correctOptions);
+    }
 }

@@ -1,30 +1,42 @@
 package org.hyperskill.community.flashcards.card.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
-import lombok.experimental.SuperBuilder;
+import lombok.Builder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.TypeAlias;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a single choice quiz card, i.e. where the user is provided with
  * multiple options of which only one is correct. Commonly visualized as
  * having options with radial buttons
  */
-@Getter
-@Setter
-@ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-@NoArgsConstructor
-@SuperBuilder
+@Builder
 @TypeAlias("SCQ")
-public final class SingleChoiceQuiz extends Card {
-    private List<String> options;
-    private Integer correctOption;
+public record SingleChoiceQuiz(
+        @Id String id,
+        String title,
+        Set<String> tags,
+        String question,
+        @CreatedDate Instant createdAt,
+        @Transient String permissions,
+        List<String> options,
+        Integer correctOption
+) implements Card {
+
+    public SingleChoiceQuiz setPermissions(String permissions) {
+        return new SingleChoiceQuiz(id, title, tags, question, createdAt, permissions, options, correctOption);
+    }
+
+    @PersistenceCreator
+    public SingleChoiceQuiz(String id, String title, Set<String> tags, String question, List<String> options,
+                                   Integer correctOption, Instant createdAt) {
+        this(id, title, tags, question, createdAt, null, options, correctOption);
+    }
 }
+

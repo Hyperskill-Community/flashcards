@@ -5,7 +5,7 @@ services:
     ports:
       - '27017:27017'
     volumes:
-      - 'mongo-data:/data/db'
+      - 'flashcards-mongo:/data/db'
     networks:
       - flashcards-network
   authserver:
@@ -21,7 +21,7 @@ services:
       - flashcards-network
 
 volumes:
-  mongo-data:
+  flashcards-mongo:
 
 networks:
   flashcards-network:

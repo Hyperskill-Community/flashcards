@@ -122,19 +122,19 @@ class CardMapperTest {
     @MethodSource("cardRequestProvider")
     void cardRequestToCard(CardRequest request, Card card) {
         var mapped = cardMapper.toDocument(request);
-        assertEquals(card.getTitle(), mapped.getTitle());
-        assertEquals(card.getTags(), mapped.getTags());
-        assertEquals(card.getQuestion(), mapped.getQuestion());
+        assertEquals(card.title(), mapped.title());
+        assertEquals(card.tags(), mapped.tags());
+        assertEquals(card.question(), mapped.question());
         switch (card) {
             case QuestionAndAnswer qna ->
-                    assertEquals(qna.getAnswer(), ((QuestionAndAnswer) mapped).getAnswer());
+                    assertEquals(qna.answer(), ((QuestionAndAnswer) mapped).answer());
             case SingleChoiceQuiz scq -> {
-                assertEquals(scq.getOptions(), ((SingleChoiceQuiz) mapped).getOptions());
-                assertEquals(scq.getCorrectOption(), ((SingleChoiceQuiz) mapped).getCorrectOption());
+                assertEquals(scq.options(), ((SingleChoiceQuiz) mapped).options());
+                assertEquals(scq.correctOption(), ((SingleChoiceQuiz) mapped).correctOption());
             }
             case MultipleChoiceQuiz mcq -> {
-                assertEquals(mcq.getOptions(), ((MultipleChoiceQuiz) mapped).getOptions());
-                assertEquals(mcq.getCorrectOptions(), ((MultipleChoiceQuiz) mapped).getCorrectOptions());
+                assertEquals(mcq.options(), ((MultipleChoiceQuiz) mapped).options());
+                assertEquals(mcq.correctOptions(), ((MultipleChoiceQuiz) mapped).correctOptions());
             }
         }
     }

@@ -30,12 +30,12 @@ public class CardMapper {
             case SingleChoiceQuiz ignoredC -> CardType.SCQ;
             case MultipleChoiceQuiz ignoredC -> CardType.MCQ;
         };
-        return new CardItemProjection(card.getId(), card.getTitle(), type);
+        return new CardItemProjection(card.id(), card.title(), type);
     }
 
     public CardResponse map(Card card, String categoryId) {
-        var uri = "/api/cards/" + card.getId() + "?categoryId=" + categoryId;
-        var actions = ActionsParser.fromPermissions(card.getPermissions(), uri);
+        var uri = "/api/cards/" + card.id() + "?categoryId=" + categoryId;
+        var actions = ActionsParser.fromPermissions(card.permissions(), uri);
 
         return switch (card) {
             case QuestionAndAnswer qna -> toDto(qna, actions);
@@ -83,42 +83,42 @@ public class CardMapper {
 
     private QuestionAndAnswerResponseDto toDto(QuestionAndAnswer card, Set<PermittedAction> actions) {
         return QuestionAndAnswerResponseDto.builder()
-                .id(card.getId())
-                .title(card.getTitle())
+                .id(card.id())
+                .title(card.title())
                 .type(CardType.QNA)
-                .question(card.getQuestion())
-                .answer(card.getAnswer())
-                .tags(card.getTags())
+                .question(card.question())
+                .answer(card.answer())
+                .tags(card.tags())
                 .actions(actions)
-                .createdAt(card.getCreatedAt())
+                .createdAt(card.createdAt())
                 .build();
     }
 
     private SingleChoiceQuizResponseDto toDto(SingleChoiceQuiz card, Set<PermittedAction> actions) {
         return SingleChoiceQuizResponseDto.builder()
-                .id(card.getId())
-                .title(card.getTitle())
+                .id(card.id())
+                .title(card.title())
                 .type(CardType.SCQ)
-                .question(card.getQuestion())
-                .options(card.getOptions())
-                .correctOption(card.getCorrectOption())
-                .tags(card.getTags())
+                .question(card.question())
+                .options(card.options())
+                .correctOption(card.correctOption())
+                .tags(card.tags())
                 .actions(actions)
-                .createdAt(card.getCreatedAt())
+                .createdAt(card.createdAt())
                 .build();
     }
 
     private MultipleChoiceQuizResponseDto toDto(MultipleChoiceQuiz card, Set<PermittedAction> actions) {
         return MultipleChoiceQuizResponseDto.builder()
-                .id(card.getId())
-                .title(card.getTitle())
+                .id(card.id())
+                .title(card.title())
                 .type(CardType.MCQ)
-                .question(card.getQuestion())
-                .options(card.getOptions())
-                .correctOptions(card.getCorrectOptions())
-                .tags(card.getTags())
+                .question(card.question())
+                .options(card.options())
+                .correctOptions(card.correctOptions())
+                .tags(card.tags())
                 .actions(actions)
-                .createdAt(card.getCreatedAt())
+                .createdAt(card.createdAt())
                 .build();
     }
 }
