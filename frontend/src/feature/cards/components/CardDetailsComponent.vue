@@ -17,29 +17,29 @@
             <v-container class="pa-0 mt-2">
               <v-list v-if="card.type !== CardType.SIMPLEQA" class="pa-0 d-flex flex-column flex-wrap">
                 <v-list-item v-for="(option, index) in card.options" :key="option"
-                             :title="parseOption(index, option, card)"
-                             @click="toggleOption(option, card)"
+                             :title="parseOption(index, option)"
+                             @click="toggleOption(option)"
                              :disabled="answerShown"
                              class="cursor-pointer"
-                             :class="{'correct': answerShown && isCorrect(option, card),
-                                      'error': selected.includes(option) && answerShown && !isCorrect(option, card),
+                             :class="{'correct': answerShown && isCorrect(option),
+                                      'error': selected.includes(option) && answerShown && !isCorrect(option),
                                       'selected': !answerShown && selected.includes(option)}"/>
               </v-list>
               <v-text-field v-else v-model="providedAnswer"
-                            :class="{'correct': answerShown && isCorrect(providedAnswer, card),
-                                     'error': answerShown && !isCorrect(providedAnswer, card)}"/>
+                            :class="{'correct': answerShown && isCorrect(providedAnswer),
+                                     'error': answerShown && !isCorrect(providedAnswer)}"/>
             </v-container>
           </v-card-text>
 
           <v-container>
             <v-row class="pa-0 d-flex w-100 justify-space-between align-center">
               <v-btn color="green" :disabled="!selected && !providedAnswer"
-                     @click="checkCorrectAnswer(card, selected.length ? selected : [providedAnswer])" variant="text"
+                     @click="checkCorrectAnswer()" variant="text"
                      border>
                 <v-icon icon="mdi-check" size="large" start/>
                 Check Answer
               </v-btn>
-              <v-card-subtitle v-show="answerShown" v-text="showCorrectAnswer(card)"/>
+              <v-card-subtitle v-show="answerShown" v-text="showCorrectAnswer()"/>
             </v-row>
           </v-container>
 
@@ -66,7 +66,7 @@ import {Card, CardType} from "@/feature/cards/model/card";
 import BackMdiButton from "@/shared/components/BackMdiButton.vue";
 import {ref} from "vue";
 
-defineProps<({
+const props = defineProps<({
   card: Card,
 })>();
 
@@ -75,18 +75,18 @@ const selected = ref([] as string[]);
 const providedAnswer = ref('');
 const isCorrectAnswer = ref(false);
 
-const parseOption = (index: number, option: string, card: Card): string => {
+const parseOption = (index: number, option: string): string => {
   return `${String.fromCharCode(65 + index)}. ${option}`;
 };
 
-const isCorrect = (option: string, card: Card) => {
-  return getCorrectAnswer(card)?.includes(option);
+const isCorrect = (option: string) => {
+  return getCorrectAnswer()?.includes(option);
 };
 
-const toggleOption = (option: string, card: Card) => {
+const toggleOption = (option: string) => {
   const index = selected.value.indexOf(option);
   if (index === -1) {
-    if (card.type === CardType.SINGLE_CHOICE && !selected.value.includes(option)) {
+    if (props.card.type === CardType.SINGLE_CHOICE && !selected.value.includes(option)) {
       selected.value = [option];
     } else {
       selected.value.push(option);
@@ -96,14 +96,16 @@ const toggleOption = (option: string, card: Card) => {
   }
 };
 
-const checkCorrectAnswer = (card: Card, answers: string[]) => {
+const checkCorrectAnswer = () => {
+  const answers = selected.value.length ? selected.value : [providedAnswer.value]
   answerShown.value = !answerShown.value;
-  const correctAnswer = getCorrectAnswer(card);
+  const correctAnswer = getCorrectAnswer();
   console.log(correctAnswer);
   isCorrectAnswer.value = answers.every(answer => correctAnswer?.includes(answer));
 };
 
-const getCorrectAnswer = (card: Card) => {
+const getCorrectAnswer = () => {
+  var card = props.card;
   console.log("card type is " , card.type);
   switch (card.type) {
     case CardType.SINGLE_CHOICE:
@@ -116,9 +118,9 @@ const getCorrectAnswer = (card: Card) => {
   }
 };
 
-const showCorrectAnswer = (card: Card) => {
-  const correctAnswer = getCorrectAnswer(card);
-  return `Correct answer${card.type === CardType.MULTIPLE_CHOICE ? 's' : ''}: ${correctAnswer}`;
+const showCorrectAnswer = () => {
+  const correctAnswer = getCorrectAnswer();
+  return `Correct answer${props.card.type === CardType.MULTIPLE_CHOICE ? 's' : ''}: ${correctAnswer}`;
 };
 </script>
 
