@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 @Builder
-public record  MultipleChoiceQuizRequestDto(
+public record MultipleChoiceQuizRequestDto(
         @NotBlank String title,
         @NotNull Set<@NotBlank String> tags,
         @NotBlank String question,

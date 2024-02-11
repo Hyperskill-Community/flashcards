@@ -2,7 +2,7 @@
   "qna_cards": [
     {
       "title": "card 1",
-      "type": "qna",
+      "type": "QNA",
       "question": "Capital of Brazil",
       "answer": "Brasilia",
       "tags": [
@@ -11,7 +11,7 @@
     },
     {
       "title": "card 2",
-      "type": "qna",
+      "type": "QNA",
       "question": "Capital of Spain",
       "answer": "Madrid",
       "tags": [
@@ -20,7 +20,7 @@
     },
     {
       "title": "card 3",
-      "type": "qna",
+      "type": "QNA",
       "question": "Name this chemical element: Tl",
       "answer": "Thallium",
       "tags": [
@@ -29,7 +29,7 @@
     },
     {
       "title": "card 4",
-      "type": "qna",
+      "type": "QNA",
       "question": "What is the square root of 144",
       "answer": "12",
       "tags": ["math"]
@@ -38,7 +38,7 @@
   "scq_cards": [
     {
       "title": "card 5",
-      "type": "scq",
+      "type": "SCQ",
       "question": "What is the root of this equation: 3x + 2 = 14",
       "options": ["5", "9", "3", "4"],
       "correctOption": 3,
@@ -46,7 +46,7 @@
     },
     {
       "title": "card 6",
-      "type": "scq",
+      "type": "SCQ",
       "question": "Name the largest country among the following:",
       "options": ["Portugal", "Sweden", "Australia", "Japan"],
       "correctOption": 2,
@@ -54,7 +54,7 @@
     },
     {
       "title": "card 7",
-      "type": "scq",
+      "type": "SCQ",
       "question": "What is the type of this reaction: NaOH + HCl = NaCl + H2O",
       "options": ["Oxidation", "Reduction", "Neutralization", "Neither"],
       "correctOption": 2,
@@ -62,7 +62,7 @@
     },
     {
       "title": "card 8",
-      "type": "scq",
+      "type": "SCQ",
       "question": "Name the capital of Luxembourg",
       "options": ["Luxembourg", "Strasbourg", "Andorra la Vella", "London"],
       "correctOption": 0,
@@ -72,7 +72,7 @@
   "mcq_cards": [
     {
       "title": "card 9",
-      "type": "mcq",
+      "type": "MCQ",
       "question": "Select all correct statements about this equation: ax + by = c",
       "options": ["It's a quadratic equation", "It's a linear equation", "It describes a line", "It describes a curve"],
       "correctOptions": [1, 2],
@@ -80,7 +80,7 @@
     },
     {
       "title": "card 10",
-      "type": "mcq",
+      "type": "MCQ",
       "question": "Which of the following is true about DNA?",
       "options": ["DNA is a double-stranded molecule", "DNA contains genetic information", "DNA stands for Deoxyribonucleic acid", "DNA is found only in animals"],
       "correctOptions": [0, 1, 2],
@@ -88,7 +88,7 @@
     },
     {
       "title": "card 11",
-      "type": "mcq",
+      "type": "MCQ",
       "question": "Which of the following elements is a noble gas?",
       "options": ["Oxygen", "Helium", "Carbon", "Nitrogen"],
       "correctOptions": [1],
@@ -96,7 +96,7 @@
     },
     {
       "title": "card 12",
-      "type": "mcq",
+      "type": "MCQ",
       "question": "Which of the following is a fundamental force in nature?",
       "options": ["Electromagnetism", "Friction", "Light", "Heat"],
       "correctOptions": [0],

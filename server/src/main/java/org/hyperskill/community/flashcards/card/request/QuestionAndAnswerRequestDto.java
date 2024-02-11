@@ -13,4 +13,5 @@ public record QuestionAndAnswerRequestDto(
         @NotBlank String question,
         @NotBlank String answer
 ) implements CardRequest {
+
 }

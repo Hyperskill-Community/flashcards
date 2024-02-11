@@ -1,7 +1,7 @@
 [
   {
     "title": "card 1",
-    "type": "qna",
+    "type": "QNA",
     "question": "Capital of Brazil",
     "answer": "Brasilia",
     "tags": [
@@ -11,7 +11,7 @@
   },
   {
     "title": "card 2",
-    "type": "qna",
+    "type": "QNA",
     "question": "Capital of Spain",
     "answer": "Madrid",
     "tags": [
@@ -21,7 +21,7 @@
   },
   {
     "title": "card 5",
-    "type": "scq",
+    "type": "SCQ",
     "question": "What is the root of this equation: 3x + 2 = 14",
     "options": [
       "5",
@@ -36,7 +36,7 @@
   },
   {
     "title": "card 6",
-    "type": "scq",
+    "type": "SCQ",
     "question": "Name the largest country among the following:",
     "options": [
       "Portugal",
@@ -51,7 +51,7 @@
   },
   {
     "title": "card 9",
-    "type": "mcq",
+    "type": "MCQ",
     "question": "Select all correct statements about this equation: ax + by = c",
     "options": [
       "It's a quadratic equation",
@@ -70,7 +70,7 @@
   },
   {
     "title": "card 10",
-    "type": "mcq",
+    "type": "MCQ",
     "question": "Which of the following is true about DNA?",
     "options": [
       "DNA is a double-stranded molecule",

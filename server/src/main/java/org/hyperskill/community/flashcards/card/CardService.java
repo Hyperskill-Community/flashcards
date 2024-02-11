@@ -8,9 +8,11 @@ import org.hyperskill.community.flashcards.card.request.CardRequest;
 import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizRequestDto;
 import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerRequestDto;
 import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizRequestDto;
+import org.hyperskill.community.flashcards.card.response.CardType;
 import org.hyperskill.community.flashcards.category.CategoryService;
 import org.hyperskill.community.flashcards.category.model.Category;
 import org.hyperskill.community.flashcards.category.model.CategoryAccess;
+import org.hyperskill.community.flashcards.common.exception.IllegalModificationException;
 import org.hyperskill.community.flashcards.common.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -91,9 +93,13 @@ public class CardService {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
         var category = categoryService.findById(username, categoryId, "w");
+        var cardBeforeUpdate = getCardById(username, cardId, categoryId);
+        if (CardType.fromCard(cardBeforeUpdate) != CardType.fromRequest(request)) {
+            throw new IllegalModificationException();
+        }
+
         var query = Query.query(Criteria.where(Card.ID_KEY).is(cardId));
         mongoTemplate.updateFirst(query, updateFrom(request), category.name());
-
         var updatedCard = Optional.ofNullable(mongoTemplate.findOne(query, Card.class, category.name()))
                 .orElseThrow(ResourceNotFoundException::new);
         return updatedCard.setPermissions(getPermissions(username, category));

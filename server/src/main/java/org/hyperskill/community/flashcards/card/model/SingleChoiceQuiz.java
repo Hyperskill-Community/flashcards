@@ -34,6 +34,7 @@ public record SingleChoiceQuiz(
     }
 
     @PersistenceCreator
+    @SuppressWarnings("unused")
     public SingleChoiceQuiz(String id, String title, Set<String> tags, String question, List<String> options,
                                    Integer correctOption, Instant createdAt) {
         this(id, title, tags, question, createdAt, null, options, correctOption);

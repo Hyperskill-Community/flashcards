@@ -24,13 +24,7 @@ import java.util.Set;
 public class CardMapper {
 
     public CardItemProjection map(Card card) {
-
-        var type = switch (card) {
-            case QuestionAndAnswer ignoredC -> CardType.QNA;
-            case SingleChoiceQuiz ignoredC -> CardType.SCQ;
-            case MultipleChoiceQuiz ignoredC -> CardType.MCQ;
-        };
-        return new CardItemProjection(card.id(), card.title(), type);
+        return new CardItemProjection(card.id(), card.title(), CardType.fromCard(card));
     }
 
     public CardResponse map(Card card, String categoryId) {

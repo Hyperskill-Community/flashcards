@@ -14,14 +14,12 @@ import java.util.Set;
 @Document
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.EXISTING_PROPERTY,
-        property = "type",
-        visible = true
+        property = "type"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = QuestionAndAnswer.class, name = "qna"),
-        @JsonSubTypes.Type(value = SingleChoiceQuiz.class, name = "scq"),
-        @JsonSubTypes.Type(value = MultipleChoiceQuiz.class, name = "mcq"),
+        @JsonSubTypes.Type(value = QuestionAndAnswer.class, name = "QNA"),
+        @JsonSubTypes.Type(value = SingleChoiceQuiz.class, name = "SCQ"),
+        @JsonSubTypes.Type(value = MultipleChoiceQuiz.class, name = "MCQ")
 })
 public sealed interface Card permits QuestionAndAnswer, SingleChoiceQuiz, MultipleChoiceQuiz {
 

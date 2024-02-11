@@ -14,10 +14,12 @@ import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizRequestD
 import org.hyperskill.community.flashcards.category.CategoryService;
 import org.hyperskill.community.flashcards.category.model.Category;
 import org.hyperskill.community.flashcards.category.model.CategoryAccess;
+import org.hyperskill.community.flashcards.common.exception.IllegalModificationException;
 import org.hyperskill.community.flashcards.common.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
@@ -33,6 +35,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -152,27 +155,35 @@ class CardServiceIT {
         assertThrows(AccessDeniedException.class, () -> service.deleteCardById("user2", id, categoryId));
     }
 
-    static CardRequest[] whenUpdateCardWithRights_Updated() {
-        return new CardRequest[]{
-                QuestionAndAnswerRequestDto.builder()
-                        .title("new").question("quest").tags(Set.of("tag")).build(),
-                SingleChoiceQuizRequestDto.builder()
-                        .title("new").question("quest").tags(Set.of("tag")).build(),
-                MultipleChoiceQuizRequestDto.builder()
-                        .title("new").question("quest").tags(Set.of("tag")).build(),
-        };
+    static Stream<Arguments> whenUpdateCardWithRights_Updated() {
+        return Stream.of(
+                Arguments.of(0, QuestionAndAnswerRequestDto.builder()
+                        .title("new").question("quest").tags(Set.of("tag")).build()),
+                Arguments.of(2, SingleChoiceQuizRequestDto.builder()
+                        .title("new").question("quest").tags(Set.of("tag")).build()),
+                Arguments.of(4, MultipleChoiceQuizRequestDto.builder()
+                        .title("new").question("quest").tags(Set.of("tag")).build())
+        );
     }
 
     @ParameterizedTest
     @MethodSource
-    void whenUpdateCardWithRights_Updated(CardRequest request) {
-        var id = idMaps.get(0);
+    void whenUpdateCardWithRights_Updated(int index, CardRequest request) {
+        var id = idMaps.get(index);
         assertEquals("new", service.updateCardById("user2", id,
                 request, categoryId).title());
         var updated = service.getCardById("user1", id, categoryId);
         assertEquals("new", updated.title());
         assertEquals("quest", updated.question());
         assertEquals(Set.of("tag"), updated.tags());
+    }
+
+    @Test
+    void whenUpdateCardWrongType_IllegalModificationThrown() {
+        var id = idMaps.get(0);
+        var request = MultipleChoiceQuizRequestDto.builder().title("new").build();
+        assertThrows(IllegalModificationException.class, () -> service.updateCardById("user2", id,
+                request, categoryId));
     }
 
     @Test

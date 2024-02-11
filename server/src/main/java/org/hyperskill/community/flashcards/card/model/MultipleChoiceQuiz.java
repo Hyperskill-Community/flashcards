@@ -33,6 +33,7 @@ public record MultipleChoiceQuiz(
         return new MultipleChoiceQuiz(id, title, tags, question, createdAt, permissions, options, correctOptions);
     }
     @PersistenceCreator
+    @SuppressWarnings("unused")
     public MultipleChoiceQuiz(String id, String title, Set<String> tags, String question, List<String> options,
                                      List<Integer> correctOptions, Instant createdAt) {
         this(id, title, tags, question, createdAt, null, options, correctOptions);

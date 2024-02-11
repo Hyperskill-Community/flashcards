@@ -48,6 +48,7 @@ public class ExampleDataInitializer {
      */
     @PostConstruct
     public void init() {
+
         log.info("Inserting sample data to the database...");
         if (isCollectionNotEmpty(USER)) {
             log.warn(ABORTING_DATABASE_INITIALIZATION, USER);
