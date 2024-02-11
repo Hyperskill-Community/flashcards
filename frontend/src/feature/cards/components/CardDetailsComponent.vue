@@ -73,7 +73,6 @@ const props = defineProps<({
 const answerShown = ref(false);
 const selected = ref([] as string[]);
 const providedAnswer = ref('');
-const isCorrectAnswer = ref(false);
 
 const parseOption = (index: number, option: string): string => {
   return `${String.fromCharCode(65 + index)}. ${option}`;
@@ -97,23 +96,17 @@ const toggleOption = (option: string) => {
 };
 
 const checkCorrectAnswer = () => {
-  const answers = selected.value.length ? selected.value : [providedAnswer.value]
   answerShown.value = !answerShown.value;
-  const correctAnswer = getCorrectAnswer();
-  console.log(correctAnswer);
-  isCorrectAnswer.value = answers.every(answer => correctAnswer?.includes(answer));
 };
 
 const getCorrectAnswer = () => {
-  var card = props.card;
-  console.log("card type is " , card.type);
+  const card = props.card;
   switch (card.type) {
     case CardType.SINGLE_CHOICE:
       return card.options[Number(card.correctOption)];
     case CardType.SIMPLEQA:
       return [card.answer];
     case CardType.MULTIPLE_CHOICE:
-      console.log("correct options are here ", card.correctOptions);
       return card.correctOptions.map(i => card.options[Number(i)]).join(", ");
   }
 };
