@@ -7,14 +7,12 @@ import java.util.Set;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.EXISTING_PROPERTY,
-        property = "type",
-        visible = true
+        property = "type"
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = QuestionAndAnswerRequestDto.class, name = "qna"),
-        @JsonSubTypes.Type(value = SingleChoiceQuizRequestDto.class, name = "scq"),
-        @JsonSubTypes.Type(value = MultipleChoiceQuizRequestDto.class, name = "mcq"),
+        @JsonSubTypes.Type(value = QuestionAndAnswerRequestDto.class, name = "QNA"),
+        @JsonSubTypes.Type(value = SingleChoiceQuizRequestDto.class, name = "SCQ"),
+        @JsonSubTypes.Type(value = MultipleChoiceQuizRequestDto.class, name = "MCQ"),
 })
 public sealed interface CardRequest permits MultipleChoiceQuizRequestDto, QuestionAndAnswerRequestDto, SingleChoiceQuizRequestDto {
 

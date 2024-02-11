@@ -8,9 +8,11 @@ import org.hyperskill.community.flashcards.card.request.CardRequest;
 import org.hyperskill.community.flashcards.card.request.MultipleChoiceQuizRequestDto;
 import org.hyperskill.community.flashcards.card.request.QuestionAndAnswerRequestDto;
 import org.hyperskill.community.flashcards.card.request.SingleChoiceQuizRequestDto;
+import org.hyperskill.community.flashcards.card.response.CardType;
 import org.hyperskill.community.flashcards.category.CategoryService;
 import org.hyperskill.community.flashcards.category.model.Category;
 import org.hyperskill.community.flashcards.category.model.CategoryAccess;
+import org.hyperskill.community.flashcards.common.exception.IllegalModificationException;
 import org.hyperskill.community.flashcards.common.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -44,7 +46,7 @@ public class CardService {
         var cards = mongoTemplate.find(query.with(pageRequest), Card.class, category.name());
 
         var permissions = getPermissions(username, category);
-        cards.forEach(card -> card.setPermissions(permissions));
+        cards = cards.stream().map(card -> card.setPermissions(permissions)).toList();
         return new PageImpl<>(cards, pageRequest, count);
     }
 
@@ -65,7 +67,7 @@ public class CardService {
     public String createCard(String username, CardRequest request, String categoryId) {
         var collection = getCollectionName(username, categoryId, "w");
         var card = mapper.toDocument(request);
-        return mongoTemplate.insert(card, collection).getId();
+        return mongoTemplate.insert(card, collection).id();
     }
 
     public Card getCardById(String username, String cardId, String categoryId) {
@@ -75,16 +77,15 @@ public class CardService {
         var category = categoryService.findById(username, categoryId);
         var card = Optional.ofNullable(mongoTemplate.findById(cardId, Card.class, category.name()))
                 .orElseThrow(ResourceNotFoundException::new);
-        card.setPermissions(getPermissions(username, category));
-        return card;
+        return card.setPermissions(getPermissions(username, category));
     }
 
-    public void deleteCardById(String username, String cardId, String categoryId) {
+    public long deleteCardById(String username, String cardId, String categoryId) {
         Objects.requireNonNull(cardId, "Card ID cannot be null");
 
         var collection = getCollectionName(username, categoryId, "d");
-        var query = Query.query(Criteria.where("id").is(cardId));
-        mongoTemplate.remove(query, collection);
+        var query = Query.query(Criteria.where(Card.ID_KEY).is(cardId));
+        return mongoTemplate.remove(query, collection).getDeletedCount();
     }
 
     public Card updateCardById(String username, String cardId, CardRequest request, String categoryId) {
@@ -92,13 +93,16 @@ public class CardService {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
         var category = categoryService.findById(username, categoryId, "w");
-        var query = Query.query(Criteria.where("_id").is(cardId));
-        mongoTemplate.updateFirst(query, updateFrom(request), category.name());
+        var cardBeforeUpdate = getCardById(username, cardId, categoryId);
+        if (CardType.fromCard(cardBeforeUpdate) != CardType.fromRequest(request)) {
+            throw new IllegalModificationException();
+        }
 
+        var query = Query.query(Criteria.where(Card.ID_KEY).is(cardId));
+        mongoTemplate.updateFirst(query, updateFrom(request), category.name());
         var updatedCard = Optional.ofNullable(mongoTemplate.findOne(query, Card.class, category.name()))
                 .orElseThrow(ResourceNotFoundException::new);
-        updatedCard.setPermissions(getPermissions(username, category));
-        return updatedCard;
+        return updatedCard.setPermissions(getPermissions(username, category));
     }
 
     private String getCollectionName(String username, String categoryId) {

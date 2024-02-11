@@ -1,0 +1,90 @@
+[
+  {
+    "title": "card 1",
+    "type": "QNA",
+    "question": "Capital of Brazil",
+    "answer": "Brasilia",
+    "tags": [
+      "america",
+      "cities"
+    ]
+  },
+  {
+    "title": "card 2",
+    "type": "QNA",
+    "question": "Capital of Spain",
+    "answer": "Madrid",
+    "tags": [
+      "europe",
+      "cities"
+    ]
+  },
+  {
+    "title": "card 5",
+    "type": "SCQ",
+    "question": "What is the root of this equation: 3x + 2 = 14",
+    "options": [
+      "5",
+      "9",
+      "3",
+      "4"
+    ],
+    "correctOption": 3,
+    "tags": [
+      "equations"
+    ]
+  },
+  {
+    "title": "card 6",
+    "type": "SCQ",
+    "question": "Name the largest country among the following:",
+    "options": [
+      "Portugal",
+      "Sweden",
+      "Australia",
+      "Japan"
+    ],
+    "correctOption": 2,
+    "tags": [
+      "countries"
+    ]
+  },
+  {
+    "title": "card 9",
+    "type": "MCQ",
+    "question": "Select all correct statements about this equation: ax + by = c",
+    "options": [
+      "It's a quadratic equation",
+      "It's a linear equation",
+      "It describes a line",
+      "It describes a curve"
+    ],
+    "correctOptions": [
+      1,
+      2
+    ],
+    "tags": [
+      "geometry",
+      "equations"
+    ]
+  },
+  {
+    "title": "card 10",
+    "type": "MCQ",
+    "question": "Which of the following is true about DNA?",
+    "options": [
+      "DNA is a double-stranded molecule",
+      "DNA contains genetic information",
+      "DNA stands for Deoxyribonucleic acid",
+      "DNA is found only in animals"
+    ],
+    "correctOptions": [
+      0,
+      1,
+      2
+    ],
+    "tags": [
+      "genetics"
+    ]
+  }
+]
