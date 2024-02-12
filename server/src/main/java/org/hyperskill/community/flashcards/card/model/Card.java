@@ -2,7 +2,6 @@ package org.hyperskill.community.flashcards.card.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 import java.util.Set;
@@ -11,7 +10,6 @@ import java.util.Set;
  * Basic class for all flashcards, contains fields shared among all subclasses
  */
 
-@Document
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         property = "type"

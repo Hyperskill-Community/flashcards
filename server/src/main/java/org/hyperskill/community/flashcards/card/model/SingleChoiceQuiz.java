@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.annotation.TypeAlias;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Set;
  */
 @Builder
 @TypeAlias("SCQ")
+@Document
 public record SingleChoiceQuiz(
         @Id String id,
         String title,

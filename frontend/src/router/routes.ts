@@ -23,9 +23,9 @@ const routes = [
     props: true,
   },
   {
-    path: '/test',
+    path: '/register',
     name: 'axios-line-temp',
-    component: () => import("@/shared/_temptestutils/AxiosLineTemp.vue"),
+    component: () => import("@/feature/registration/pages/RegistrationPage.vue"),
   },
   // Always leave this as last one,
   // but you can also remove it
