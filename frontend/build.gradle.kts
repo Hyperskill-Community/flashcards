@@ -35,7 +35,7 @@ tasks.register<Zip>("packageFrontend") {
     archiveBaseName = project.name
     archiveExtension = "jar"
     from("dist") {
-        into ("static")
+        into("static")
     }
     dependsOn("npmBuild")
 }

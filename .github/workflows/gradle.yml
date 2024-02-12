@@ -28,6 +28,7 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@v2
+      # https://github.com/marketplace/actions/gradle-build-action
+      uses: gradle/actions/setup-gradle@v3
       with:
         arguments: build
