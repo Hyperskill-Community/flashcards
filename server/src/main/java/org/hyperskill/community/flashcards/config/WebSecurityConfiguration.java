@@ -2,9 +2,9 @@ package org.hyperskill.community.flashcards.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.hyperskill.community.flashcards.registration.User;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -35,10 +34,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class WebSecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, Environment env) throws Exception {
-        if (Boolean.TRUE.equals(env.getProperty("DEV_MODE", Boolean.class, false))) {
-            return filterChainDevMode(http);
-        }
+    @ConditionalOnProperty(name = "DEV_MODE", havingValue = "false", matchIfMissing = true)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(CsrfConfigurer::disable)
                 .oauth2ResourceServer(auth -> auth.jwt(withDefaults()))
@@ -64,18 +61,9 @@ public class WebSecurityConfiguration {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(Environment env) {
-        var configuration = new CorsConfiguration();
-        if (Boolean.TRUE.equals(env.getProperty("DEV_MODE", Boolean.class, false))) {
-            corsDevMode(configuration);
-        }
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", configuration);
-        return source;
-    }
-
-    private static DefaultSecurityFilterChain filterChainDevMode(HttpSecurity http) throws Exception {
-        log.warn("Running in DEV_MODE,permitting all requests.");
+    @ConditionalOnProperty(name = "DEV_MODE", havingValue = "true")
+    public SecurityFilterChain filterChainDevMode(HttpSecurity http) throws Exception {
+        log.warn("Running in DEV_MODE, permitting all requests.");
         return http
                 .csrf(CsrfConfigurer::disable)
                 .cors(withDefaults())
@@ -84,13 +72,19 @@ public class WebSecurityConfiguration {
                 ).build();
     }
 
-    private static void corsDevMode(CorsConfiguration configuration) {
+    @Bean
+    @ConditionalOnProperty(name = "DEV_MODE", havingValue = "true")
+    public CorsConfigurationSource corsConfigurationSource() {
         log.info("Configuring CORS for DEV MODE");
+        var configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization",
                 "Access-Control-Allow-Origin", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization",
                 "Access-Control-Allow-Origin", "Content-Type"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/api/**", configuration);
+        return source;
     }
 }
