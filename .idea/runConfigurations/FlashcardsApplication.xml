@@ -1,5 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="FlashcardsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <classpathModifications>
+      <entry path="$PROJECT_DIR$/frontend/build/distributions/flashcards-client.jar" />
+    </classpathModifications>
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="flashcards.flashcards-server.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="org.hyperskill.community.flashcards.FlashcardsApplication" />
