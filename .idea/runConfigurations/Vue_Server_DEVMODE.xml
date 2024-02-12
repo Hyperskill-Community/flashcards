@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Vue+Server-DEVMODE" type="CompoundRunConfigurationType">
+    <toRun name="Flashcards-client" type="js.build_tools.npm" />
+    <toRun name="Flashcards-DEVMODE" type="SpringBootApplicationConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
