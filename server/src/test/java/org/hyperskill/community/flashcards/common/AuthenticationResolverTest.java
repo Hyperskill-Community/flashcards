@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoSettings;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,9 +31,12 @@ class AuthenticationResolverTest {
 
     AuthenticationResolver resolver;
 
+    @Mock
+    Environment env;
+
     @BeforeEach
     void setup() {
-        resolver = new AuthenticationResolver();
+        resolver = new AuthenticationResolver(env);
     }
 
     static Stream<Arguments> whenJwtOrOidcAuthentication_resolverWorks() {
