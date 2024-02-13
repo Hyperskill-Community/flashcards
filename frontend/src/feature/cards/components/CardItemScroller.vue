@@ -61,41 +61,4 @@ const openCard = (id: string) => {
   console.log("Opening card with id: " + id);
   router.push(`/card/${props.categoryId}/${id}`);
 }
-// ------------------- TEST DATA -------------------
-// ---uncomment if on npm run mode - and comment out the fetchCardsPage() call
-// const load = async ({done} : {done: Function}) => {
-//   console.log(`Loading cards ... Now we have ${items.value.length} items.`);
-//   items.value.push({
-//     id: "123",
-//     title: "A math question",
-//     type: CardType.SIMPLEQA,
-//   });
-//   items.value.push({
-//     id: "456",
-//     title: "A Java question",
-//     type: CardType.SINGLE_CHOICE,
-//   });
-//   items.value.push({
-//     id: "456",
-//     title: "Another Java question",
-//     type: CardType.SINGLE_CHOICE,
-//   });
-//   items.value.push({
-//     id: "456",
-//     title: "Another Math question",
-//     type: CardType.SINGLE_CHOICE,
-//   });
-//   items.value.push({
-//     id: "456",
-//     title: "Another Python question",
-//     type: CardType.SINGLE_CHOICE,
-//   });
-//   items.value.push({
-//     id: "456",
-//     title: "A Python question",
-//     type: CardType.SINGLE_CHOICE,
-//   });
-//   done('ok');
-// }
-// load({done: console.log});
 </script>
