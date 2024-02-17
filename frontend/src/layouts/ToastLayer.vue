@@ -9,13 +9,7 @@
 
 <script setup lang="ts">
 import ToastNotification from "@/shared/notifications/ToastNotification.vue";
-import {watch} from "vue";
 import {toasts} from "@/shared/composables/toastService";
-
-watch(toasts, (newValue) => {
-  return newValue
-});
-
 </script>
 
 <style scoped lang="scss">

@@ -1,13 +1,13 @@
 <template>
   <div class="notification">
-      <div v-text="notification.header" :class="notification.type" class="pa-3 font-weight-bold"/>
-      <div v-html="notification.message" class="pa-3"/>
+    <div v-text="notification.header" :class="notification.type" class="pa-3 font-weight-bold"/>
+    <div v-html="notification.message" class="pa-3"/>
   </div>
 </template>
 
 <script setup lang="ts">
-import {onMounted, PropType} from "vue";
-import {toasts, Toast} from "@/shared/composables/toastService";
+import {PropType} from "vue";
+import {Toast, toasts} from "@/shared/composables/toastService";
 
 const props = defineProps({
   notificationKey: {
@@ -20,10 +20,7 @@ const props = defineProps({
   }
 })
 
-onMounted(() => {
-  setTimeout(() => toasts.value.delete(<number>props.notificationKey), 3000);
-})
-
+setTimeout(() => toasts.value.delete(props.notificationKey), 5000);
 </script>
 
 <style scoped lang="scss">

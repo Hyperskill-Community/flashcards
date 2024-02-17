@@ -17,6 +17,12 @@ export type Category = {
   description?: string,
 }
 
+export type CategoryPage = {
+  categories: Category[],
+  currentPage: number,
+  isLast: boolean,
+}
+
 export interface CategoryRequest {
   name: string;
   description: string;

@@ -23,14 +23,14 @@
 </template>
 
 <script setup lang="ts">
-import useCardsService from "@/feature/cards/composables/useCardsService";
 import {ref} from "vue";
+import useRegistrationService from "@/feature/registration/composables/useRegistrationService";
 
 const email = ref('');
 const password = ref('');
 
 const postNewUser = () => {
-  useCardsService().postNewUser(email.value, password.value);
+  useRegistrationService().postNewUser(email.value, password.value);
 }
 </script>
 

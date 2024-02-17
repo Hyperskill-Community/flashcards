@@ -1,87 +1,24 @@
-import apiClient from '@/plugins/axios';
-import {useErrorService} from "@/shared/composables/errorService";
-import {useToastService} from "@/shared/composables/toastService";
-import apiUrl from "@/shared/composables/baseUrl";
-import {Card, CardResponse} from "@/feature/cards/model/card";
+import {Card, CardPage} from "@/feature/cards/model/card";
+import useApi from "@/shared/composables/useApi";
 
 const useCardsService = () => {
 
-  const postNewUser = async (email: string, password: string, errorResult: string = 'throw') => {
-    const postUrl = apiUrl + 'register';
+  const ENDPOINT = '/cards';
 
-    const postData = {
-      email: email,
-      password: password,
-    };
-
-    try {
-      const response = await apiClient.post(postUrl, postData);
-      if (response.status !== 200) {
-        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to register user');
-      } else {
-        useToastService().showSuccess('SUCCESS', `User ${email} registered successfully!`)
-      }
-    } catch (error: any) {
-      errorResult === 'throw' ? useErrorService().handleAndThrow(error)
-        : useErrorService().handleAndNotify('custom error', 'custom message');
-    }
+  const getCards = async (categoryId: string, titleFilter: string, page: number) => {
+    return await useApi().get<CardPage>(ENDPOINT,
+      {categoryId: categoryId, page: String(page), titleFilter: titleFilter});
   }
 
-  const getCards = async (categoryId: string, titleFilter: string, page: number, errorResult: string = 'throw'): Promise<CardResponse> => {
-    const filterQuery = titleFilter ? `&titleFilter=${titleFilter}` : '';
-    const url = `${apiUrl}cards?categoryId=${categoryId}&page=${page}${filterQuery}`;
-
-    try {
-      const response = await apiClient.get(url);
-      if (response.status !== 200) {
-        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to load cards');
-        return {isLast: true, cards: [], currentPage: 0} as CardResponse;
-      } else {
-        return (response.data as CardResponse);
-      }
-    } catch (error: any) {
-      errorResult === 'throw' ? useErrorService().handleAndThrow(error)
-        : useErrorService().handleAndNotify('custom error', 'custom message');
-      return {isLast: true, cards: [], currentPage: 0} as CardResponse;
-    }
+  const getCardById = async (cardId: string, categoryId: string) => {
+    return await useApi().get<Card>(`${ENDPOINT}/${cardId}`, {categoryId: categoryId});
   }
 
-  const getCardById = async (cardId: string, categoryId: string, errorResult: string = 'throw'): Promise<Card> => {
-    const url = apiUrl + 'cards/' + cardId + '?categoryId=' + categoryId;
-    try {
-      const response = await apiClient.get(url);
-      if (response.status !== 200) {
-        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to load card');
-        return {} as Card;
-      } else {
-        return (response.data as Card);
-      }
-    } catch (error: any) {
-      errorResult === 'throw' ? useErrorService().handleAndThrow(error)
-        : useErrorService().handleAndNotify('custom error', 'custom message');
-      return {} as Card;
-    }
-  }
-
-  const getCardCount = async (categoryId: string, errorResult: string = 'throw') => {
-    const url = apiUrl + 'cards/count?categoryId=' + categoryId;
-
-    try {
-      const response = await apiClient.get(url);
-      if (response.status !== 200) {
-        useErrorService().handleAndNotify(`Error status code ${response.status}!`, 'Failed to load card count');
-      } else {
-        return response.data as number;
-      }
-    } catch (error: any) {
-      errorResult === 'throw' ? useErrorService().handleAndThrow(error)
-        : useErrorService().handleAndNotify('custom error', 'custom message');
-      return 0;
-    }
+  const getCardCount = async (categoryId: string) => {
+    return await useApi().get<number>(`${ENDPOINT}/count`, {categoryId: categoryId});
   }
 
   return {
-    postNewUser,
     getCards,
     getCardById,
     getCardCount

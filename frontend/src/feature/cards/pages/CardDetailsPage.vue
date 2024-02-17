@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import CardDetailsComponent from "@/feature/cards/components/CardDetailsComponent.vue";
 import {onMounted, ref} from "vue";
-import {Card, CardItem, CardResponse} from "@/feature/cards/model/card";
+import {Card} from "@/feature/cards/model/card";
 import useCardsService from "@/feature/cards/composables/useCardsService";
 
 const props = defineProps<({
