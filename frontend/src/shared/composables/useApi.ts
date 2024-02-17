@@ -65,7 +65,7 @@ const useApi = () => {
         if (response.status != 200) {
           useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage || 'Failed to update');
         } else {
-          useToastService().showSuccess(successMessage || `Successfully updated ${url}!`)
+          useToastService().showSuccess(successMessage || `Successfully deleted ${url}!`)
         }
       } catch (error: any) {
         handleNonAxiosError(customError, error);
