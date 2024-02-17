@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -19,12 +20,14 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static org.hyperskill.community.flashcards.TestUtils.TEST1;
 import static org.hyperskill.community.flashcards.TestUtils.TEST2;
 import static org.hyperskill.community.flashcards.TestUtils.jwtUser;
 import static org.hyperskill.community.flashcards.TestUtils.oidcUser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.when;
 
 @MockitoSettings
 class AuthenticationResolverTest {
@@ -63,6 +66,15 @@ class AuthenticationResolverTest {
             securityContextHolder.when(SecurityContextHolder::getContext).thenReturn(securityContext);
             assertThrows(IllegalStateException.class, () -> resolver.resolveUsername());
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "dev user"})
+    void whenDevMode_resolverReturnsDevUser(String devUser) {
+        when(env.getProperty("DEV_MODE", Boolean.class, false)).thenReturn(true);
+        var expected = devUser.isBlank() ? TEST1 : devUser;
+        when(env.getProperty("DEV_USER", TEST1)).thenReturn(expected);
+        assertEquals(expected, resolver.resolveUsername());
     }
 
 }
