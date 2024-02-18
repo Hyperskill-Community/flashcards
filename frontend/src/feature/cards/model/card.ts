@@ -22,7 +22,7 @@ export type Card = {
   type: string,
 }
 
-export type CardResponse = {
+export type CardPage = {
   cards: CardItem[],
   currentPage: number,
   isLast: boolean,

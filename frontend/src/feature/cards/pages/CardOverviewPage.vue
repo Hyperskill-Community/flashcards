@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 import SubmitMdiButton from "@/shared/components/SubmitMdiButton.vue";
 import CardItemScroller from "@/feature/cards/components/CardItemScroller.vue";
@@ -37,9 +37,8 @@ const filterOnTitle = () => {
   filter.value.title = filter.value.input;
   console.log("Filtering on title: " + filter.value.title);
 }
-const fetchCategoryName = async () => {
+onMounted(async () => {
   categoryName.value = (await useCategoriesService().getCategoryById(props.categoryId)).name;
-}
-fetchCategoryName();
+});
 </script>
 

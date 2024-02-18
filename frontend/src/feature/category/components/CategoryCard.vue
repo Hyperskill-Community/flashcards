@@ -42,10 +42,8 @@
       </div>
       <v-container v-if="editRequested">
         <v-form @submit.prevent class="d-flex justify-space-between align-center">
-          <v-text-field density="compact" v-model="updateRequest.name" label="Category name">
-          </v-text-field>
-          <v-text-field density="compact" v-model="updateRequest.description" label="Description">
-          </v-text-field>
+          <v-text-field density="compact" v-model="updateRequest.name" label="Category name" />
+          <v-text-field density="compact" v-model="updateRequest.description" label="Description" />
           <submit-mdi-button :disabled="!updateRequest.name && ! updateRequest.description"
                              :clickHandler="performUpdate"/>
         </v-form>
@@ -94,6 +92,7 @@ const editCategory = () => {
   resetRequests();
   editRequested.value = true;
 };
+
 const deleteCategory = async () => {
   resetRequests();
   await categoryService().deleteCategory(props.category.id);

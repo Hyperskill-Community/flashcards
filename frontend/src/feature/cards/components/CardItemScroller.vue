@@ -58,7 +58,6 @@ watch(() => props.titleFilter, async (newVal, oldVal) => {
 });
 
 const openCard = (id: string) => {
-  console.log("Opening card with id: " + id);
   router.push(`/card/${props.categoryId}/${id}`);
 }
 </script>

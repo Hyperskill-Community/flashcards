@@ -20,16 +20,16 @@ export function useToastService() {
     toasts.value.set(Math.round(Math.random() * 12345), {type, header, message});
   }
 
-  const showSuccess = (header: string, message: string) => {
-    showNotification(ToastType.SUCCESS, header, message);
+  const showSuccess = (message: string) => {
+    showNotification(ToastType.SUCCESS, 'SUCCESS', message);
   }
 
-  const showWarning = (header: string, message: string) => {
-    showNotification(ToastType.WARNING, header, message);
+  const showWarning = (message: string) => {
+    showNotification(ToastType.WARNING, 'WARNING', message);
   }
 
-  const showError = (header: string, message: string) => {
-    showNotification(ToastType.ERROR, header, message);
+  const showError = (message: string) => {
+    showNotification(ToastType.ERROR, 'ERROR', message);
   }
 
   return {
