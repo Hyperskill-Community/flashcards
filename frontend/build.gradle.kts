@@ -44,7 +44,7 @@ tasks.register<NpmTask>("npmBuild") {
     inputs.dir("src")
     inputs.dir(fileTree("node_modules").exclude(".cache"))
     outputs.dir("dist")
-    dependsOn("eslint", "vitest")
+    dependsOn("eslint")
 }
 
 tasks.register<Zip>("packageFrontend") {
@@ -68,4 +68,8 @@ artifacts {
 
 tasks.withType<Delete>().named("clean") {
     delete("dist")
+}
+
+tasks.named("check") {
+    dependsOn("vitest")
 }
