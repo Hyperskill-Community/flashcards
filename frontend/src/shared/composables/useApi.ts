@@ -1,5 +1,5 @@
 import apiClient from '@/plugins/axios';
-import {ErrorState, useErrorService} from "@/shared/composables/errorService";
+import {ErrorState, useErrorService} from "@/shared/composables/errorService.ts";
 import {useToastService} from "@/shared/composables/toastService";
 
 const useApi = () => {
@@ -8,7 +8,7 @@ const useApi = () => {
     customError
     && useErrorService().handleAndNotify(customError.code, customError.message)
     || useErrorService().handleAndThrow(error);
-  }
+  };
 
   return {
     post: async <R>(url: string, requestData: R, successMessage?: string,
@@ -18,7 +18,7 @@ const useApi = () => {
         if (response.status !== 200 && response.status !== 201) {
           useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage || 'Failed to post');
         } else {
-          useToastService().showSuccess(successMessage || `Successfully posted to ${url}!`)
+          useToastService().showSuccess(successMessage || `Successfully posted to ${url}!`);
         }
       } catch (error: any) {
         handleNonAxiosError(customError, error);
@@ -51,7 +51,7 @@ const useApi = () => {
         if (response.status != 200) {
           useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage || 'Failed to update');
         } else {
-          useToastService().showSuccess(successMessage || `Successfully updated ${url}!`)
+          useToastService().showSuccess(successMessage || `Successfully updated ${url}!`);
         }
       } catch (error: any) {
         handleNonAxiosError(customError, error);
@@ -65,12 +65,12 @@ const useApi = () => {
         if (response.status != 200) {
           useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage || 'Failed to update');
         } else {
-          useToastService().showSuccess(successMessage || `Successfully deleted ${url}!`)
+          useToastService().showSuccess(successMessage || `Successfully deleted ${url}!`);
         }
       } catch (error: any) {
         handleNonAxiosError(customError, error);
       }
     }
-  }
-}
+  };
+};
 export default useApi;

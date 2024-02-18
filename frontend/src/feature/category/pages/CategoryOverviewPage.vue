@@ -30,6 +30,6 @@ const fetchCategories = async () => {
     items.value.push({category: category, expanded: false});
     category.numberOfCards = await useCardsService().getCardCount(category.id);
   }
-}
+};
 fetchCategories();
 </script>

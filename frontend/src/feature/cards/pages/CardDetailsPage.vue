@@ -14,7 +14,7 @@ import useCardsService from "@/feature/cards/composables/useCardsService";
 const props = defineProps<({
   categoryId: string,
   cardId: string,
-})>()
+})>();
 
 const card = ref<Card>(
   {} as Card

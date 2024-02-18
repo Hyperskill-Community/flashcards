@@ -47,7 +47,7 @@ const fetchCardsPage = async ({done}: { done: Function }) => {
     items.value.push(cardItem);
   }
   done('ok');
-}
+};
 
 watch(() => props.titleFilter, async (newVal, oldVal) => {
   if (newVal !== oldVal) {
@@ -59,5 +59,5 @@ watch(() => props.titleFilter, async (newVal, oldVal) => {
 
 const openCard = (id: string) => {
   router.push(`/card/${props.categoryId}/${id}`);
-}
+};
 </script>

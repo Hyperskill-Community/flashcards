@@ -7,7 +7,7 @@ export enum ActionType {
 export type Action = {
   action: ActionType,
   uri: string
-}
+};
 
 export type Category = {
   id: string,
@@ -15,13 +15,13 @@ export type Category = {
   actions: Action[],
   numberOfCards?: number,
   description?: string,
-}
+};
 
 export type CategoryPage = {
   categories: Category[],
   currentPage: number,
   isLast: boolean,
-}
+};
 
 export interface CategoryRequest {
   name: string;

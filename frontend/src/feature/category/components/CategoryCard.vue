@@ -101,5 +101,5 @@ const deleteCategory = async () => {
 
 const resetRequests = () => {
   editRequested.value = false;
-}
+};
 </script>

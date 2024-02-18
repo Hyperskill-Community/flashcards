@@ -8,23 +8,23 @@ const useCategoriesService = () => {
   const getCategories = async () => {
     const page = await useApi().get<CategoryPage>(ENDPOINT);
     return page.categories;
-  }
+  };
 
   const getCategoryById = async (id: string) => {
     return await useApi().get<Category>(`${ENDPOINT}/${id}`);
-  }
+  };
 
   const postNewCategory = async (data: CategoryRequest)  => {
     return await useApi().post(ENDPOINT, data, `Category ${data.name} successfully created!`);
-  }
+  };
 
   const putCategory = async (id: string, data: CategoryRequest)  => {
     return await useApi().put(`${ENDPOINT}/${id}`, data, `Category ${data.name} successfully updated!`);
-  }
+  };
 
-  const deleteCategory = async (id: string, errorResult: string = 'throw')  => {
+  const deleteCategory = async (id: string)  => {
     return await useApi().delete(`${ENDPOINT}/${id}`, 'Category successfully removed');
-  }
+  };
 
   return {
     getCategories,
@@ -32,7 +32,7 @@ const useCategoriesService = () => {
     putCategory,
     deleteCategory,
     getCategoryById
-  }
-}
+  };
+};
 
 export default useCategoriesService;

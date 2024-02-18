@@ -18,7 +18,7 @@ const props = defineProps({
     type: Object as PropType<Toast>,
     required: true,
   }
-})
+});
 
 setTimeout(() => toasts.value.delete(props.notificationKey), 5000);
 </script>

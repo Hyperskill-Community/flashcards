@@ -31,7 +31,7 @@ const password = ref('');
 
 const postNewUser = () => {
   useRegistrationService().postNewUser(email.value, password.value);
-}
+};
 </script>
 
 <style scoped lang="scss"/>

@@ -36,7 +36,7 @@ const filter = ref({
 const filterOnTitle = () => {
   filter.value.title = filter.value.input;
   console.log("Filtering on title: " + filter.value.title);
-}
+};
 onMounted(async () => {
   categoryName.value = (await useCategoriesService().getCategoryById(props.categoryId)).name;
 });

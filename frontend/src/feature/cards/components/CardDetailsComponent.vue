@@ -91,7 +91,7 @@ const toggleOption = (option: string) => {
       selected.value.push(option);
     }
   } else {
-    selected.value.splice(index, 1)
+    selected.value.splice(index, 1);
   }
 };
 

@@ -8,7 +8,7 @@ export type CardItem = {
   id: string,
   title: string,
   type: CardType,
-}
+};
 
 export type Card = {
   id: string,
@@ -20,10 +20,10 @@ export type Card = {
   options: string[],
   tags: string[],
   type: string,
-}
+};
 
 export type CardPage = {
   cards: CardItem[],
   currentPage: number,
   isLast: boolean,
-}
+};

@@ -18,6 +18,24 @@ configurations {
     }
 }
 
+tasks.register<NpmTask>("eslint") {
+    group = "npm"
+    description = "ES-Linting of frontend code"
+    args.addAll("run", "lint")
+    inputs.dir("src")
+    inputs.dir("test")
+    dependsOn("npmInstall")
+}
+
+tasks.register<NpmTask>("vitest") {
+    group = "verification"
+    description = "Runs vitest"
+    args.addAll("run", "test")
+    inputs.dir("src")
+    inputs.dir("test")
+    dependsOn("eslint")
+}
+
 tasks.register<NpmTask>("npmBuild") {
     group = "npm"
     description = "Builds the frontend"
@@ -26,7 +44,7 @@ tasks.register<NpmTask>("npmBuild") {
     inputs.dir("src")
     inputs.dir(fileTree("node_modules").exclude(".cache"))
     outputs.dir("dist")
-    dependsOn("npmInstall")
+    dependsOn("eslint", "vitest")
 }
 
 tasks.register<Zip>("packageFrontend") {
