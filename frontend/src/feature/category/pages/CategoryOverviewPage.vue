@@ -1,19 +1,14 @@
 <template>
   <v-container>
-    <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between"
-            fill-height
-            color="containerBackground">
-      <v-card-title class="text-center text-h4">
-        Your accessible categories
-      </v-card-title>
+    <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" fill-height color="containerBackground">
+      <v-card-title v-text="'Your accessible categories'" class="text-center text-h4"/>
       <category-iterator :categories="items" @reload="fetchCategories"/>
     </v-card>
   </v-container>
 </template>
 
-
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {Category} from "@/feature/category/model/category";
 import CategoryIterator from "@/feature/category/components/CategoryIterator.vue";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService";
@@ -23,6 +18,8 @@ const items = ref([] as
   { category: Category, expanded: boolean }[]
 );
 
+onMounted(async () => fetchCategories());
+
 const fetchCategories = async () => {
   items.value = [];
   const categories = await useCategoriesService().getCategories();
@@ -31,5 +28,4 @@ const fetchCategories = async () => {
     category.numberOfCards = await useCardsService().getCardCount(category.id);
   }
 };
-fetchCategories();
 </script>

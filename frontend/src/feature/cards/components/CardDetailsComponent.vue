@@ -7,8 +7,7 @@
           <v-card-subtitle class="pa-2 ma-2 d-flex justify-space-between">
             <v-card-text v-text="'Tags: '"/>
             <v-list class="ma-0 pa-0 d-flex flex-row flex-wrap">
-              <v-list-item v-for="tag in card.tags" :key="tag"
-                           :title="tag"/>
+              <v-list-item v-for="tag in card.tags" :key="tag" :title="tag"/>
             </v-list>
           </v-card-subtitle>
 
@@ -33,10 +32,8 @@
 
           <v-container>
             <v-row class="pa-0 d-flex w-100 justify-space-between align-center">
-              <v-btn color="green" :disabled="!selected && !providedAnswer"
-                     @click="checkCorrectAnswer()" variant="text"
-                     border>
-                <v-icon icon="mdi-check" size="large" start/>
+              <v-btn @click="highlightCorrectAnswers()" :disabled="!selected && !providedAnswer"
+                     prepend-icon="mdi-check-circle" color="green" variant="text">
                 Check Answer
               </v-btn>
               <v-card-subtitle v-show="answerShown" v-text="showCorrectAnswer()"/>
@@ -74,12 +71,11 @@ const answerShown = ref(false);
 const selected = ref([] as string[]);
 const providedAnswer = ref('');
 
-const parseOption = (index: number, option: string): string => {
-  return `${String.fromCharCode(65 + index)}. ${option}`;
-};
-
-const isCorrect = (option: string) => {
-  return getCorrectAnswer()?.includes(option);
+const parseOption = (index: number, option: string) => `${String.fromCharCode(65 + index)}. ${option}`;
+const isCorrect = (option: string) => getCorrectAnswer()?.includes(option);
+const highlightCorrectAnswers = () => answerShown.value = !answerShown.value;
+const showCorrectAnswer = () => {
+  return `Correct answer${props.card.type === CardType.MULTIPLE_CHOICE ? 's' : ''}: ${getCorrectAnswer()}`;
 };
 
 const toggleOption = (option: string) => {
@@ -95,10 +91,6 @@ const toggleOption = (option: string) => {
   }
 };
 
-const checkCorrectAnswer = () => {
-  answerShown.value = !answerShown.value;
-};
-
 const getCorrectAnswer = () => {
   const card = props.card;
   switch (card.type) {
@@ -110,29 +102,26 @@ const getCorrectAnswer = () => {
       return card.correctOptions.map(i => card.options[Number(i)]).join(", ");
   }
 };
-
-const showCorrectAnswer = () => {
-  const correctAnswer = getCorrectAnswer();
-  return `Correct answer${props.card.type === CardType.MULTIPLE_CHOICE ? 's' : ''}: ${correctAnswer}`;
-};
 </script>
 
 <style scoped lang="scss">
+@import "@/assets/colors";
+
 .correct {
-  border: 1px solid green;
+  border: 1px solid $--green-correct-answer;
   border-radius: .25rem;
-  background-color: rgb(0, 255, 0, .8);
+  background-color: $--green-correct-answer-background;
 }
 
 .selected {
-  border: 1px solid green;
+  border: 1px solid $--green-correct-answer;
   border-radius: .25rem;
-  background-color: rgb(0, 128, 0, .5);
+  background-color: $--green-selected-answer-background;
 }
 
 .error {
-  border: 1px solid red;
+  border: 1px solid $--red-wrong-answer;
   border-radius: .25rem;
-  background-color: rgb(255, 0, 0, .5);
+  background-color: $--red-wrong-answer-background;
 }
 </style>

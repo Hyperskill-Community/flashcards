@@ -16,7 +16,8 @@ const useApi = () => {
       try {
         const response = await apiClient.post(url, requestData);
         if (response.status !== 200 && response.status !== 201) {
-          useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage || 'Failed to post');
+          useErrorService().handleAndNotify(
+            `Error status code ${response.status}!`, errorMessage || 'Failed to post');
         } else {
           useToastService().showSuccess(successMessage || `Successfully posted to ${url}!`);
         }
@@ -32,8 +33,8 @@ const useApi = () => {
       try {
         const response = await apiClient.get(urlWithParams);
         if (response.status !== 200) {
-          useErrorService().handleAndNotify(`Error status code ${response.status}!`,
-            errorMessage || `Failed to load ${urlWithParams}`);
+          useErrorService().handleAndNotify(
+            `Error status code ${response.status}!`, errorMessage || `Failed to load ${urlWithParams}`);
           return {} as R;
         } else {
           return response.data;
@@ -49,7 +50,8 @@ const useApi = () => {
       try {
         const response = await apiClient.put(url, requestData);
         if (response.status != 200) {
-          useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage || 'Failed to update');
+          useErrorService().handleAndNotify(
+            `Error status code ${response.status}!`, errorMessage || 'Failed to update');
         } else {
           useToastService().showSuccess(successMessage || `Successfully updated ${url}!`);
         }
@@ -63,7 +65,8 @@ const useApi = () => {
       try {
         const response = await apiClient.delete(url);
         if (response.status != 200) {
-          useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage || 'Failed to update');
+          useErrorService().handleAndNotify(
+            `Error status code ${response.status}!`, errorMessage || 'Failed to update');
         } else {
           useToastService().showSuccess(successMessage || `Successfully deleted ${url}!`);
         }
