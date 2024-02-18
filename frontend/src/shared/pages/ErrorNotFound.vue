@@ -1,13 +1,11 @@
 <template>
-  <div
-    class="fullscreen text-center q-pa-md flex flex-center"
-  >
+  <div class="fullscreen text-center q-pa-md flex flex-center">
     <div>
-      <div style="font-size: 30vh">404</div>
-      <div class="text-h2" style="opacity: 0.5">Oops. Nothing here...</div>
-      <v-btn class="ma-10" to="/">Go Home</v-btn>
+      <div v-text="'404'" style="font-size: 30vh"/>
+      <div v-text="'Oops. Nothing here...'" class="text-h2" style="opacity: 0.5"/>
+      <v-btn v-text="'Go Home'" class="ma-10" to="/"/>
     </div>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts"/>

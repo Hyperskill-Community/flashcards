@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <card-details-component :card="card"></card-details-component>
+    <card-details-component :card="card"/>
   </v-container>
 </template>
 
