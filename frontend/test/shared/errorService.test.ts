@@ -1,5 +1,5 @@
 import {useErrorService} from '@/shared/composables/errorService';
-import {useToastService} from "@/shared/composables/toastService.ts";
+import {useToastService} from "@/shared/composables/toastService";
 import {expect, it, vi} from "vitest";
 
 // create a mock for the toastService
@@ -10,7 +10,7 @@ const mockedToastService = vi.hoisted(() => {
         }),};
 });
 // mock the actual toastService composable using above mock
-vi.mock('@/shared/composables/toastService.ts', () => {
+vi.mock('@/shared/composables/toastService', () => {
     return {
         useToastService: mockedToastService.useToastService,};
 });

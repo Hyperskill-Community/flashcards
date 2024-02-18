@@ -1,5 +1,5 @@
 import apiClient from '@/plugins/axios';
-import {ErrorState, useErrorService} from "@/shared/composables/errorService.ts";
+import {ErrorState, useErrorService} from "@/shared/composables/errorService";
 import {useToastService} from "@/shared/composables/toastService";
 
 const useApi = () => {
