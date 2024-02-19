@@ -4,13 +4,12 @@ import {useToastService} from "@/shared/composables/toastService";
 export type ErrorState = {
   code: string,
   message: string
-}
+};
 
-export function useErrorService() {
-
-  const errorState: ErrorState = {} as ErrorState;
+export const useErrorService = () => {
 
   const handleError = (error: AxiosError | any, message?: string) : ErrorState => {
+    const errorState = {} as ErrorState;
     errorState.code = (error.isAxiosError && error.response)
       ? `Error status ${error.response.status}`
       : 'Unknown Error';
@@ -18,22 +17,21 @@ export function useErrorService() {
       ? error.response.data.message
       : message || 'Service Unavailable';
     return errorState;
-  }
+  };
 
   const handleAndThrow = (error: AxiosError | any, message?: string) => {
     const newError = handleError(error, message);
     useToastService().showError(`<b>${newError.code}</b><br>${newError.message}`);
-    throw new Error(Object.values(newError).filter(i => i).join(': '), {cause: error});
-  }
+    throw new Error(Object.values(newError).join(': '), {cause: error});
+  };
 
-  const handleAndNotify = (error: AxiosError | any, message?: string) => {
-    const newError = handleError(error, message);
-    console.error(`${newError.code} - ${newError.message}`);
-    useToastService().showError(`<b>${error}</b><br>${message}`);
-  }
+  const handleAndNotify = (statusMessage: string, errorMessage: string) => {
+    console.error(`${statusMessage} - ${errorMessage}`);
+    useToastService().showError(`<b>${statusMessage}</b><br>${errorMessage}`);
+  };
 
   return {
     handleAndThrow,
     handleAndNotify,
   };
-}
+};

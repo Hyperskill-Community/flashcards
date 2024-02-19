@@ -8,5 +8,3 @@
     </v-responsive>
   </v-container>
 </template>
-
-<script lang="ts" setup/>

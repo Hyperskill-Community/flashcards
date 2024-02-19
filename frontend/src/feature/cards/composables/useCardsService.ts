@@ -22,6 +22,6 @@ const useCardsService = () => {
     getCards,
     getCardById,
     getCardCount
-  }
-}
+  };
+};
 export default useCardsService;
