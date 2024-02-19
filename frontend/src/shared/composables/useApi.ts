@@ -4,10 +4,10 @@ import {useToastService} from "@/shared/composables/toastService";
 
 const useApi = () => {
 
-  const handleNonAxiosError = (customError: ErrorState | undefined, error: any) => {
+  const handleNonAxiosError = (error: any, customError?: ErrorState) => {
     customError
-    && useErrorService().handleAndNotify(customError.code, customError.message)
-    || useErrorService().handleAndThrow(error);
+      ? useErrorService().handleAndNotify(customError.code, customError.message)
+      : useErrorService().handleAndThrow(error);
   };
 
   return {
@@ -22,7 +22,7 @@ const useApi = () => {
           useToastService().showSuccess(successMessage || `Successfully posted to ${url}!`);
         }
       } catch (error: any) {
-        handleNonAxiosError(customError, error);
+        handleNonAxiosError(error, customError);
       }
     },
 
@@ -40,7 +40,7 @@ const useApi = () => {
           return response.data;
         }
       } catch (error: any) {
-        handleNonAxiosError(customError, error);
+        handleNonAxiosError(error, customError);
         return {} as R;
       }
     },
@@ -56,7 +56,7 @@ const useApi = () => {
           useToastService().showSuccess(successMessage || `Successfully updated ${url}!`);
         }
       } catch (error: any) {
-        handleNonAxiosError(customError, error);
+        handleNonAxiosError(error, customError);
       }
     },
 
@@ -66,12 +66,12 @@ const useApi = () => {
         const response = await apiClient.delete(url);
         if (response.status != 200) {
           useErrorService().handleAndNotify(
-            `Error status code ${response.status}!`, errorMessage || 'Failed to update');
+            `Error status code ${response.status}!`, errorMessage || 'Failed to delete');
         } else {
           useToastService().showSuccess(successMessage || `Successfully deleted ${url}!`);
         }
       } catch (error: any) {
-        handleNonAxiosError(customError, error);
+        handleNonAxiosError(error, customError);
       }
     }
   };

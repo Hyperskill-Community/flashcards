@@ -1,5 +1,4 @@
 import {toasts, ToastType, useToastService} from "@/shared/composables/toastService";
-import {describe, expect, it} from "vitest";
 
 describe('toastService', () => {
   it('should show success message', () => {

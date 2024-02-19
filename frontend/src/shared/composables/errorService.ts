@@ -6,7 +6,7 @@ export type ErrorState = {
   message: string
 };
 
-export function useErrorService() {
+export const useErrorService = () => {
 
   const handleError = (error: AxiosError | any, message?: string) : ErrorState => {
     const errorState = {} as ErrorState;
@@ -34,4 +34,4 @@ export function useErrorService() {
     handleAndThrow,
     handleAndNotify,
   };
-}
+};

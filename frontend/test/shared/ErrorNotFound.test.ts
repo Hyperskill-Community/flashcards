@@ -1,18 +1,8 @@
-import {mount} from '@vue/test-utils';
 import ErrorNotFound from '@/shared/pages/ErrorNotFound.vue';
-import {describe, expect, it} from "vitest";
-import {createVuetify} from 'vuetify';
-import * as components from 'vuetify/components';
-import * as directives from 'vuetify/directives';
+import MainLayout from "@/layouts/MainLayout.vue";
+import {mount} from '@vue/test-utils';
 import router from "@/router";
-
-const vuetify = createVuetify({
-  components,
-  directives,
-});
-const mountOptions = {
-  global: {plugins: [vuetify, router],}
-};
+import {mountOptions} from "../util/useTestPlugins.ts";
 
 describe('ErrorNotFound.vue', () => {
   it('renders 404 message', () => {
@@ -32,7 +22,13 @@ describe('ErrorNotFound.vue', () => {
 
   it('redirects to home page when "Go Home" button is clicked', async () => {
     const wrapper = mount(ErrorNotFound, mountOptions);
-    await wrapper.find('.ma-10').trigger('click');
+    await wrapper.findComponent({ name: 'VBtn' }).trigger('click');
     expect(wrapper.vm.$route.path).toBe('/');
+  });
+
+  it('is mounted if route is not found', async () => {
+    await router.push('/not-there');
+    const wrapper = mount(MainLayout, mountOptions);
+    expect(wrapper.text()).toContain('404');
   });
 });

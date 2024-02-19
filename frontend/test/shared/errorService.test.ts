@@ -1,21 +1,22 @@
 import {useErrorService} from '@/shared/composables/errorService';
 import {useToastService} from "@/shared/composables/toastService";
-import {describe, expect, it, vi} from "vitest";
+import {describe, expect, it, vi} from 'vitest';
 
-// create a mock for the toastService
-const mockedToastService = vi.hoisted(() => {
-    return {
-        useToastService: vi.fn().mockReturnValue({
-            showError: vi.fn()
-        }),};
-});
-// mock the actual toastService composable using above mock
+// mock toastService
 vi.mock('@/shared/composables/toastService', () => {
-    return {
-        useToastService: mockedToastService.useToastService,};
+  return {
+    useToastService: vi.fn().mockReturnValue({
+      showError: vi.fn(),
+      showSuccess: vi.fn(),
+    }),};
 });
 
 describe('errorService', () => {
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should handle and throw errors correctly', () => {
     const error = new Error('Test Error');
     const axiosError = {
