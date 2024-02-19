@@ -22,13 +22,12 @@ export function useErrorService() {
   const handleAndThrow = (error: AxiosError | any, message?: string) => {
     const newError = handleError(error, message);
     useToastService().showError(`<b>${newError.code}</b><br>${newError.message}`);
-    throw new Error(Object.values(newError).filter(i => i).join(': '), {cause: error});
+    throw new Error(Object.values(newError).join(': '), {cause: error});
   };
 
-  const handleAndNotify = (error: AxiosError | any, message?: string) => {
-    const newError = handleError(error, message);
-    console.error(`${newError.code} - ${newError.message}`);
-    useToastService().showError(`<b>${error}</b><br>${message}`);
+  const handleAndNotify = (statusMessage: string, errorMessage: string) => {
+    console.error(`${statusMessage} - ${errorMessage}`);
+    useToastService().showError(`<b>${statusMessage}</b><br>${errorMessage}`);
   };
 
   return {
