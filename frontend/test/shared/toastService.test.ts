@@ -1,6 +1,12 @@
 import {toasts, ToastType, useToastService} from "@/shared/composables/toastService";
+import {beforeEach} from "vitest";
 
 describe('toastService', () => {
+
+  beforeEach(() => {
+    toasts.value.clear();
+  });
+
   it('should show success message', () => {
     useToastService().showSuccess('Success message');
     expect(toasts.value.size).toBe(1);
@@ -11,7 +17,6 @@ describe('toastService', () => {
   });
 
   it('should show warning message', () => {
-    toasts.value.clear();
     useToastService().showWarning('Warning message');
     expect(toasts.value.size).toBe(1);
     const toast = toasts.value.values().next().value;
@@ -21,7 +26,6 @@ describe('toastService', () => {
   });
 
   it('should show error message', () => {
-    toasts.value.clear();
     useToastService().showError('Error message');
     expect(toasts.value.size).toBe(1);
     const toast = toasts.value.values().next().value;

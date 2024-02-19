@@ -3,6 +3,7 @@ import {Toast, toasts, ToastType} from "@/shared/composables/toastService";
 import {mount} from "@vue/test-utils";
 
 describe('ToastNotification.vue', () => {
+
   it('renders notification header and message', async () => {
     const wrapper = mount(ToastNotification, {
       props: {
@@ -17,7 +18,6 @@ describe('ToastNotification.vue', () => {
 
   it('removes notification after timeout', async () => {
     vi.useFakeTimers();
-
     toasts.value.set(1, {type: ToastType.SUCCESS, header: 'Header', message: 'Message'});
 
     mount(ToastNotification, {
@@ -33,37 +33,16 @@ describe('ToastNotification.vue', () => {
     vi.useRealTimers();
   });
 
-  it('applies correct class for success type', () => {
+  it.each([[ToastType.SUCCESS, 'success'], [ToastType.ERROR, 'error'], [ToastType.WARNING, 'warning']]
+  )('applies correct class for %s type', (type, clazz) => {
     const wrapper = mount(ToastNotification, {
       props: {
         notificationKey: 1,
-        notification: {type: ToastType.SUCCESS, header: 'Header', message: 'Message'}
+        notification: {type: type, header: 'Header', message: 'Message'}
       }
     });
 
-    expect(wrapper.get('.success')).toBeTruthy();
+    expect(wrapper.get(`.${clazz}`)).toBeTruthy();
   });
 
-  it('applies correct class for error type', () => {
-    const wrapper = mount(ToastNotification, {
-      props: {
-        notificationKey: 1,
-        notification: {type: ToastType.ERROR, header: 'Header', message: 'Error message'}
-      }
-    });
-
-    expect(wrapper.text()).contains('Error message');
-    expect(wrapper.get('.error')).toBeTruthy();
-  });
-
-  it('applies correct class for warning type', () => {
-    const wrapper = mount(ToastNotification, {
-      props: {
-        notificationKey: 1,
-        notification: {type: ToastType.WARNING, header: 'Header', message: 'Message'}
-      }
-    });
-
-    expect(wrapper.get('.warning')).toBeTruthy();
-  });
 });
