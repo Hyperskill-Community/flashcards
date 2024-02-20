@@ -29,7 +29,7 @@ tasks.register<Copy>("select-compose-file") {
 
 tasks.register("sonar") {
     group = "verification"
-    description = "Run sonarqube analysis - presently only for flashcards-server"
+    description = "Run sonarqube analysis"
     dependsOn(":flashcards-server:sonar")
     dependsOn(":flashcards-client:sonar")
 }
