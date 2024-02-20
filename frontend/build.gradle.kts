@@ -27,15 +27,6 @@ tasks.register<NpmTask>("eslint") {
     dependsOn("npmInstall")
 }
 
-tasks.register<NpmTask>("vitest") {
-    group = "verification"
-    description = "Runs vitest"
-    args.addAll("run", "test")
-    inputs.dir("src")
-    inputs.dir("test")
-    dependsOn("eslint")
-}
-
 tasks.register<NpmTask>("npmBuild") {
     group = "npm"
     description = "Builds the frontend"
@@ -66,10 +57,36 @@ artifacts {
     }
 }
 
-tasks.withType<Delete>().named("clean") {
-    delete("dist")
+tasks.register<NpmTask>("coverage") {
+    group = "verification"
+    description = "Run tests with coverage"
+    args.addAll("run", "coverage")
+    inputs.dir("src")
+    inputs.dir("test")
+    dependsOn("eslint")
+}
+
+val sonarToken: String by project
+tasks.register<NpmTask>("sonar") {
+    group = "verification"
+    description = "Runs sonar scanner for frontend code"
+    args.addAll("run", "sonar", "--sonartoken=$sonarToken")
+    dependsOn("coverage")
+}
+
+tasks.register<NpmTask>("vitest") {
+    group = "verification"
+    description = "Runs vitest"
+    args.addAll("run", "test")
+    inputs.dir("src")
+    inputs.dir("test")
+    dependsOn("eslint")
 }
 
 tasks.named("check") {
     dependsOn("vitest")
+}
+
+tasks.withType<Delete>().named("clean") {
+    delete("dist")
 }

@@ -19,4 +19,3 @@ gradle.properties
 ### Mac OS ###
 .DS_Store
 HELP.MD
-/frontend/coverage/
