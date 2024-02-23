@@ -89,4 +89,6 @@ tasks.named("check") {
 
 tasks.withType<Delete>().named("clean") {
     delete("dist")
+    delete("coverage")
+    delete(".scannerwork")
 }

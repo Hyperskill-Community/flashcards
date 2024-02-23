@@ -17,9 +17,9 @@ const useApi = () => {
         const response = await apiClient.post(url, requestData);
         if (response.status !== 200 && response.status !== 201) {
           useErrorService().handleAndNotify(
-            `Error status code ${response.status}!`, errorMessage || 'Failed to post');
+            `Error status code ${response.status}!`, errorMessage?? 'Failed to post');
         } else {
-          useToastService().showSuccess(successMessage || `Successfully posted to ${url}!`);
+          useToastService().showSuccess(successMessage?? `Successfully posted to ${url}!`);
         }
       } catch (error: any) {
         handleNonAxiosError(error, customError);
@@ -34,7 +34,7 @@ const useApi = () => {
         const response = await apiClient.get(urlWithParams);
         if (response.status !== 200) {
           useErrorService().handleAndNotify(
-            `Error status code ${response.status}!`, errorMessage || `Failed to load ${urlWithParams}`);
+            `Error status code ${response.status}!`, errorMessage?? `Failed to load ${urlWithParams}`);
           return {} as R;
         } else {
           return response.data;
@@ -51,9 +51,9 @@ const useApi = () => {
         const response = await apiClient.put(url, requestData);
         if (response.status != 200) {
           useErrorService().handleAndNotify(
-            `Error status code ${response.status}!`, errorMessage || 'Failed to update');
+            `Error status code ${response.status}!`, errorMessage?? 'Failed to update');
         } else {
-          useToastService().showSuccess(successMessage || `Successfully updated ${url}!`);
+          useToastService().showSuccess(successMessage?? `Successfully updated ${url}!`);
         }
       } catch (error: any) {
         handleNonAxiosError(error, customError);
@@ -66,9 +66,9 @@ const useApi = () => {
         const response = await apiClient.delete(url);
         if (response.status != 200) {
           useErrorService().handleAndNotify(
-            `Error status code ${response.status}!`, errorMessage || 'Failed to delete');
+            `Error status code ${response.status}!`, errorMessage?? 'Failed to delete');
         } else {
-          useToastService().showSuccess(successMessage || `Successfully deleted ${url}!`);
+          useToastService().showSuccess(successMessage?? `Successfully deleted ${url}!`);
         }
       } catch (error: any) {
         handleNonAxiosError(error, customError);
