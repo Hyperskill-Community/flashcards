@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import {Category} from "@/feature/category/model/category";
+import {Category, CategoryRequest} from "@/feature/category/model/category";
 import CategoryCard from "@/feature/category/components/CategoryCard.vue";
 import AddMdiButton from "@/shared/components/AddMdiButton.vue";
 import {ref} from "vue";
@@ -43,13 +43,11 @@ const emit = defineEmits<{
 }>();
 
 const addRequested = ref(false);
-const newCategory = ref(
-  {name: "", description: "", actions: []}
-);
+const newCategory = ref<CategoryRequest>({} as CategoryRequest);
 
 const addCategory = () => {
-  newCategory.value = {name: "", description: "", actions: []};
-  addRequested.value = true;
+  newCategory.value = {name: "", description: ""};
+  addRequested.value = !addRequested.value;
 };
 
 const postNewCategory = async () => {

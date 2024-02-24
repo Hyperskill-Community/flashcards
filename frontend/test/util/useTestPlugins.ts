@@ -8,7 +8,7 @@ const vuetify = createVuetify({
   directives,
 });
 global.ResizeObserver = require('resize-observer-polyfill');
+
 export const mountOptions = {
   global: {plugins: [vuetify, router],}
 };
-

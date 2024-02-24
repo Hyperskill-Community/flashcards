@@ -3,7 +3,7 @@
     <template v-slot:activator="{ props }">
       <v-btn variant="elevated"
              icon="mdi-arrow-left"
-             class = "ms-n6"
+             class = "back-button ms-n6"
              v-bind="props"
              :disabled="disabled"
              @click="clickHandler"
