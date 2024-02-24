@@ -83,26 +83,6 @@ describe('CategoryOverviewPage', () => {
     expect(iterator.vm.$props.categories).toHaveLength(newCategories.length);
   });
 
-  it('should remove category card to display after delete', async () => {
-    vi.mocked(useCategoriesService().getCategories).mockResolvedValueOnce(categories);
-    vi.mocked(useCardsService().getCardCount)
-      .mockResolvedValueOnce(5)
-      .mockResolvedValueOnce(10);
-    const wrapper = mount(CategoryOverviewPage, mountOptions);
-    const iterator = wrapper.findComponent({name: 'CategoryIterator'});
-    await flushPromises(); // slicker version of vi.waitFor
-    expect(iterator.vm.$props.categories).toHaveLength(categories.length);
-    const newCategories
-      = [...categories, {id: '3', name: 'New Category', actions: [], description: 'New Description'}];
-    vi.mocked(useCategoriesService().getCategories).mockResolvedValue(newCategories);
-    await wrapper.findComponent('.add-button').trigger('click');
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(0)?.setValue(newCategories[2].name);
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(1)?.setValue(newCategories[2].description);
-    await wrapper.findComponent('.submit-button').trigger('click');
-    await flushPromises();
-    expect(iterator.vm.$props.categories).toHaveLength(newCategories.length);
-  });
-
   it('should delete category card to display after delete', async () => {
     vi.mocked(useCategoriesService().getCategories).mockResolvedValueOnce(categories);
     vi.mocked(useCardsService().getCardCount)
