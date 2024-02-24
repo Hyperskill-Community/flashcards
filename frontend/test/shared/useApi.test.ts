@@ -1,7 +1,6 @@
 import apiClient from "@/plugins/axios.ts";
 import useApi from "@/shared/composables/useApi.ts";
 import {useToastService} from "@/shared/composables/toastService.ts";
-import {expect, vi} from "vitest";
 
 vi.mock('@/shared/composables/toastService', () => {
   return {

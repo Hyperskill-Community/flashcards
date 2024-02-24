@@ -1,8 +1,8 @@
 import {mount} from "@vue/test-utils";
 import {mountOptions} from "../../util/useTestPlugins.ts";
+import {ActionType} from "@/feature/category/model/category.ts";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService.ts";
 import CategoryIterator from "@/feature/category/components/CategoryIterator.vue";
-import {ActionType} from "@/feature/category/model/category.ts";
 
 vi.mock("@/feature/category/composables/useCategoriesService.ts", () => {
   return {

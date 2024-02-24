@@ -1,8 +1,8 @@
 import {mount} from "@vue/test-utils";
 import {mountOptions} from "../../util/useTestPlugins.ts";
 import useRegistrationService from "@/feature/registration/composables/useRegistrationService.ts";
-import RegistrationPage from "@/feature/registration/pages/RegistrationPage.vue";
 import App from "@/App.vue";
+import RegistrationPage from "@/feature/registration/pages/RegistrationPage.vue";
 
 vi.mock('@/feature/registration/composables/useRegistrationService.ts', () => {
   return {

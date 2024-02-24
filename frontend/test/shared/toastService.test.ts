@@ -1,5 +1,4 @@
 import {toasts, ToastType, useToastService} from "@/shared/composables/toastService";
-import {beforeEach} from "vitest";
 
 describe('toastService', () => {
 

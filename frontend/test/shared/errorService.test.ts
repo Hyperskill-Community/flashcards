@@ -1,6 +1,5 @@
 import {useErrorService} from '@/shared/composables/errorService';
 import {useToastService} from "@/shared/composables/toastService";
-import {describe, expect, it, vi} from 'vitest';
 
 // mock toastService
 vi.mock('@/shared/composables/toastService', () => {

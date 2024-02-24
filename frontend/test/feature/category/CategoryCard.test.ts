@@ -2,12 +2,11 @@ import {mount} from "@vue/test-utils";
 import {mountOptions} from "../../util/useTestPlugins.ts";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService.ts";
 import {ActionType} from "@/feature/category/model/category.ts";
-import CategoryCard from "@/feature/category/components/CategoryCard.vue";
 import App from "@/App.vue";
+import CategoryOverviewPage from "@/feature/category/pages/CategoryOverviewPage.vue";
+import CategoryCard from "@/feature/category/components/CategoryCard.vue";
 import router from "@/router";
 import flushPromises from "flush-promises";
-import {expect} from "vitest";
-import CategoryOverviewPage from "@/feature/category/pages/CategoryOverviewPage.vue";
 
 vi.mock("@/feature/category/composables/useCategoriesService.ts", () => {
   return {
