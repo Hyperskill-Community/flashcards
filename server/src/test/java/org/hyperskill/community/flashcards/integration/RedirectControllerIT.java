@@ -8,7 +8,6 @@ import org.hyperskill.community.flashcards.category.model.CategoryAccess;
 import org.hyperskill.community.flashcards.common.AuthenticationResolver;
 import org.hyperskill.community.flashcards.common.RedirectController;
 import org.hyperskill.community.flashcards.config.ObservabilityConfiguration;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -49,10 +48,6 @@ class RedirectControllerIT {
 
     @Autowired
     MockMvc mockMvc;
-
-    @BeforeEach
-    void setUp() {
-    }
 
     @ParameterizedTest
     @ValueSource(strings = {"/api/categories", "/categories/1", "/categories"})

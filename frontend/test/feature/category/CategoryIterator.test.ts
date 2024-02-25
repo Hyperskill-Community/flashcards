@@ -47,11 +47,11 @@ describe('CategoryIterator', () => {
       ...mountOptions,
       props: {categories: categories}
     });
-    expect(wrapper.findComponent({name: 'VForm'}).exists()).toBe(false);
+    expect(wrapper.findComponent('.v-form').exists()).toBe(false);
     await wrapper.findComponent('.add-button').trigger('click');
-    expect(wrapper.findComponent({name: 'VForm'}).isVisible()).toBe(true);
+    expect(wrapper.findComponent('.v-form').isVisible()).toBe(true);
     await wrapper.findComponent('.add-button').trigger('click');
-    expect(wrapper.findComponent({name: 'VForm'}).exists()).toBe(false);
+    expect(wrapper.findComponent('.v-form').exists()).toBe(false);
   });
 
   it('should post new category on form submit', async () => {
@@ -64,8 +64,8 @@ describe('CategoryIterator', () => {
       description: 'New Description',
     };
     await wrapper.findComponent('.add-button').trigger('click');
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(0)?.setValue(newCategory.name);
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(1)?.setValue(newCategory.description);
+    await wrapper.findAllComponents('.v-text-field')?.at(0)?.setValue(newCategory.name);
+    await wrapper.findAllComponents('.v-text-field')?.at(1)?.setValue(newCategory.description);
     expect(wrapper.findComponent({name: 'SubmitMdiButton'}).vm.$props.disabled).toBeFalsy();
     await wrapper.findComponent('.submit-button').trigger('click');
     expect(useCategoriesService().postNewCategory).toHaveBeenCalledWith(newCategory);
@@ -77,7 +77,7 @@ describe('CategoryIterator', () => {
       props: {categories: categories}
     });
     await wrapper.findComponent('.add-button').trigger('click');
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(1)?.setValue('New Description');
+    await wrapper.findAllComponents('.v-text-field')?.at(1)?.setValue('New Description');
     expect(wrapper.findComponent({name: 'SubmitMdiButton'}).vm.$props.disabled).toBeTruthy();
     await wrapper.findComponent('.submit-button').trigger('click');
     expect(useCategoriesService().postNewCategory).not.toHaveBeenCalled();
@@ -89,8 +89,8 @@ describe('CategoryIterator', () => {
       props: {categories: categories}
     });
     await wrapper.findComponent('.add-button').trigger('click');
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(0)?.setValue('New Category');
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(1)?.setValue('New Description');
+    await wrapper.findAllComponents('.v-text-field')?.at(0)?.setValue('New Category');
+    await wrapper.findAllComponents('.v-text-field')?.at(1)?.setValue('New Description');
     await wrapper.findComponent('.submit-button').trigger('click');
     expect(wrapper.emitted('reload')).toBeTruthy();
   });

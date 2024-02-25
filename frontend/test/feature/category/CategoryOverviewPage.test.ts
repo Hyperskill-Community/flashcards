@@ -76,8 +76,8 @@ describe('CategoryOverviewPage', () => {
       = [...categories, {id: '3', name: 'New Category', actions: [], description: 'New Description'}];
     vi.mocked(useCategoriesService().getCategories).mockResolvedValue(newCategories);
     await wrapper.findComponent('.add-button').trigger('click');
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(0)?.setValue(newCategories[2].name);
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(1)?.setValue(newCategories[2].description);
+    await wrapper.findAllComponents('.v-text-field')?.at(0)?.setValue(newCategories[2].name);
+    await wrapper.findAllComponents('.v-text-field')?.at(1)?.setValue(newCategories[2].description);
     await wrapper.findComponent('.submit-button').trigger('click');
     await flushPromises();
     expect(iterator.vm.$props.categories).toHaveLength(newCategories.length);

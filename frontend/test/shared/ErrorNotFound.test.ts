@@ -22,7 +22,7 @@ describe('ErrorNotFound.vue', () => {
 
   it('redirects to home page when "Go Home" button is clicked', async () => {
     const wrapper = mount(ErrorNotFound, mountOptions);
-    await wrapper.findComponent({ name: 'VBtn' }).trigger('click');
+    await wrapper.findComponent('.v-btn').trigger('click');
     expect(wrapper.vm.$route.path).toBe('/');
   });
 

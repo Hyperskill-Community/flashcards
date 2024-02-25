@@ -22,9 +22,9 @@ describe('RegistrationPage', () => {
     const email = 'email@t.com';
     const password = 'password';
     const wrapper = mount(RegistrationPage, mountOptions);
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(0)?.setValue(email);
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(1)?.setValue(password);
-    await wrapper.findComponent({name: 'VBtn'}).trigger('click');
+    await wrapper.findAllComponents('.v-text-field')?.at(0)?.setValue(email);
+    await wrapper.findAllComponents('.v-text-field')?.at(1)?.setValue(password);
+    await wrapper.findComponent('.v-btn').trigger('click');
     expect(useRegistrationService().postNewUser).toHaveBeenCalledWith(email, password);
   });
 

@@ -46,11 +46,11 @@ describe('CategoryCard', () => {
       ...mountOptions,
       props: {category: category, expanded: false}
     });
-    expect(wrapper.findComponent({name: 'VForm'}).exists()).toBe(false);
+    expect(wrapper.findComponent('.v-form').exists()).toBe(false);
     await wrapper.findComponent('.edit-button').trigger('click');
-    expect(wrapper.findComponent({name: 'VForm'}).isVisible()).toBe(true);
+    expect(wrapper.findComponent('.v-form').isVisible()).toBe(true);
     await wrapper.findComponent('.edit-button').trigger('click');
-    expect(wrapper.findComponent({name: 'VForm'}).exists()).toBe(false);
+    expect(wrapper.findComponent('.v-form').exists()).toBe(false);
   });
 
   it('should put filled form correctly and fire reload', async () => {
@@ -60,8 +60,8 @@ describe('CategoryCard', () => {
     });
     const putRequest = {name: 'New Name', description: 'New Description'};
     await wrapper.findComponent('.edit-button').trigger('click');
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(0)?.setValue('New Name');
-    await wrapper.findAllComponents({name: 'VTextField'})?.at(1)?.setValue('New Description');
+    await wrapper.findAllComponents('.v-text-field')?.at(0)?.setValue('New Name');
+    await wrapper.findAllComponents('.v-text-field')?.at(1)?.setValue('New Description');
     await wrapper.findComponent('.submit-button').trigger('click');
     expect(useCategoriesService().putCategory).toHaveBeenCalledWith(category.id, putRequest);
     expect(wrapper.emitted('reload')).toBeTruthy();
@@ -98,10 +98,10 @@ describe('CategoryCard', () => {
       ...mountOptions,
     });
     await flushPromises();
-    await wrapper.findComponent({name: 'VSwitch'}).trigger('click'); //expand
+    await wrapper.findComponent('.v-switch').trigger('click'); //expand
     expect(wrapper.findComponent({name: 'CategoryCard'}).emitted('update:expanded')).toBeTruthy();
     expect(wrapper.text()).toContain(' Your access: WRITE');
-    await wrapper.findComponent({name: 'VSwitch'}).trigger('click'); // close
+    await wrapper.findComponent('.v-switch').trigger('click'); // close
     expect(wrapper.text()).not.toContain(' Your access: WRITE');
   });
 
