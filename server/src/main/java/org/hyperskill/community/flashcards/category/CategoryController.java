@@ -32,7 +32,7 @@ public class CategoryController {
     private final AuthenticationResolver authenticationResolver;
 
     @GetMapping
-    public CategoryPageResponse getAllCategories(
+    public CategoryPageResponse getCategories(
             @Valid @Min(0) @RequestParam(name = "page", required = false, defaultValue = "0") int page) {
 
         var username = authenticationResolver.resolveUsername();

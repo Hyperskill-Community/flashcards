@@ -2,7 +2,6 @@ import {mount} from "@vue/test-utils";
 import {mountOptions} from "../../util/useTestPlugins.ts";
 import {ActionType} from "@/feature/category/model/category.ts";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService.ts";
-import useCardsService from "@/feature/cards/composables/useCardsService.ts";
 import CategoryOverviewPage from "@/feature/category/pages/CategoryOverviewPage.vue";
 import flushPromises from "flush-promises";
 
@@ -31,19 +30,22 @@ describe('CategoryOverviewPage', () => {
     {id: '2', name: 'Other Category', actions: [], description: 'Other Description'}
   ];
   const expected = [
-    {...categories[0], numberOfCards: 5},
-    {...categories[1], numberOfCards: 10},
+    {...categories[0]},
+    {...categories[1]},
   ];
+  const page = {
+    categories: categories,
+    currentPage: 0,
+    totalElements: 2,
+    isLast: true
+  };
 
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should fetch categories and their counts on mount and propagate them', async () => {
-    vi.mocked(useCategoriesService().getCategories).mockResolvedValue(categories);
-    vi.mocked(useCardsService().getCardCount)
-      .mockResolvedValueOnce(5)
-      .mockResolvedValueOnce(10);
+  it('should fetch categories on mount and propagate them', async () => {
+    vi.mocked(useCategoriesService().getCategories).mockResolvedValue(page);
     const wrapper = mount(CategoryOverviewPage, mountOptions);
     const iterator = wrapper.findComponent({name: 'CategoryIterator'});
     await vi.waitFor( // just as alternative to flushPromises - i.e. without that module
@@ -56,25 +58,25 @@ describe('CategoryOverviewPage', () => {
       });
     expect(iterator.vm.$props.categories).toHaveLength(2);
     expect(useCategoriesService().getCategories).toHaveBeenCalled();
-    expect(useCardsService().getCardCount).toHaveBeenCalledWith('1');
-    expect(useCardsService().getCardCount).toHaveBeenCalledWith('2');
     // check if the categories and their counts are propagated to the CategoryIterator
     expect(iterator.vm.$props.categories[0]).toStrictEqual({category: expected[0], expanded: false});
     expect(iterator.vm.$props.categories[1]).toStrictEqual({category: expected[1], expanded: false});
   });
 
   it('should add category card to display after post', async () => {
-    vi.mocked(useCategoriesService().getCategories).mockResolvedValueOnce(categories);
-    vi.mocked(useCardsService().getCardCount)
-      .mockResolvedValueOnce(5)
-      .mockResolvedValueOnce(10);
+    vi.mocked(useCategoriesService().getCategories).mockResolvedValueOnce(page);
     const wrapper = mount(CategoryOverviewPage, mountOptions);
     const iterator = wrapper.findComponent({name: 'CategoryIterator'});
     await flushPromises(); // slicker version of vi.waitFor
     expect(iterator.vm.$props.categories).toHaveLength(categories.length);
     const newCategories
       = [...categories, {id: '3', name: 'New Category', actions: [], description: 'New Description'}];
-    vi.mocked(useCategoriesService().getCategories).mockResolvedValue(newCategories);
+    vi.mocked(useCategoriesService().getCategories).mockResolvedValue({
+      categories: newCategories,
+      currentPage: 0,
+      totalElements: 3,
+      isLast: true
+    });
     await wrapper.findComponent('.add-button').trigger('click');
     await wrapper.findAllComponents('.v-text-field')?.at(0)?.setValue(newCategories[2].name);
     await wrapper.findAllComponents('.v-text-field')?.at(1)?.setValue(newCategories[2].description);
@@ -84,15 +86,17 @@ describe('CategoryOverviewPage', () => {
   });
 
   it('should delete category card to display after delete', async () => {
-    vi.mocked(useCategoriesService().getCategories).mockResolvedValueOnce(categories);
-    vi.mocked(useCardsService().getCardCount)
-      .mockResolvedValueOnce(5)
-      .mockResolvedValue(10);
+    vi.mocked(useCategoriesService().getCategories).mockResolvedValueOnce(page);
     const wrapper = mount(CategoryOverviewPage, mountOptions);
     const iterator = wrapper.findComponent({name: 'CategoryIterator'});
     await flushPromises(); // slicker version of vi.waitFor
     expect(iterator.vm.$props.categories).toHaveLength(categories.length);
-    vi.mocked(useCategoriesService().getCategories).mockResolvedValueOnce([categories[1]]);
+    vi.mocked(useCategoriesService().getCategories).mockResolvedValueOnce({
+      categories: [categories[1]],
+      currentPage: 0,
+      totalElements: 1,
+      isLast: true
+    });
     await wrapper.findComponent('.delete-button').trigger('click');
     await flushPromises();
     expect(iterator.vm.$props.categories).toHaveLength(1);

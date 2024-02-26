@@ -37,6 +37,13 @@ describe('CategoryCard', () => {
     numberOfCards: 5
   };
 
+  const page = {
+    categories: [category],
+    currentPage: 0,
+    totalElements: 1,
+    isLast: true
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -79,7 +86,7 @@ describe('CategoryCard', () => {
 
   it('should route to card overview page on open button click', async () => {
     const app = mount(App, mountOptions);
-    vi.mocked(useCategoriesService().getCategories).mockResolvedValue([category]);
+    vi.mocked(useCategoriesService().getCategories).mockResolvedValue(page);
     vi.mocked(useCategoriesService().getCategoryById).mockResolvedValue(category);
     await router.push('/categories');
     vi.spyOn(router, 'push');
@@ -93,7 +100,7 @@ describe('CategoryCard', () => {
   });
 
   it('should show details on expand and close on switch', async () => {
-    vi.mocked(useCategoriesService().getCategories).mockResolvedValue([category]);
+    vi.mocked(useCategoriesService().getCategories).mockResolvedValue(page);
     const wrapper = mount(CategoryOverviewPage, {
       ...mountOptions,
     });

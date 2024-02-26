@@ -5,9 +5,8 @@ const useCategoriesService = () => {
 
   const ENDPOINT = '/categories';
 
-  const getCategories = async () => {
-    const page = await useApi().get<CategoryPage>(ENDPOINT);
-    return page.categories;
+  const getCategories = async (page: number = 0) => {
+    return await useApi().get<CategoryPage>(ENDPOINT, {page: String(page)});
   };
 
   const getCategoryById = async (id: string) => {

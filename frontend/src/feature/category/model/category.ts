@@ -20,6 +20,7 @@ export type Category = {
 export type CategoryPage = {
   categories: Category[],
   currentPage: number,
+  totalElements: number,
   isLast: boolean,
 };
 
