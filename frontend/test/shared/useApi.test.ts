@@ -1,7 +1,6 @@
 import apiClient from "@/plugins/axios.ts";
 import useApi from "@/shared/composables/useApi.ts";
 import {useToastService} from "@/shared/composables/toastService.ts";
-import {expect, vi} from "vitest";
 
 vi.mock('@/shared/composables/toastService', () => {
   return {
@@ -26,7 +25,7 @@ describe('useApi', () => {
     await expect(useApi().delete(testUrl)).rejects.toThrowError('Unknown Error: Service Unavailable');
 
     expect(apiClient.delete).toHaveBeenCalledWith(testUrl);
-    expect(useToastService().showError).toHaveBeenCalledWith('<b>Unknown Error</b><br>Service Unavailable');
+    expect(useToastService().showError).toHaveBeenCalledWith('Service Unavailable', 'Unknown Error');
   });
 
   it('should show Custom Error no throw if Axios throws', async () => {
@@ -34,14 +33,14 @@ describe('useApi', () => {
 
     await useApi().delete(testUrl, '', '', {code: 'Error 999', message: 'No Service'});
     expect(apiClient.delete).toHaveBeenCalledWith(testUrl);
-    expect(useToastService().showError).toHaveBeenCalledWith('<b>Error 999</b><br>No Service');
+    expect(useToastService().showError).toHaveBeenCalledWith('No Service', 'Error 999');
   });
 
   it.each(
     [undefined, 'Congrats - you deleted it!']
   )('should show %s on delete with status 200', async (customSuccess) => {
     vi.mocked(apiClient.delete).mockResolvedValue({status: 200});
-    const successMessage = customSuccess || `Successfully deleted ${testUrl}!`;
+    const successMessage = customSuccess?? `Successfully deleted ${testUrl}!`;
 
     await useApi().delete(testUrl, customSuccess);
     expect(apiClient.delete).toHaveBeenCalledWith(testUrl);
@@ -51,11 +50,11 @@ describe('useApi', () => {
   it.each([undefined, 'Error - cannot delete that!']
   )('should show %s on delete with Status 403', async (customError) => {
     vi.mocked(apiClient.delete).mockResolvedValue({status: 403});
-    const errorMessage = customError || 'Failed to delete';
+    const errorMessage = customError?? 'Failed to delete';
 
     await useApi().delete(testUrl, '', customError);
     expect(apiClient.delete).toHaveBeenCalledWith(testUrl);
-    expect(useToastService().showError).toHaveBeenCalledWith(`<b>Error status code 403!</b><br>${errorMessage}`);
+    expect(useToastService().showError).toHaveBeenCalledWith(errorMessage, 'Error status code 403!');
   });
 
   it.each([200, 201]
@@ -94,6 +93,6 @@ describe('useApi', () => {
 
     await apiMethod(testUrl, {});
     expect(useToastService().showError)
-      .toHaveBeenCalledWith(expect.stringContaining('<b>Error status code 403!</b>'));
+      .toHaveBeenCalledWith(expect.stringContaining('Failed to '), 'Error status code 403!');
   });
 });

@@ -9,6 +9,7 @@ export enum ToastType {
 export type Toast = {
   type: ToastType,
   header: string,
+  title?: string,
   message: string,
 };
 
@@ -16,20 +17,21 @@ export const toasts = ref(new Map<number, Toast>());
 
 export const useToastService = () => {
 
-  const showNotification = (type: ToastType, header: string, message: string) => {
-    toasts.value.set(Math.round(Math.random() * 12345), {type, header, message});
+  const showNotification = (type: ToastType, header: string, message: string, title?: string) => {
+    const nextKey = () => toasts.value.size ? Math.max(...toasts.value.keys()) + 1 : 0;
+    toasts.value.set(nextKey(), {type, header, title, message});
   };
 
-  const showSuccess = (message: string) => {
-    showNotification(ToastType.SUCCESS, 'SUCCESS', message);
+  const showSuccess = (message: string, title?: string) => {
+    showNotification(ToastType.SUCCESS, 'SUCCESS', message, title);
   };
 
-  const showWarning = (message: string) => {
-    showNotification(ToastType.WARNING, 'WARNING', message);
+  const showWarning = (message: string, title?: string) => {
+    showNotification(ToastType.WARNING, 'WARNING', message, title);
   };
 
-  const showError = (message: string) => {
-    showNotification(ToastType.ERROR, 'ERROR', message);
+  const showError = (message: string, title?: string) => {
+    showNotification(ToastType.ERROR, 'ERROR', message, title);
   };
 
   return {

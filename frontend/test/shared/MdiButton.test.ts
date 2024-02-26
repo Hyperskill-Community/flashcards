@@ -1,11 +1,11 @@
+import {mount} from '@vue/test-utils';
+import {mountOptions} from "../util/useTestPlugins.ts";
 import EditMdiButton from '@/shared/components/EditMdiButton.vue';
 import DeleteMdiButton from '@/shared/components/DeleteMdiButton.vue';
 import SubmitMdiButton from '@/shared/components/SubmitMdiButton.vue';
 import BackMdiButton from '@/shared/components/BackMdiButton.vue';
 import OpenMdiButton from '@/shared/components/OpenMdiButton.vue';
 import AddMdiButton from '@/shared/components/AddMdiButton.vue';
-import {mount} from '@vue/test-utils';
-import {mountOptions} from "../util/useTestPlugins.ts";
 
 describe('MdiButtons', () => {
 

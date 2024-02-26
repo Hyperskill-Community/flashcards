@@ -1,6 +1,5 @@
 import {useErrorService} from '@/shared/composables/errorService';
 import {useToastService} from "@/shared/composables/toastService";
-import {describe, expect, it, vi} from 'vitest';
 
 // mock toastService
 vi.mock('@/shared/composables/toastService', () => {
@@ -29,9 +28,9 @@ describe('errorService', () => {
       }
     };
     expect(() => useErrorService().handleAndThrow(axiosError)).toThrowError('Not Found');
-    expect(useToastService().showError).toHaveBeenCalledWith('<b>Error status 404</b><br>Not Found');
+    expect(useToastService().showError).toHaveBeenCalledWith('Not Found','Error status 404');
     expect(() => useErrorService().handleAndThrow(error)).toThrowError('Unknown Error');
-    expect(useToastService().showError).toHaveBeenCalledWith('<b>Unknown Error</b><br>Service Unavailable');
+    expect(useToastService().showError).toHaveBeenCalledWith('Service Unavailable','Unknown Error');
   });
 
   it('should handle and notify errors correctly', () => {
@@ -46,8 +45,8 @@ describe('errorService', () => {
       }
     };
     useErrorService().handleAndNotify(`Status code: ${axiosError.response.status}`, axiosError.response.data.message);
-    expect(useToastService().showError).toHaveBeenCalledWith('<b>Status code: 404</b><br>Not Found');
+    expect(useToastService().showError).toHaveBeenCalledWith('Not Found', 'Status code: 404');
     useErrorService().handleAndNotify(customError.code, customError.message);
-    expect(useToastService().showError).toHaveBeenCalledWith('<b>999</b><br>No Service');
+    expect(useToastService().showError).toHaveBeenCalledWith('No Service', '999');
   });
 });

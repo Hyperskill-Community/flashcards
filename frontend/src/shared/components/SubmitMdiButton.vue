@@ -4,7 +4,7 @@
       <v-btn variant="text"
              type="submit"
              icon="mdi-send-circle-outline"
-             class = "mb-5 fill-height"
+             class = "submit-button mb-5 fill-height"
              v-bind="props"
              :disabled="disabled"
              @click="clickHandler"

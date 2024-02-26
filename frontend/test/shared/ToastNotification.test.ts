@@ -1,6 +1,6 @@
+import {mount} from "@vue/test-utils";
 import ToastNotification from "@/shared/notifications/ToastNotification.vue";
 import {Toast, toasts, ToastType} from "@/shared/composables/toastService";
-import {mount} from "@vue/test-utils";
 
 describe('ToastNotification.vue', () => {
 

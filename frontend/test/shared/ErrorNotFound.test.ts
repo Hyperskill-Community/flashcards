@@ -1,8 +1,8 @@
+import {mount} from '@vue/test-utils';
+import {mountOptions} from "../util/useTestPlugins.ts";
 import ErrorNotFound from '@/shared/pages/ErrorNotFound.vue';
 import MainLayout from "@/layouts/MainLayout.vue";
-import {mount} from '@vue/test-utils';
 import router from "@/router";
-import {mountOptions} from "../util/useTestPlugins.ts";
 
 describe('ErrorNotFound.vue', () => {
   it('renders 404 message', () => {
@@ -22,7 +22,7 @@ describe('ErrorNotFound.vue', () => {
 
   it('redirects to home page when "Go Home" button is clicked', async () => {
     const wrapper = mount(ErrorNotFound, mountOptions);
-    await wrapper.findComponent({ name: 'VBtn' }).trigger('click');
+    await wrapper.findComponent('.v-btn').trigger('click');
     expect(wrapper.vm.$route.path).toBe('/');
   });
 

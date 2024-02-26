@@ -12,6 +12,3 @@
 import ToastLayer from "@/layouts/ToastLayer.vue";
 import SideNavigation from "@/layouts/SideNavigation.vue";
 </script>
-
-<style scoped lang="scss">
-</style>

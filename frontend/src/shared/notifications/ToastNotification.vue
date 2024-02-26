@@ -1,7 +1,10 @@
 <template>
   <div class="notification">
     <div v-text="notification.header" :class="notification.type" class="pa-3 font-weight-bold"/>
-    <div v-html="notification.message" class="pa-3"/>
+    <div class="pa-3">
+      <b>{{ notification.title}}</b><br>
+      {{notification.message}}
+    </div>
   </div>
 </template>
 

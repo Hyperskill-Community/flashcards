@@ -3,7 +3,7 @@
     <template v-slot:activator="{ props }">
       <v-btn variant="text"
              icon="mdi-open-in-app"
-             class = "ms-n6"
+             class = "open-button ms-n6"
              v-bind="props"
              :disabled="disabled"
              @click="clickHandler"

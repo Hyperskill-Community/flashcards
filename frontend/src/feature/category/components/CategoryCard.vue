@@ -14,7 +14,7 @@
                            :clickHandler="deleteCategory"/>
       </div>
     </v-card-title>
-    <v-card-text v-text="category.description || 'No description given'"/>
+    <v-card-text v-text="category.description?? 'No description given'"/>
     <div class="px-4">
       <v-switch
         :model-value="expanded"
@@ -75,10 +75,7 @@ const updateRequest = ref({name: "", description: ""});
 
 const toggleColor = computed(() => props.expanded ? '#43a047' : '#eeeeee');
 
-const resetRequests = () => editRequested.value = false;
-
 const openCategory = () => {
-  resetRequests();
   router.push(`/category/${props.category.id}`);
 };
 
@@ -88,12 +85,10 @@ const performUpdate = async () => {
 };
 
 const editCategory = () => {
-  resetRequests();
-  editRequested.value = true;
+  editRequested.value = !editRequested.value;
 };
 
 const deleteCategory = async () => {
-  resetRequests();
   await categoryService().deleteCategory(props.category.id);
   emit('reload', true);
 };
