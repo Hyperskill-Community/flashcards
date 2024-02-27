@@ -64,14 +64,14 @@ const addRequested = ref(false);
 const newCategory = ref<CategoryRequest>({} as CategoryRequest);
 const pageRef = ref({page: 1, loadNext: false});
 
-const totalPages = computed(() => pages(props.total));
+const totalPages = computed(() => pageCount(props.total));
 
 watch(() => props.categories.length, () => {
   if (pageRef.value.loadNext) {
     pageRef.value.loadNext = false;
     pageRef.value.page++;
   } else {
-    pageRef.value.page = Math.min(pageRef.value.page, pages(props.categories.length));
+    pageRef.value.page = Math.min(pageRef.value.page, pageCount(props.categories.length));
   }
 });
 
@@ -95,7 +95,7 @@ const pageForward = async (page: number) => {
   }
 };
 
-const pages = (count: number) => {
-  return Math.floor(count / props.itemsPerPage) + (count % props.itemsPerPage === 0 ? 0 : 1);
+const pageCount = (itemCount: number) => {
+  return Math.ceil(itemCount / props.itemsPerPage);
 };
 </script>
