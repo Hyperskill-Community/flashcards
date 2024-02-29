@@ -43,7 +43,6 @@ const fetchNextPageFromServer = async (page: number) => {
 
 const loadCount = async (id: string) => {
   const count = await useCardsService().getCardCount(id);
-  const index = items.value.findIndex((item) => item.category.id === id);
-  items.value[index].category.numberOfCards = count;
+  items.value.filter((item) => item.category.id === id).forEach((item) => item.category.numberOfCards = count);
 };
 </script>

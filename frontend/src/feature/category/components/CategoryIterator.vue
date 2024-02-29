@@ -67,10 +67,10 @@ const pageRef = ref({page: 1, loadNext: false});
 const totalPages = computed(() => pageCount(props.total));
 
 watch(() => props.categories.length, () => {
-  if (pageRef.value.loadNext) {
+  if (pageRef.value.loadNext) { // if loadNext set, we just loaded new items and can now jump to requested page
     pageRef.value.loadNext = false;
     pageRef.value.page++;
-  } else {
+  } else { // after reload we might have less items, so we need to adjust the page number to the highest available
     pageRef.value.page = Math.min(pageRef.value.page, pageCount(props.categories.length));
   }
 });
@@ -88,13 +88,16 @@ const postNewCategory = async () => {
 
 const pageForward = async (page: number) => {
   if (page * props.itemsPerPage == props.categories.length) {
-    emit('loadNext', page / 5);
+    // if we are at the end of the list, emit loadNext to load next page from server,
+    // increment pageRef.page is deferred until data is loaded
+    emit('loadNext', page * props.itemsPerPage / 20); // 20 pages in server response
     pageRef.value.loadNext = true;
   } else {
     pageRef.value.page++;
   }
 };
 
+// calcs amount of pages needed for given amount of items
 const pageCount = (itemCount: number) => {
   return Math.ceil(itemCount / props.itemsPerPage);
 };

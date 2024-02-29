@@ -23,7 +23,7 @@
         :disabled="editRequested"
         density="compact"
         inset
-        @click="() => emit('update:expanded', !expanded)"
+        @click="expand"
       />
     </div>
     <v-divider/>
@@ -51,7 +51,7 @@
 import {Category} from "@/feature/category/model/category";
 import {getAccess, getDeleteUri, getPutUri} from "@/feature/category/composables/useCategory";
 import {useRouter} from "vue-router";
-import {computed, ref, watch} from "vue";
+import {computed, ref} from "vue";
 import categoryService from "@/feature/category/composables/useCategoriesService";
 import OpenMdiButton from "@/shared/components/OpenMdiButton.vue";
 import DeleteMdiButton from "@/shared/components/DeleteMdiButton.vue";
@@ -69,9 +69,6 @@ const emit = defineEmits<{
   'reload': [val: boolean]
 }>();
 
-watch(() => props.expanded,
-  (value) => value && emit('loadCount', props.category.id));
-
 const router = useRouter();
 const putUri = getPutUri(props.category);
 const deleteUri = getDeleteUri(props.category);
@@ -79,6 +76,12 @@ const editRequested = ref(false);
 const updateRequest = ref({name: "", description: ""});
 
 const toggleColor = computed(() => props.expanded ? '#43a047' : '#eeeeee');
+
+const expand = () => {
+  // if props.expanded is false, emit loadCount to load card count from server
+  props.expanded || emit('loadCount', props.category.id);
+  emit('update:expanded', !props.expanded);
+};
 
 const openCategory = () => {
   router.push(`/category/${props.category.id}`);
