@@ -25,17 +25,8 @@
       </v-row>
     </template>
     <template v-slot:footer="{ page }">
-      <v-container v-if="totalPages > 1" class="d-flex align-center justify-center pa-4">
-        <v-btn :disabled="page === 1" icon="mdi-chevron-left" density="comfortable" variant="tonal" rounded
-               @click="() => pageRef.page--"
-        ></v-btn>
-        <div class="mx-2 text-caption">
-          Page {{ page }} of {{ totalPages }}
-        </div>
-        <v-btn :disabled="page >= totalPages" icon="mdi-chevron-right" density="comfortable" variant="tonal" rounded
-               @click="() => pageForward(page)"
-        ></v-btn>
-      </v-container>
+      <pagination-footer :total-pages="totalPages" :page="page"
+                         @update:page="(newVal) => paginate(newVal)"/>
     </template>
   </v-data-iterator>
 </template>
@@ -47,6 +38,7 @@ import AddMdiButton from "@/shared/components/AddMdiButton.vue";
 import {computed, ref, watch} from "vue";
 import SubmitMdiButton from "@/shared/components/SubmitMdiButton.vue";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService";
+import PaginationFooter from "@/shared/components/PaginationFooter.vue";
 
 const props = defineProps<({
   categories: { category: Category, expanded: boolean }[],
@@ -70,10 +62,21 @@ watch(() => props.categories.length, () => {
   if (pageRef.value.loadNext) { // if loadNext set, we just loaded new items and can now jump to requested page
     pageRef.value.loadNext = false;
     pageRef.value.page++;
-  } else { // after reload we might have less items, so we need to adjust the page number to the highest available
+  } else { // after reload, we may have fewer items, so we need to adjust the page number to the highest available
     pageRef.value.page = Math.min(pageRef.value.page, pageCount(props.categories.length));
   }
 });
+
+const paginate = (page: number) => {
+  if (page * props.itemsPerPage == props.categories.length) {
+    // if we are at the end of the list, emit loadNext to load next page from server,
+    // increment pageRef.page is deferred until data is loaded
+    emit('loadNext', page * props.itemsPerPage / 20); // 20 pages in server response
+    pageRef.value.loadNext = true;
+  } else {
+    pageRef.value.page = page;
+  }
+};
 
 const addCategory = () => {
   newCategory.value = {name: "", description: ""};
@@ -84,17 +87,6 @@ const postNewCategory = async () => {
   addRequested.value = false;
   await useCategoriesService().postNewCategory(newCategory.value);
   emit('reload', true);
-};
-
-const pageForward = async (page: number) => {
-  if (page * props.itemsPerPage == props.categories.length) {
-    // if we are at the end of the list, emit loadNext to load next page from server,
-    // increment pageRef.page is deferred until data is loaded
-    emit('loadNext', page * props.itemsPerPage / 20); // 20 pages in server response
-    pageRef.value.loadNext = true;
-  } else {
-    pageRef.value.page++;
-  }
 };
 
 // calcs amount of pages needed for given amount of items
