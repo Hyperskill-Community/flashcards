@@ -67,14 +67,14 @@ watch(() => props.categories.length, () => {
   }
 });
 
-const paginate = (page: number) => {
-  if (page * props.itemsPerPage == props.categories.length) {
+const paginate = (pageRequested: number) => {
+  if ((pageRequested - 1) * props.itemsPerPage == props.categories.length) {
     // if we are at the end of the list, emit loadNext to load next page from server,
     // increment pageRef.page is deferred until data is loaded
-    emit('loadNext', page * props.itemsPerPage / 20); // 20 pages in server response
+    emit('loadNext', pageRef.value.page * props.itemsPerPage / 20); // 20 pages in server response
     pageRef.value.loadNext = true;
   } else {
-    pageRef.value.page = page;
+    pageRef.value.page = pageRequested;
   }
 };
 
