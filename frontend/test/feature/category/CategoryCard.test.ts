@@ -94,7 +94,7 @@ describe('CategoryCard', () => {
     await app.findComponent('.open-button').trigger('click');
     expect(router.push).toHaveBeenCalledWith(`/category/${category.id}`);
     await router.push(`/category/${category.id}`); // since we mocked the service, we need to manually navigate
-    expect(app.findComponent({name: 'CardOverviewPage'}).exists()).toBeTruthy();
+    expect(app.findComponent({name: 'CardsPage'}).exists()).toBeTruthy();
     await flushPromises(); // wait for getCategoryById to resolve
     expect(app.text()).toContain(category.name); // now the name should be visible
   });
