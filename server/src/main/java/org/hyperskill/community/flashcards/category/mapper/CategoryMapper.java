@@ -46,9 +46,9 @@ public class CategoryMapper {
     public CategoryPageResponse categoryPageToCategoryPageResponse(Page<Category> page) {
         return new CategoryPageResponse(
                 page.isFirst(),
-                page.isLast(),
                 page.getNumber(),
                 page.getTotalPages(),
+                page.getTotalElements(),
                 page.stream().map(this::categoryToCategoryDto).toList()
         );
     }

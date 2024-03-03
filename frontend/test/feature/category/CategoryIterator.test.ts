@@ -37,7 +37,7 @@ describe('CategoryIterator', () => {
   it('should contain as many CategoryCards as entries in prop', async () => {
     const wrapper = mount(CategoryIterator, {
       ...mountOptions,
-      props: {categories: categories}
+      props: {categories: categories, itemsPerPage: 5, total: 2}
     });
     expect(wrapper.findAllComponents({name: 'CategoryCard'})).toHaveLength(2);
   });
@@ -45,7 +45,7 @@ describe('CategoryIterator', () => {
   it('should open and close add form on add button click', async () => {
     const wrapper = mount(CategoryIterator, {
       ...mountOptions,
-      props: {categories: categories}
+      props: {categories: categories, itemsPerPage: 5, total: 2}
     });
     expect(wrapper.findComponent('.v-form').exists()).toBe(false);
     await wrapper.findComponent('.add-button').trigger('click');
@@ -57,7 +57,7 @@ describe('CategoryIterator', () => {
   it('should post new category on form submit', async () => {
     const wrapper = mount(CategoryIterator, {
       ...mountOptions,
-      props: {categories: categories}
+      props: {categories: categories, itemsPerPage: 5, total: 2}
     });
     const newCategory = {
       name: 'New Category',
@@ -70,11 +70,11 @@ describe('CategoryIterator', () => {
     await wrapper.findComponent('.submit-button').trigger('click');
     expect(useCategoriesService().postNewCategory).toHaveBeenCalledWith(newCategory);
   });
-
+2;
   it('should not post new category on form submit if name is empty', async () => {
     const wrapper = mount(CategoryIterator, {
       ...mountOptions,
-      props: {categories: categories}
+      props: {categories: categories, itemsPerPage: 5, total: 2}
     });
     await wrapper.findComponent('.add-button').trigger('click');
     await wrapper.findAllComponents('.v-text-field')?.at(1)?.setValue('New Description');
@@ -86,7 +86,7 @@ describe('CategoryIterator', () => {
   it('should fire reload event after post', async () => {
     const wrapper = mount(CategoryIterator, {
       ...mountOptions,
-      props: {categories: categories}
+      props: {categories: categories, itemsPerPage: 5, total: 2}
     });
     await wrapper.findComponent('.add-button').trigger('click');
     await wrapper.findAllComponents('.v-text-field')?.at(0)?.setValue('New Category');

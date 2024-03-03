@@ -2,7 +2,8 @@
   <v-container>
     <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" fill-height color="containerBackground">
       <v-card-title v-text="'Your accessible categories'" class="text-center text-h4"/>
-      <category-iterator :categories="items" @reload="fetchCategories"/>
+      <category-iterator :categories="items" :items-per-page="4" :total="totalItems" @reload="fetchCategories"
+      @loadNext="(page) => fetchNextPageFromServer(page)" @loadCount="(id) => loadCount(id)"/>
     </v-card>
   </v-container>
 </template>
@@ -17,15 +18,31 @@ import useCardsService from "@/feature/cards/composables/useCardsService";
 const items = ref([] as
   { category: Category, expanded: boolean }[]
 );
+const totalItems = ref(0);
 
 onMounted(async () => fetchCategories());
 
 const fetchCategories = async () => {
-  items.value = [];
-  const categories = await useCategoriesService().getCategories();
-  for (const category of categories) {
-    items.value.push({category: category, expanded: false});
-    category.numberOfCards = await useCardsService().getCardCount(category.id);
+  const newItems = [];
+  const page = await useCategoriesService().getCategories();
+  totalItems.value = page.totalElements;
+  for (const category of page.categories) {
+    newItems.push({category: category, expanded: false});
   }
+  items.value = newItems;
+};
+
+const fetchNextPageFromServer = async (page: number) => {
+  const pageRes = await useCategoriesService().getCategories(page);
+  const newItems = [];
+  for (const category of pageRes.categories) {
+    newItems.push({category: category, expanded: false});
+  }
+  items.value = items.value.concat(newItems);
+};
+
+const loadCount = async (id: string) => {
+  const count = await useCardsService().getCardCount(id);
+  items.value.filter((item) => item.category.id === id).forEach((item) => item.category.numberOfCards = count);
 };
 </script>

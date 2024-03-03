@@ -98,9 +98,9 @@ class CardMapperTest {
 
     static Stream<Arguments> cardItemProvider() {
         return Stream.of(
-                Arguments.of(CARDS.getFirst(), new CardItemProjection("1", "title", CardType.QNA)),
-                Arguments.of(CARDS.get(1), new CardItemProjection("2", "another title", CardType.SCQ)),
-                Arguments.of(CARDS.getLast(), new CardItemProjection("12345", "multi", CardType.MCQ))
+                Arguments.of(CARDS.getFirst(), new CardItemProjection("1", "question", CardType.QNA)),
+                Arguments.of(CARDS.get(1), new CardItemProjection("2", "question2", CardType.SCQ)),
+                Arguments.of(CARDS.getLast(), new CardItemProjection("12345", "question3", CardType.MCQ))
         );
     }
 

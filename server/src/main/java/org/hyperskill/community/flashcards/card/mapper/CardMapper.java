@@ -24,7 +24,7 @@ import java.util.Set;
 public class CardMapper {
 
     public CardItemProjection map(Card card) {
-        return new CardItemProjection(card.id(), card.title(), CardType.fromCard(card));
+        return new CardItemProjection(card.id(), card.question(), CardType.fromCard(card));
     }
 
     public CardResponse map(Card card, String categoryId) {

@@ -14,18 +14,27 @@
                            :clickHandler="deleteCategory"/>
       </div>
     </v-card-title>
-    <v-card-text v-text="category.description?? 'No description given'"/>
+    <v-card-text v-text="category.description || 'No description given'"/>
     <div class="px-4">
       <v-switch
         :model-value="expanded"
         :label="`Show details`"
         :color="toggleColor"
+        :disabled="editRequested"
         density="compact"
         inset
-        @click="() => emit('update:expanded', !expanded)"
+        @click="expand"
       />
     </div>
     <v-divider/>
+    <v-container v-if="editRequested">
+      <v-form @submit.prevent class="d-flex justify-space-between align-center">
+        <v-text-field density="compact" v-model="updateRequest.name" label="Category name"/>
+        <v-text-field density="compact" v-model="updateRequest.description" label="Description"/>
+        <submit-mdi-button :disabled="!updateRequest.name && ! updateRequest.description"
+                           :clickHandler="performUpdate"/>
+      </v-form>
+    </v-container>
     <v-expand-transition>
       <div v-if="expanded && !editRequested">
         <v-list density="compact" :lines="false">
@@ -34,14 +43,6 @@
           <v-list-item :title="`🧲 Id: ${category.id}`"/>
         </v-list>
       </div>
-      <v-container v-if="editRequested">
-        <v-form @submit.prevent class="d-flex justify-space-between align-center">
-          <v-text-field density="compact" v-model="updateRequest.name" label="Category name" />
-          <v-text-field density="compact" v-model="updateRequest.description" label="Description" />
-          <submit-mdi-button :disabled="!updateRequest.name && ! updateRequest.description"
-                             :clickHandler="performUpdate"/>
-        </v-form>
-      </v-container>
     </v-expand-transition>
   </v-card>
 </template>
@@ -63,7 +64,8 @@ const props = defineProps<({
 })>();
 
 const emit = defineEmits<{
-  'update:expanded': [val: boolean]
+  'update:expanded': [val: boolean],
+  'loadCount': [categoryId: string],
   'reload': [val: boolean]
 }>();
 
@@ -74,6 +76,12 @@ const editRequested = ref(false);
 const updateRequest = ref({name: "", description: ""});
 
 const toggleColor = computed(() => props.expanded ? '#43a047' : '#eeeeee');
+
+const expand = () => {
+  // if props.expanded is false, emit loadCount to load card count from server
+  props.expanded || emit('loadCount', props.category.id);
+  emit('update:expanded', !props.expanded);
+};
 
 const openCategory = () => {
   router.push(`/category/${props.category.id}`);

@@ -5,12 +5,13 @@
                      empty-text="No more cards">
     <template v-for="(item, index) in items" :key="item">
       <div
-        :class="['pa-2', 'd-flex', 'justify-space-between', 'align-center', {'bg-grey-lighten-2': index % 2 === 0}]">
+        :class="['cursor-pointer', 'pa-3', 'd-flex', 'justify-space-between', 'align-center',
+            'v-col-sm-12', {'bg-grey-lighten-2': index % 2 === 0}]"
+        @click="() => openCard(item.id)">
         <v-avatar v-text="`${index + 1}`" color="primary" size="large" class="mr-5"/>
-        {{ item.title }}
+        {{ item.question }}
         <v-spacer/>
         <v-avatar v-text="item.type.toUpperCase()" color="primary" size="large" class="mr-10"/>
-        <open-mdi-button :clickHandler="() => openCard(item.id)" tooltip-text="Open Card Details"/>
       </div>
     </template>
   </v-infinite-scroll>
@@ -20,7 +21,6 @@
 import {ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import {CardItem} from "@/feature/cards/model/card";
-import OpenMdiButton from "@/shared/components/OpenMdiButton.vue";
 import useCardsService from "@/feature/cards/composables/useCardsService";
 
 const props = defineProps<({

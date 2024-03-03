@@ -31,6 +31,7 @@ describe('useCategoriesService', () => {
   const page : CategoryPage = {
     categories: [readCat, writeCat],
     currentPage: 1,
+    totalElements: 2,
     isLast: true
   };
 
@@ -40,8 +41,8 @@ describe('useCategoriesService', () => {
 
   it('getCategories should return categories in page', async () => {
     vi.mocked(useApi().get).mockResolvedValue(page);
-    await expect(useCategoriesService().getCategories()).resolves.toEqual(page.categories);
-    expect(useApi().get).toHaveBeenCalledWith('/categories');
+    await expect(useCategoriesService().getCategories()).resolves.toEqual(page);
+    expect(useApi().get).toHaveBeenCalledWith('/categories', {page: '0'});
   });
 
   it('getCategoryById should return category by id', async () => {
