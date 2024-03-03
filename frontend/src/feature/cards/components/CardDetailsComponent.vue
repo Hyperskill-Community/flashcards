@@ -1,9 +1,9 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <v-row justify="center">
-      <v-col cols="12" md="8" lg="6">
+      <v-col cols="12" md="8" lg="8">
         <v-card color="secondary" class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between">
-          <v-card-title v-text="card.title"/>
+          <v-card-title v-text="card.title" class="align-self-center"/>
           <v-card-subtitle class="pa-2 ma-2 d-flex justify-space-between">
             <v-card-text v-text="'Tags: '"/>
             <v-list class="ma-0 pa-0 d-flex flex-row flex-wrap">
@@ -11,8 +11,8 @@
             </v-list>
           </v-card-subtitle>
 
-          <v-card-text>
-            {{ card.question }}
+          <v-card-text >
+            <h4 class="pa-2 ma-2">{{ card.question }}</h4>
             <v-container class="pa-0 mt-2">
               <v-list v-if="card.type !== CardType.SIMPLEQA" class="pa-0 d-flex flex-column flex-wrap">
                 <v-list-item v-for="(option, index) in card.options" :key="option"
@@ -31,7 +31,7 @@
           </v-card-text>
 
           <v-container>
-            <v-row class="pa-0 d-flex w-100 justify-space-between align-center">
+            <v-row class="pa-2 d-flex justify-space-between align-center">
               <v-btn @click="highlightCorrectAnswers()" :disabled="!selected && !providedAnswer"
                      prepend-icon="mdi-check-circle" color="green" variant="text">
                 Check Answer
@@ -41,7 +41,7 @@
           </v-container>
 
           <v-container>
-            <v-card-actions class="pa-0 ma-0">
+            <v-card-actions class="pa-2 ma-0">
               <edit-mdi-button tooltip-text="Edit Card - not implemented"/>
               <delete-mdi-button tooltip-text="Delete Card - not implemented"/>
               <v-spacer/>

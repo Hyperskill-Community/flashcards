@@ -4,7 +4,7 @@
       <v-card-title v-text="`Cards in ${categoryName}`" class="text-center text-h4"/>
       <v-form @submit.prevent class="d-flex justify-space-between align-center">
         <v-text-field v-model="filter.input"
-                      label="Filter on title"
+                      label="Filter on title, tags and question"
                       prepend-inner-icon="mdi-magnify"/>
         <submit-mdi-button :clickHandler="filterOnTitle" :disabled="!filter.input"/>
       </v-form>

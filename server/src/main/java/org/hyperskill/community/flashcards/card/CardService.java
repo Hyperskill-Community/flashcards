@@ -23,9 +23,12 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 import java.util.Optional;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Service
 @Slf4j
@@ -50,10 +53,15 @@ public class CardService {
         return new PageImpl<>(cards, pageRequest, count);
     }
 
-    private Query createFilterQuery(String titleFilter) {
+    private Query createFilterQuery(String filter) {
         var query = new Query();
-        if (Objects.nonNull(titleFilter)) {
-            var criteria = Criteria.where("title").regex(".*" + titleFilter + ".*", "i");
+        if (StringUtils.hasText(filter)) {
+            var pattern = ".*" + filter + ".*";
+            var criteria = new Criteria().orOperator(
+                    where("title").regex(pattern, "i"),
+                    where("tags").regex(pattern, "i"),
+                    where("question").regex(pattern, "i")
+            );
             query.addCriteria(criteria);
         }
         return query;
@@ -84,7 +92,7 @@ public class CardService {
         Objects.requireNonNull(cardId, "Card ID cannot be null");
 
         var collection = getCollectionName(username, categoryId, "d");
-        var query = Query.query(Criteria.where(Card.ID_KEY).is(cardId));
+        var query = Query.query(where(Card.ID_KEY).is(cardId));
         return mongoTemplate.remove(query, collection).getDeletedCount();
     }
 
@@ -98,7 +106,7 @@ public class CardService {
             throw new IllegalModificationException();
         }
 
-        var query = Query.query(Criteria.where(Card.ID_KEY).is(cardId));
+        var query = Query.query(where(Card.ID_KEY).is(cardId));
         mongoTemplate.updateFirst(query, updateFrom(request), category.name());
         var updatedCard = Optional.ofNullable(mongoTemplate.findOne(query, Card.class, category.name()))
                 .orElseThrow(ResourceNotFoundException::new);

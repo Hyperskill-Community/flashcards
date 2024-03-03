@@ -6,7 +6,7 @@ export enum CardType {
 
 export type CardItem = {
   id: string,
-  title: string,
+  question: string,
   type: CardType,
 };
 

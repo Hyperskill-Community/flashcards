@@ -108,7 +108,7 @@ class CardServiceIT {
         var response = service.getCardsByCategory("user1", categoryId, 0, "1");
         var sortedCards = Arrays.stream(cards)
                 .sorted(Comparator.comparing(Card::title))
-                .filter(card -> card.title().contains("1"))
+                .filter(card -> card.title().contains("1") || card.tags().contains("1") || card.question().contains("1"))
                 .map(card -> card.setPermissions("r"))
                 .toList();
         assertThat(response.get())
