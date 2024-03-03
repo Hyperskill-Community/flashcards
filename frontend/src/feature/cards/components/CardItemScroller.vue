@@ -7,7 +7,7 @@
       <div
         :class="['cursor-pointer', 'pa-3', 'd-flex', 'justify-space-between', 'align-center',
             'v-col-sm-12', {'bg-grey-lighten-2': index % 2 === 0}]"
-        @click="() => openCard(item.id)">
+        @click="() => emit('openCard', item.id)">
         <v-avatar v-text="`${index + 1}`" color="primary" size="large" class="mr-5"/>
         {{ item.question }}
         <v-spacer/>
@@ -19,35 +19,31 @@
 
 <script setup lang="ts">
 import {ref, watch} from "vue";
-import {useRouter} from "vue-router";
 import {CardItem} from "@/feature/cards/model/card";
 import useCardsService from "@/feature/cards/composables/useCardsService";
 
 const props = defineProps<({
   categoryId: string,
-  titleFilter: string,
+  filter: string,
+})>();
+
+const emit = defineEmits<({
+  'openCard': [val: string],
 })>();
 
 const items = ref([] as CardItem[]);
-const router = useRouter();
 const pagePointer = ref({current: 0, isLast: false});
 
-watch(() => props.titleFilter, async (newVal, oldVal) => {
-  if (newVal !== oldVal) {
-    pagePointer.value = {current: 0, isLast: false}; // reset the page pointer
-    items.value = []; // clear the items array
-    await fetchCardsPage({done: () => console.log("Manual reload after filter change")});
-  }
-});
-
-const openCard = (id: string) => router.push(`/card/${props.categoryId}/${id}`);
+watch(() => props.filter,
+  async (newVal, oldVal) => newVal !== oldVal && await loadFiltered()
+);
 
 const fetchCardsPage = async ({done}: { done: Function }) => {
   if (pagePointer.value.isLast) {
     done('empty');
     return;
   }
-  const cardResponse = await useCardsService().getCards(props.categoryId, props.titleFilter, pagePointer.value.current);
+  const cardResponse = await useCardsService().getCards(props.categoryId, props.filter, pagePointer.value.current);
   pagePointer.value.current = cardResponse.currentPage + 1;
   pagePointer.value.isLast = cardResponse.isLast;
   for (const cardItem of cardResponse.cards) {
@@ -57,5 +53,11 @@ const fetchCardsPage = async ({done}: { done: Function }) => {
     items.value.push(cardItem);
   }
   done('ok');
+};
+
+const loadFiltered = async () => {
+  pagePointer.value = {current: 0, isLast: false}; // reset the page pointer
+  items.value = []; // clear the items array
+  await fetchCardsPage({done: () => {}}); // trigger new load with filter
 };
 </script>

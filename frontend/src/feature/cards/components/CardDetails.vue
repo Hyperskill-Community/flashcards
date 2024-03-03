@@ -46,7 +46,7 @@
               <delete-mdi-button tooltip-text="Delete Card - not implemented"/>
               <v-spacer/>
               <back-mdi-button tooltip-text="Back to Category"
-                               :click-handler="$router.back"/>
+                               :click-handler="() => emit('close', true)"/>
             </v-card-actions>
           </v-container>
         </v-card>
@@ -61,15 +61,19 @@ import EditMdiButton from "@/shared/components/EditMdiButton.vue";
 import DeleteMdiButton from "@/shared/components/DeleteMdiButton.vue";
 import {Card, CardType} from "@/feature/cards/model/card";
 import BackMdiButton from "@/shared/components/BackMdiButton.vue";
-import {ref} from "vue";
+import {ref, shallowRef} from "vue";
 
 const props = defineProps<({
   card: Card,
 })>();
 
-const answerShown = ref(false);
+const emit = defineEmits<({
+  'close': [val: boolean],
+})>();
+
+const answerShown = shallowRef(false);
 const selected = ref([] as string[]);
-const providedAnswer = ref('');
+const providedAnswer = shallowRef('');
 
 const parseOption = (index: number, option: string) => `${String.fromCharCode(65 + index)}. ${option}`;
 const isCorrect = (option: string) => getCorrectAnswer()?.includes(option);

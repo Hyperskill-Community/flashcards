@@ -13,13 +13,7 @@ const routes = [
   {
     path: '/category/:categoryId',
     name: 'cards-by-category',
-    component: () => import("@/feature/cards/pages/CardOverviewPage.vue"),
-    props: true,
-  },
-  {
-    path: '/card/:categoryId/:cardId',
-    name: 'card-details',
-    component: () => import("@/feature/cards/pages/CardDetailsPage.vue"),
+    component: () => import("@/feature/cards/pages/CardsPage.vue"),
     props: true,
   },
   {
