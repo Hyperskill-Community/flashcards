@@ -84,7 +84,7 @@ const expand = () => {
 };
 
 const openCategory = () => {
-  router.push(`/category/${props.category.id}`);
+  router.push(`/category/${props.category.id}?name=${props.category.name}`);
 };
 
 const performUpdate = async () => {
