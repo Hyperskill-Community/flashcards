@@ -25,6 +25,7 @@ import useCardsService from "@/feature/cards/composables/useCardsService";
 const props = defineProps<({
   categoryId: string,
   filter: string,
+  reload: boolean,
 })>();
 
 const emit = defineEmits<({
@@ -35,6 +36,7 @@ const items = ref<CardItem[]>([]);
 const pagePointer = ref({current: 0, isLast: false});
 
 watch(() => props.filter, async () => await loadFiltered());
+watch(() => props.reload, async () => await loadFiltered());
 
 const fetchCardsPage = async ({done}: { done: Function }) => {
   if (pagePointer.value.isLast) {

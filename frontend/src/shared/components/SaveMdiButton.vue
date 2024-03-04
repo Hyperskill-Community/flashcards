@@ -2,9 +2,8 @@
   <v-tooltip :disabled="!tooltipText" :text="tooltipText" location="top">
     <template v-slot:activator="{ props }">
       <v-btn variant="text"
-             type="submit"
-             icon="mdi-send-circle-outline"
-             class = "submit-button mb-5 fill-height"
+             icon="mdi-content-save-outline"
+             class = "add-button ms-n6"
              v-bind="props"
              :disabled="disabled"
              @click="clickHandler"
@@ -22,7 +21,7 @@ defineProps({
   },
   tooltipText: {
     type: String,
-    default: "Submit"
+    default: "Save"
   }
 });
 </script>

@@ -18,7 +18,7 @@ const useCategoriesService = () => {
   };
 
   const putCategory = async (id: string, data: CategoryRequest)  => {
-    return await useApi().put(`${ENDPOINT}/${id}`, data, `Category ${data.name} successfully updated!`);
+    return await useApi().put(`${ENDPOINT}/${id}`, data, {},`Category ${data.name} successfully updated!`);
   };
 
   const deleteCategory = async (id: string)  => {

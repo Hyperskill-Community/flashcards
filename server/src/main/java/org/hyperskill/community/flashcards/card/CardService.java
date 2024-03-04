@@ -43,7 +43,7 @@ public class CardService {
         Objects.requireNonNull(categoryId, "Category ID cannot be null");
 
         final var category = categoryService.findById(username, categoryId);
-        var pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by("title"));
+        var pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by("question"));
         var query = createFilterQuery(titleFilter);
         var count = mongoTemplate.count(query, category.name());
         var cards = mongoTemplate.find(query.with(pageRequest), Card.class, category.name());

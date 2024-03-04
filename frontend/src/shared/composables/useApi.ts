@@ -45,10 +45,12 @@ const useApi = () => {
       }
     },
 
-    put: async <R>(url: string, requestData: R, successMessage?: string,
+    put: async <R>(url: string, requestData: R, query?: Record<string, string>, successMessage?: string,
                    errorMessage?: string, customError?: ErrorState) => {
+      const urlWithParams = query ?
+        `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}` : url;
       try {
-        const response = await apiClient.put(url, requestData);
+        const response = await apiClient.put(urlWithParams, requestData);
         if (response.status != 200) {
           useErrorService().handleAndNotify(
             `Error status code ${response.status}!`, errorMessage?? 'Failed to update');
