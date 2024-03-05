@@ -9,19 +9,21 @@
         <v-card-text>
           <v-row class="align-content-center">
             <v-col md="2" class="text-h6">Title:</v-col>
-            <v-text-field class="v-col-sm-10" density="compact" v-model="newCard.title"/>
+            <v-text-field clearable class="v-col-sm-10" density="compact" v-model="newCard.title"/>
             <v-col md="2" class="text-h6">Tags:</v-col>
             <v-col md="10">
               <div class="d-flex flex-wrap justify-sm-space-between ma-n3">
                 <v-col v-for="index in 4" :key="index" md="6">
-                  <v-text-field density="compact" v-model="newCard.tags![index - 1]"/>
+                  <v-text-field clearable density="compact"
+                                :disabled="indexEnabled(index)"
+                                v-model="newCard.tags[index - 1]"/>
                 </v-col>
               </div>
             </v-col>
             <v-col sm="2" class="text-h6">Question:</v-col>
-            <v-text-field class="v-col-sm-10" density="compact" v-model="newCard.question"/>
+            <v-text-field clearable class="v-col-sm-10" density="compact" v-model="newCard.question"/>
             <v-col sm="2" class="text-h6">Answer:</v-col>
-            <v-text-field class="v-col-sm-10" density="compact" v-model="newCard.answer"/>
+            <v-text-field clearable class="v-col-sm-10" density="compact" v-model="newCard.answer"/>
           </v-row>
         </v-card-text>
 
@@ -40,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import {Card, cloneQna} from "@/feature/cards/model/card";
+import {Card, clone} from "@/feature/cards/model/card";
 import BackMdiButton from "@/shared/components/BackMdiButton.vue";
 import {ref} from "vue";
 import SaveMdiButton from "@/shared/components/SaveMdiButton.vue";
@@ -55,10 +57,14 @@ const emit = defineEmits<({
   'update': [val: Card],
 })>();
 
-const newCard = ref<Card>(cloneQna(props.card));
+const newCard = ref<Card>(clone(props.card));
 
 const resetNewCard = () => {
-  newCard.value = cloneQna(props.card);
+  newCard.value = clone(props.card);
+};
+
+const indexEnabled = (index: number) => {
+  return index > 1 && newCard.value.tags.slice(index - 2, 4).every(tag => !tag);
 };
 
 </script>

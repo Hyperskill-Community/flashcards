@@ -13,13 +13,13 @@ export type CardItem = {
 export type Card = {
   id?: string,
   type: string,
+  tags: string[],
   question: string,
   title?: string,
   correctOption?: string,
   correctOptions?: string[],
   answer?: string,
   options?: string[],
-  tags: string[],
 };
 
 export type CardPage = {
@@ -28,13 +28,16 @@ export type CardPage = {
   isLast: boolean,
 };
 
-export const cloneQna = (qna: Card) : Card => {
+export const clone = (card: Card) : Card => {
   return {
-    title: qna.title,
-    question: qna.question,
+    title: card.title,
+    question: card.question,
     // copy from scq.tags array and fill up to 4 elements with empty strings
-    tags: qna.tags.concat(Array(4 - qna.tags.length).fill('')),
-    answer: qna.answer,
-    type: CardType.SIMPLEQA
+    tags: [...card.tags],
+    answer: card.answer,
+    options: card.options && [...card.options],
+    correctOption: card.correctOption,
+    correctOptions: card.correctOptions && [...card.correctOptions],
+    type: card.type
   };
 };
