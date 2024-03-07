@@ -8,24 +8,23 @@
 
         <v-card-text>
           <v-row class="align-content-center">
-            <v-col md="2" class="text-h6">Title:</v-col>
+            <v-col md="2" class="text-h6 mt-2">Title:</v-col>
             <v-text-field clearable @click:clear="newCard.title=''" v-model="newCard.title"
                           class="v-col-sm-10" density="compact"/>
-            <v-col md="2" class="text-h6">Tags:</v-col>
+            <v-col md="2" class="text-h6 mt-n2">Tags:</v-col>
             <v-col md="10">
               <div class="d-flex flex-wrap justify-sm-space-between ma-n3">
                 <v-col v-for="index in newCard.tags.length + 1" :key="index" md="6">
                   <v-text-field clearable density="compact" class="mt-n4 mb-n4"
-                                :disabled="indexEnabled(index)"
                                 @click:clear="shiftDown(index)"
                                 v-model="newCard.tags[index - 1]"/>
                 </v-col>
               </div>
             </v-col>
-            <v-col sm="2" class="text-h6">Question:</v-col>
+            <v-col sm="2" class="text-h6 mt-2">Question:</v-col>
             <v-text-field clearable @click:clear="newCard.question=''" v-model="newCard.question"
                           class="v-col-sm-10" density="compact" />
-            <v-col sm="2" class="text-h6">Answer:</v-col>
+            <v-col sm="2" class="text-h6 mt-n2">Answer:</v-col>
             <v-text-field clearable @click:clear="newCard.answer=''" v-model="newCard.answer"
                           class="v-col-sm-10 mt-n4 mb-n4" density="compact" />
           </v-row>
@@ -65,10 +64,6 @@ const newCard = ref<Card>(clone(props.card));
 
 const resetNewCard = () => {
   newCard.value = clone(props.card);
-};
-
-const indexEnabled = (index: number) => {
-  return index > 1 && newCard.value.tags.slice(index - 2, 4).every(tag => !tag);
 };
 
 const shiftDown = (index: number) => {
