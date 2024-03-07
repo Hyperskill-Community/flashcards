@@ -32,7 +32,6 @@ export const clone = (card: Card) : Card => {
   return {
     title: card.title,
     question: card.question,
-    // copy from scq.tags array and fill up to 4 elements with empty strings
     tags: [...card.tags],
     answer: card.answer,
     options: card.options && [...card.options],

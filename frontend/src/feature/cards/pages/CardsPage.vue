@@ -4,7 +4,8 @@
       <v-container :hidden="displayDetails || displayEdit">
         <v-card-title v-text="`Cards in ${categoryName}`" class="text-center text-h4"/>
         <v-form @submit.prevent="filter.set = filter.input">
-          <v-text-field clearable v-model="filter.input" label="Filter on title, tags and question" prepend-inner-icon="mdi-magnify"/>
+          <v-text-field clearable @click:clear="filter.input=''" v-model="filter.input"
+                        label="Filter on title, tags and question" prepend-inner-icon="mdi-magnify"/>
         </v-form>
         <card-item-scroller :categoryId="categoryId" :filter="filter.set" :reload="toggleReload" @openCard="openCard"/>
       </v-container>
@@ -44,7 +45,7 @@ const openCard = async (id: string) => {
 };
 
 const updateCard = async (newCard: Card) => {
-  newCard.tags = [...newCard.tags.filter(tag => !!tag)];
+  newCard.tags = newCard.tags.filter(tag => !!tag);
   await useCardsService().putCard(card.value.id!, props.categoryId, newCard);
   toggleReload.value = !toggleReload.value;
   displayEdit.value = false;
