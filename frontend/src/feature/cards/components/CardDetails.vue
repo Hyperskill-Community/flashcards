@@ -1,5 +1,4 @@
 <template>
-  <v-container>
     <v-row justify="center">
       <v-col cols="12" md="8" lg="8">
         <v-card color="secondary" class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between">
@@ -42,7 +41,8 @@
 
           <v-container>
             <v-card-actions class="pa-2 ma-0">
-              <edit-mdi-button tooltip-text="Edit Card - not implemented"/>
+              <edit-mdi-button tooltip-text="Edit Card"
+                               :click-handler="() => emit('edit', true)"/>
               <delete-mdi-button tooltip-text="Delete Card - not implemented"/>
               <v-spacer/>
               <back-mdi-button tooltip-text="Back to Category"
@@ -52,8 +52,6 @@
         </v-card>
       </v-col>
     </v-row>
-
-  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -69,6 +67,7 @@ const props = defineProps<({
 
 const emit = defineEmits<({
   'close': [val: boolean],
+  'edit': [val: boolean],
 })>();
 
 const answerShown = shallowRef(false);
@@ -99,11 +98,11 @@ const getCorrectAnswer = () => {
   const card = props.card;
   switch (card.type) {
     case CardType.SINGLE_CHOICE:
-      return card.options[Number(card.correctOption)];
+      return card.options![Number(card.correctOption)];
     case CardType.SIMPLEQA:
       return [card.answer];
     case CardType.MULTIPLE_CHOICE:
-      return card.correctOptions.map(i => card.options[Number(i)]).join(", ");
+      return card.correctOptions!.map(i => card.options![Number(i)]).join(", ");
   }
 };
 </script>

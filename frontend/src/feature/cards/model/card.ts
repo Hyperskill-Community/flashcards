@@ -11,19 +11,32 @@ export type CardItem = {
 };
 
 export type Card = {
-  id: string,
-  title: string,
-  correctOption: string,
-  correctOptions: string[],
-  answer: string,
-  question: string,
-  options: string[],
-  tags: string[],
+  id?: string,
   type: string,
+  tags: string[],
+  question: string,
+  title?: string,
+  correctOption?: string,
+  correctOptions?: string[],
+  answer?: string,
+  options?: string[],
 };
 
 export type CardPage = {
   cards: CardItem[],
   currentPage: number,
   isLast: boolean,
+};
+
+export const clone = (card: Card) : Card => {
+  return {
+    title: card.title,
+    question: card.question,
+    tags: [...card.tags],
+    answer: card.answer,
+    options: card.options && [...card.options],
+    correctOption: card.correctOption,
+    correctOptions: card.correctOptions && [...card.correctOptions],
+    type: card.type
+  };
 };

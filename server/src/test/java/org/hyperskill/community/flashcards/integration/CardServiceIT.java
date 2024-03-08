@@ -88,7 +88,7 @@ class CardServiceIT {
     void whenUserHasReadRight_getCardsNoFilterReturnsAllSorted() {
         var response = service.getCardsByCategory("user1", categoryId, 0, null);
         var sortedCards = Arrays.stream(cards)
-                .sorted(Comparator.comparing(Card::title))
+                .sorted(Comparator.comparing(Card::question))
                 .map(card -> card.setPermissions("r"))
                 .toList();
 
@@ -107,7 +107,7 @@ class CardServiceIT {
     void whenUserHasReadRight_getCardsFilteredReturnsFiltered() {
         var response = service.getCardsByCategory("user1", categoryId, 0, "1");
         var sortedCards = Arrays.stream(cards)
-                .sorted(Comparator.comparing(Card::title))
+                .sorted(Comparator.comparing(Card::question))
                 .filter(card -> card.title().contains("1") || card.tags().contains("1") || card.question().contains("1"))
                 .map(card -> card.setPermissions("r"))
                 .toList();
@@ -120,7 +120,7 @@ class CardServiceIT {
     @Test
     void whenManyCards_pagingWorks() {
         for (int i = 0; i < 20; i++) {
-            mongoTemplate.save(QuestionAndAnswer.builder().title("test" + i).build(), "cat");
+            mongoTemplate.save(QuestionAndAnswer.builder().question("test" + i).build(), "cat");
         }
         // 20 new and 6 previous - visible for user1
         var page0 = service.getCardsByCategory("user1", categoryId, 0, null);
@@ -128,7 +128,7 @@ class CardServiceIT {
         var page2 = service.getCardsByCategory("user1", categoryId, 2, null);
         assertEquals(26, page0.getTotalElements());
         assertEquals(2, page1.getTotalPages());
-        assertEquals("test9", page1.getContent().getLast().title());
+        assertEquals("test9", page1.getContent().getLast().question());
         assertTrue(page0.isFirst());
         assertTrue(page1.isLast());
         assertFalse(page0.isLast());

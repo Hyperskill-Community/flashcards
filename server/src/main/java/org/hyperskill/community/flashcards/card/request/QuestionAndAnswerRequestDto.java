@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Builder
 public record QuestionAndAnswerRequestDto(
-        @NotBlank String title,
+        String title,
         @NotNull Set<@NotBlank String>tags,
         @NotBlank String question,
         @NotBlank String answer

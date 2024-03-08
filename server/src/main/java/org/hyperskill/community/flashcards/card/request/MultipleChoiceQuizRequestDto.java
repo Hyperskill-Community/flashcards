@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Builder
 public record MultipleChoiceQuizRequestDto(
-        @NotBlank String title,
+        String title,
         @NotNull Set<@NotBlank String> tags,
         @NotBlank String question,
         @NotNull @NotEmpty List<@NotBlank String> options,

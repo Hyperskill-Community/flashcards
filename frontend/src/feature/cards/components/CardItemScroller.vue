@@ -25,18 +25,18 @@ import useCardsService from "@/feature/cards/composables/useCardsService";
 const props = defineProps<({
   categoryId: string,
   filter: string,
+  reload: boolean,
 })>();
 
 const emit = defineEmits<({
   'openCard': [val: string],
 })>();
 
-const items = ref([] as CardItem[]);
+const items = ref<CardItem[]>([]);
 const pagePointer = ref({current: 0, isLast: false});
 
-watch(() => props.filter,
-  async (newVal, oldVal) => newVal !== oldVal && await loadFiltered()
-);
+watch(() => props.filter, async () => await loadFiltered());
+watch(() => props.reload, async () => await loadFiltered());
 
 const fetchCardsPage = async ({done}: { done: Function }) => {
   if (pagePointer.value.isLast) {
@@ -46,12 +46,8 @@ const fetchCardsPage = async ({done}: { done: Function }) => {
   const cardResponse = await useCardsService().getCards(props.categoryId, props.filter, pagePointer.value.current);
   pagePointer.value.current = cardResponse.currentPage + 1;
   pagePointer.value.isLast = cardResponse.isLast;
-  for (const cardItem of cardResponse.cards) {
-    if (items.value.find((item) => item.id === cardItem.id)) {
-      continue; // necessary, since method is called manually and automatically after filter change
-    }
-    items.value.push(cardItem);
-  }
+  const newItems = cardResponse.cards.filter(cardItem => !items.value.some(item => item.id === cardItem.id));
+  items.value = [...items.value, ...newItems];
   done('ok');
 };
 

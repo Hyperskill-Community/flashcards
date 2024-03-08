@@ -61,7 +61,7 @@ describe('useCategoriesService', () => {
   it('putCategory should return category updated', async () => {
     const updatedCat = {name: 'Updated Category', description: 'Updated Description'};
     await useCategoriesService().putCategory('1', updatedCat);
-    expect(useApi().put).toHaveBeenCalledWith('/categories/1', updatedCat, 'Category Updated Category successfully updated!');
+    expect(useApi().put).toHaveBeenCalledWith('/categories/1', updatedCat, {}, 'Category Updated Category successfully updated!');
   });
 
   it('deleteCategory should return category removed', async () => {

@@ -32,6 +32,9 @@ class CardControllerValidationUnitTest {
 
     static Stream<Arguments> whenValidMcqRequest_NoError() {
         return Stream.of(
+                Arguments.of("title", ""),
+                Arguments.of("title", "  "),
+                Arguments.of("title", null),
                 Arguments.of("title", "a"),
                 Arguments.of("title", "a+-3§"),
                 Arguments.of("question", "a"),
@@ -54,9 +57,6 @@ class CardControllerValidationUnitTest {
 
     static Stream<Arguments> whenInvalidMcqRequest_ValidationError() {
         return Stream.of(
-                Arguments.of("title", ""),
-                Arguments.of("title", "  "),
-                Arguments.of("title", null),
                 Arguments.of("question", ""),
                 Arguments.of("question", "  "),
                 Arguments.of("question", null),
@@ -95,6 +95,9 @@ class CardControllerValidationUnitTest {
 
     static Stream<Arguments> whenValidScqRequest_NoError() {
         return Stream.of(
+                Arguments.of("title", ""),
+                Arguments.of("title", "  "),
+                Arguments.of("title", null),
                 Arguments.of("title", "a"),
                 Arguments.of("title", "a+-3§"),
                 Arguments.of("question", "a"),
@@ -116,9 +119,6 @@ class CardControllerValidationUnitTest {
 
     static Stream<Arguments> whenInvalidScqRequest_ValidationError() {
         return Stream.of(
-                Arguments.of("title", ""),
-                Arguments.of("title", "  "),
-                Arguments.of("title", null),
                 Arguments.of("question", ""),
                 Arguments.of("question", "  "),
                 Arguments.of("question", null),
@@ -155,6 +155,9 @@ class CardControllerValidationUnitTest {
 
     static Stream<Arguments> whenValidQnaRequest_NoError() {
         return Stream.of(
+                Arguments.of("title", ""),
+                Arguments.of("title", "  "),
+                Arguments.of("title", null),
                 Arguments.of("title", "a"),
                 Arguments.of("title", "a+-3§"),
                 Arguments.of("question", "a"),
@@ -174,9 +177,6 @@ class CardControllerValidationUnitTest {
 
     static Stream<Arguments> whenInvalidQnaRequest_ValidationError() {
         return Stream.of(
-                Arguments.of("title", ""),
-                Arguments.of("title", "  "),
-                Arguments.of("title", null),
                 Arguments.of("question", ""),
                 Arguments.of("question", "  "),
                 Arguments.of("question", null),

@@ -12,3 +12,6 @@ This section contains the overview pages of the Flashcards app.
 #### Cards overview
 ![Cards Overview Wiremock in Excalidraw](cards-overview.svg)
 
+#### Edit cards -  QNA (question and answer)
+![Edit cards QNA Wiremock in Excalidraw](card-qna-edit.svg)
+

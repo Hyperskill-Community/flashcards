@@ -18,10 +18,15 @@ const useCardsService = () => {
     return await useApi().get<number>(`${ENDPOINT}/count`, {categoryId: categoryId});
   };
 
+  const putCard = async (cardId: string, categoryId: string, data: Card)  => {
+    return await useApi().put(`${ENDPOINT}/${cardId}`, data, {categoryId: categoryId}, `Card ${data.question} successfully updated!`);
+  };
+
   return {
     getCards,
     getCardById,
-    getCardCount
+    getCardCount,
+    putCard
   };
 };
 export default useCardsService;
