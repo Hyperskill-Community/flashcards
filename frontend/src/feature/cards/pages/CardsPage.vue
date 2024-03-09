@@ -47,8 +47,9 @@ const openCard = async (id: string) => {
 const updateCard = async (newCard: Card) => {
   newCard.tags = newCard.tags.filter(tag => !!tag);
   await useCardsService().putCard(card.value.id!, props.categoryId, newCard);
+  card.value = newCard;
   toggleReload.value = !toggleReload.value;
-  displayEdit.value = false;
+  toggleEdit();
 };
 
 const toggleEdit = () => {

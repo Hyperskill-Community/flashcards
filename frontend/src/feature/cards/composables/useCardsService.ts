@@ -18,7 +18,7 @@ const useCardsService = () => {
     return await useApi().get<number>(`${ENDPOINT}/count`, {categoryId: categoryId});
   };
 
-  const putCard = async (cardId: string, categoryId: string, data: Card)  => {
+  const putCard = async (cardId: string, categoryId: string, data: Card) : Promise<Card>  => {
     return await useApi().put(`${ENDPOINT}/${cardId}`, data, {categoryId: categoryId}, `Card ${data.question} successfully updated!`);
   };
 
