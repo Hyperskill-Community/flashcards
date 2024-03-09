@@ -34,9 +34,9 @@
 <script setup lang="ts">
 import {Category, CategoryRequest} from "@/feature/category/model/category";
 import CategoryCard from "@/feature/category/components/CategoryCard.vue";
-import AddMdiButton from "@/shared/components/AddMdiButton.vue";
+import AddMdiButton from "@/shared/buttons/AddMdiButton.vue";
 import {computed, ref, watch} from "vue";
-import SubmitMdiButton from "@/shared/components/SubmitMdiButton.vue";
+import SubmitMdiButton from "@/shared/buttons/SubmitMdiButton.vue";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 import PaginationFooter from "@/shared/components/PaginationFooter.vue";
 

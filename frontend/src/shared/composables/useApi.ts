@@ -45,8 +45,8 @@ const useApi = () => {
       }
     },
 
-    put: async <R>(url: string, requestData: R, query?: Record<string, string>, successMessage?: string,
-                   errorMessage?: string, customError?: ErrorState) => {
+    put: async <R, S>(url: string, requestData: R, query?: Record<string, string>, successMessage?: string,
+                   errorMessage?: string, customError?: ErrorState) : Promise<S> => {
       const urlWithParams = query ?
         `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}` : url;
       try {
@@ -54,11 +54,14 @@ const useApi = () => {
         if (response.status != 200) {
           useErrorService().handleAndNotify(
             `Error status code ${response.status}!`, errorMessage?? 'Failed to update');
+          return {} as S;
         } else {
           useToastService().showSuccess(successMessage?? `Successfully updated ${url}!`);
+          return response.data;
         }
       } catch (error: any) {
         handleNonAxiosError(error, customError);
+        return {} as S;
       }
     },
 
