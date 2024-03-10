@@ -38,9 +38,7 @@ const model = computed({
   set: val => emit('update:modelValue', val)
 });
 
-const shiftDown = (index: number) => {
-  model.value.splice(index - 1, 1);
-};
+const shiftDown = (index: number) => model.value.splice(index - 1, 1);
 
 const shiftIfEmpty = (index: number) => !model.value[index - 1] && shiftDown(index);
 </script>

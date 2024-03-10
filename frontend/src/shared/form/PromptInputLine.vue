@@ -23,7 +23,6 @@ const emit = defineEmits<({
   'update:modelValue': [value: string],
 })>();
 
-const updateValue = (value: string) => {
-  emit('update:modelValue', value);
-};
+const updateValue = (value: string) => emit('update:modelValue', value);
+
 </script>

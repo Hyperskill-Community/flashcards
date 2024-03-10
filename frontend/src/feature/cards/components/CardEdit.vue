@@ -63,7 +63,5 @@ const emit = defineEmits<({
 const newCard = ref<Card>(clone(props.card));
 const formValid = ref(false);
 
-const resetNewCard = () => {
-  newCard.value = clone(props.card);
-};
+const resetNewCard = () => newCard.value = clone(props.card);
 </script>

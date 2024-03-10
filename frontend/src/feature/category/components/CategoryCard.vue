@@ -79,18 +79,14 @@ const expand = () => {
   emit('update:expanded', !props.expanded);
 };
 
-const openCategory = () => {
-  router.push(`/category/${props.category.id}?name=${props.category.name}`);
-};
+const openCategory = () => router.push(`/category/${props.category.id}?name=${props.category.name}`);
 
 const performUpdate = async () => {
   await categoryService().putCategory(props.category.id, updateRequest.value);
   emit('reload', true);
 };
 
-const editCategory = () => {
-  editRequested.value = !editRequested.value;
-};
+const editCategory = () => editRequested.value = !editRequested.value;
 
 const deleteCategory = async () => {
   await categoryService().deleteCategory(props.category.id);

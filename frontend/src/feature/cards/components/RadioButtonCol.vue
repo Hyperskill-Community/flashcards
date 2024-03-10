@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts">
-
 import {computed} from "vue";
 
 const props = withDefaults(defineProps<({
@@ -22,12 +21,12 @@ const props = withDefaults(defineProps<({
   md: 2,
 });
 
+const emit = defineEmits<({
+  'update:modelValue': [value: number],
+})>();
+
 const model = computed({
   get: () => props.modelValue,
   set: val => emit('update:modelValue', val)
 });
-
-const emit = defineEmits<({
-  'update:modelValue': [value: number],
-})>();
 </script>

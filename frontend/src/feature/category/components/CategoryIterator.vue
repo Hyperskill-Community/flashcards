@@ -90,7 +90,5 @@ const postNewCategory = async () => {
 };
 
 // calcs amount of pages needed for given amount of items
-const pageCount = (itemCount: number) => {
-  return Math.ceil(itemCount / props.itemsPerPage);
-};
+const pageCount = (itemCount: number) =>  Math.ceil(itemCount / props.itemsPerPage);
 </script>
