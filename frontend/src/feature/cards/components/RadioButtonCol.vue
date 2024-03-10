@@ -3,7 +3,7 @@
     <div class="d-flex flex-wrap justify-sm-space-between ma-n3">
       <v-radio-group v-for="index in Array.from({ length: groupSize }, (_, ind) => ind)" :key="index"
                      :model-value="model"
-                     @update:model-value="(val) => model = val!">
+                     @update:model-value="val => model = val!">
         <v-radio :value="index" class="ml-n4 mt-n2 mb-n2" label="correct" color="green"/>
       </v-radio-group>
     </div>
@@ -24,7 +24,7 @@ const props = withDefaults(defineProps<({
 
 const model = computed({
   get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
+  set: val => emit('update:modelValue', val)
 });
 
 const emit = defineEmits<({

@@ -3,7 +3,7 @@
     <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" fill-height color="containerBackground">
       <v-card-title v-text="'Your accessible categories'" class="text-center text-h4"/>
       <category-iterator :categories="items" :items-per-page="4" :total="totalItems" @reload="fetchCategories"
-      @loadNext="(page) => fetchNextPageFromServer(page)" @loadCount="(id) => loadCount(id)"/>
+      @loadNext="page => fetchNextPageFromServer(page)" @loadCount="id => loadCount(id)"/>
     </v-card>
   </v-container>
 </template>
@@ -43,6 +43,6 @@ const fetchNextPageFromServer = async (page: number) => {
 
 const loadCount = async (id: string) => {
   const count = await useCardsService().getCardCount(id);
-  items.value.filter((item) => item.category.id === id).forEach((item) => item.category.numberOfCards = count);
+  items.value.filter(item => item.category.id === id).forEach(item => item.category.numberOfCards = count);
 };
 </script>

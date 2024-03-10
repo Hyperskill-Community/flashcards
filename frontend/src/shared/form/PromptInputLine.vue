@@ -4,7 +4,7 @@
                 :model-value="modelValue"
                 :label="prompt"
                 @update:modelValue="updateValue"
-                :rules="required ? [(v) =>  !!v || 'must not be empty'] : []"
+                :rules="required ? [v => !!v || 'must not be empty'] : []"
                 :class="`v-col-sm-${inputWidth} ${inputClass}`" density="compact"/>
 </template>
 

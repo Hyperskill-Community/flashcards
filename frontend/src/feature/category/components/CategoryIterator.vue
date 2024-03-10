@@ -26,7 +26,7 @@
     </template>
     <template v-slot:footer="{ page }">
       <pagination-footer :total-pages="totalPages" :page="page"
-                         @update:page="(newVal) => paginate(newVal)"/>
+                         @update:page="newVal => paginate(newVal)"/>
     </template>
   </v-data-iterator>
 </template>
