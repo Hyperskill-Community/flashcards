@@ -2,10 +2,11 @@
   <v-tooltip :disabled="!tooltipText" :text="tooltipText" location="top">
     <template v-slot:activator="{ props }">
       <v-btn variant="text"
-             icon="mdi-square-edit-outline"
-             class = "edit-button ms-n6"
+             icon="mdi-close-outline"
+             class = "add-button ms-n6"
              v-bind="props"
              :disabled="disabled"
+             color="deep-orange"
              @click="clickHandler"
              size="x-large"/>
     </template>
@@ -13,16 +14,12 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
+withDefaults(defineProps<({
   clickHandler: Function,
-  disabled:  {
-    type: Boolean,
-    default: false
-  },
-  // no tooltip by default
-  tooltipText: {
-    type: String,
-    default: ""
-  }
+  disabled?: boolean,
+  tooltipText?: string,
+})>(), {
+  disabled: false,
+  tooltipText: ''
 });
 </script>

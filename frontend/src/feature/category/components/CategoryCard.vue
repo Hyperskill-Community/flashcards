@@ -1,9 +1,18 @@
 <template>
   <v-card color="secondary">
-    <v-card-title class="d-flex justify-space-between align-center">
+    <v-card-title class="ml-3">
       <h4 v-text="category.name"/>
-      <div class="mr-n6">
-        <!--  ms-n6  = negative margin 3 on sides - also ml, mr, ma, mt, mb -->
+    </v-card-title>
+
+    <v-card-text class="ml-3">
+      {{ category.description || "No description available" }}
+    </v-card-text>
+
+      <v-card-actions class="ma-4">
+        <v-switch :model-value="expanded" label="Show details"
+                  :color="toggleColor" :disabled="editRequested"
+                  density="compact" inset @click="expand"/>
+        <v-spacer/>
         <open-mdi-button tooltip-text="Open Category"
                          :clickHandler="openCategory"/>
         <edit-mdi-button tooltip-text="Rename Category"
@@ -12,20 +21,7 @@
         <delete-mdi-button tooltip-text="Delete Category"
                            :disabled="!deleteUri"
                            :clickHandler="deleteCategory"/>
-      </div>
-    </v-card-title>
-    <v-card-text v-text="category.description || 'No description given'"/>
-    <div class="px-4">
-      <v-switch
-        :model-value="expanded"
-        :label="`Show details`"
-        :color="toggleColor"
-        :disabled="editRequested"
-        density="compact"
-        inset
-        @click="expand"
-      />
-    </div>
+      </v-card-actions>
     <v-divider/>
     <v-container v-if="editRequested">
       <v-form @submit.prevent class="d-flex justify-space-between align-center">
@@ -53,10 +49,10 @@ import {getAccess, getDeleteUri, getPutUri} from "@/feature/category/composables
 import {useRouter} from "vue-router";
 import {computed, ref} from "vue";
 import categoryService from "@/feature/category/composables/useCategoriesService";
-import OpenMdiButton from "@/shared/components/OpenMdiButton.vue";
-import DeleteMdiButton from "@/shared/components/DeleteMdiButton.vue";
-import EditMdiButton from "@/shared/components/EditMdiButton.vue";
-import SubmitMdiButton from "@/shared/components/SubmitMdiButton.vue";
+import OpenMdiButton from "@/shared/buttons/OpenMdiButton.vue";
+import DeleteMdiButton from "@/shared/buttons/DeleteMdiButton.vue";
+import EditMdiButton from "@/shared/buttons/EditMdiButton.vue";
+import SubmitMdiButton from "@/shared/buttons/SubmitMdiButton.vue";
 
 const props = defineProps<({
   category: Category,
@@ -83,18 +79,14 @@ const expand = () => {
   emit('update:expanded', !props.expanded);
 };
 
-const openCategory = () => {
-  router.push(`/category/${props.category.id}?name=${props.category.name}`);
-};
+const openCategory = () => router.push(`/category/${props.category.id}?name=${props.category.name}`);
 
 const performUpdate = async () => {
   await categoryService().putCategory(props.category.id, updateRequest.value);
   emit('reload', true);
 };
 
-const editCategory = () => {
-  editRequested.value = !editRequested.value;
-};
+const editCategory = () => editRequested.value = !editRequested.value;
 
 const deleteCategory = async () => {
   await categoryService().deleteCategory(props.category.id);

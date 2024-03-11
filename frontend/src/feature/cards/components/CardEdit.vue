@@ -2,37 +2,33 @@
   <v-row justify="center">
     <v-col md="9" lg="9">
       <v-card color="secondary" class="pa-2 ma-2 d-flex flex-column">
-        <v-card-title class="text-center text-h4 pb-5">
-          Edit card of type QNA
-        </v-card-title>
+        <v-card-title class="text-center text-h4">Edit card of type {{ translateType(card.type) }}</v-card-title>
+        <v-card-subtitle class="text-center">Submit Changes with Enter or Save button</v-card-subtitle>
 
         <v-card-text>
-          <v-row class="align-content-center">
-            <v-col md="2" class="text-h6 mt-2">Title:</v-col>
-            <v-text-field clearable @click:clear="newCard.title=''" v-model="newCard.title"
-                          class="v-col-sm-10" density="compact"/>
-            <v-col md="2" class="text-h6 mt-n2">Tags:</v-col>
-            <v-col md="10">
-              <div class="d-flex flex-wrap justify-sm-space-between ma-n3">
-                <v-col v-for="index in newCard.tags.length + 1" :key="index" md="6">
-                  <v-text-field clearable density="compact" class="mt-n4 mb-n4"
-                                @click:clear="shiftDown(index)"
-                                v-model="newCard.tags[index - 1]"/>
-                </v-col>
-              </div>
-            </v-col>
-            <v-col sm="2" class="text-h6 mt-2">Question:</v-col>
-            <v-text-field clearable @click:clear="newCard.question=''" v-model="newCard.question"
-                          class="v-col-sm-10" density="compact" />
-            <v-col sm="2" class="text-h6 mt-n2">Answer:</v-col>
-            <v-text-field clearable @click:clear="newCard.answer=''" v-model="newCard.answer"
-                          class="v-col-sm-10 mt-n4 mb-n4" density="compact" />
-          </v-row>
+          <v-form @submit.prevent="() => !!formValid && emit('update', newCard)" v-model="formValid">
+            <input type="submit" hidden /><!-- Required for the form to submit on enter -->
+            <v-row>
+              <prompt-input-line prompt="Title" v-model="newCard.title!"/>
+              <input-array-col prompt="Tag" v-model="newCard.tags"/>
+              <prompt-input-line prompt="Question" required v-model="newCard.question"/>
+              <!-- Simple Q & A -->
+              <prompt-input-line v-if="card.type===CardType.SIMPLEQA" prompt="Answer" required v-model="newCard.answer!"
+                                 label-class="mt-n2" input-class="mt-n4 mb-n4"/>
+              <!-- Quiz Cards -->
+              <input-array-col v-if="card.type!==CardType.SIMPLEQA" prompt="Option" :required="2"
+                               v-model="newCard.options!" :md="10" :field-md="12"/>
+              <radio-button-col v-if="card.type===CardType.SINGLE_CHOICE" v-model="newCard.correctOption!"
+                                :group-size="newCard.options!.length"/>
+              <check-box-col v-if="card.type===CardType.MULTIPLE_CHOICE" v-model="newCard.correctOptions!"
+                                :group-size="newCard.options!.length"/>
+            </v-row>
+          </v-form>
         </v-card-text>
 
         <v-card-actions class="pa-2 ma-0">
           <v-spacer/>
-          <save-mdi-button :click-handler="() => emit('update', newCard)"/>
+          <save-mdi-button :disabled="!formValid" :click-handler="() => emit('update', newCard)"/>
           <cancel-mdi-button tooltip-text="Reset content"
                              :click-handler="resetNewCard"/>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -45,11 +41,15 @@
 </template>
 
 <script setup lang="ts">
-import {Card, clone} from "@/feature/cards/model/card";
-import BackMdiButton from "@/shared/components/BackMdiButton.vue";
 import {ref} from "vue";
-import SaveMdiButton from "@/shared/components/SaveMdiButton.vue";
-import CancelMdiButton from "@/shared/components/CancelMdiButton.vue";
+import {Card, CardType, clone, translateType} from "@/feature/cards/model/card";
+import BackMdiButton from "@/shared/buttons/BackMdiButton.vue";
+import SaveMdiButton from "@/shared/buttons/SaveMdiButton.vue";
+import CancelMdiButton from "@/shared/buttons/CancelMdiButton.vue";
+import PromptInputLine from "@/shared/form/PromptInputLine.vue";
+import InputArrayCol from "@/shared/form/InputArrayCol.vue";
+import RadioButtonCol from "@/feature/cards/components/RadioButtonCol.vue";
+import CheckBoxCol from "@/feature/cards/components/CheckBoxCol.vue";
 
 const props = defineProps<({
   card: Card,
@@ -61,13 +61,7 @@ const emit = defineEmits<({
 })>();
 
 const newCard = ref<Card>(clone(props.card));
+const formValid = ref(false);
 
-const resetNewCard = () => {
-  newCard.value = clone(props.card);
-};
-
-const shiftDown = (index: number) => {
-  newCard.value.tags.splice(index - 1, 1);
-};
-
+const resetNewCard = () => newCard.value = clone(props.card);
 </script>
