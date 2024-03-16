@@ -19,7 +19,7 @@ const routes = [
   {
     path: '/export',
     name: 'export',
-    component: () => import("@/shared/pages/DataExport.vue"),
+    component: () => import("@/feature/dataio/pages/DataExport.vue"),
   },
   {
     path: '/register',
