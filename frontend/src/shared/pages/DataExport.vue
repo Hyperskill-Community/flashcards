@@ -12,7 +12,7 @@
       <v-img src="@/assets/folder.jpg" aspect-ratio="2.25" class="mx-auto"/>
     <v-label class="float-right text-sm-subtitle-2 text-grey">Photo by Maksym Kaharlytskyi on Unsplash</v-label>
     </v-card-item>
-    <v-card-text class="mt-10">
+    <v-card-text class="mt-10 mb-5">
       <v-row justify="center">
 
         <v-form cols="12" sm="6" md="4" class="align-content-center">

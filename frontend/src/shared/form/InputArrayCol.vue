@@ -1,6 +1,6 @@
 <template>
   <v-col :md="md">
-    <div class="d-flex flex-wrap justify-sm-space-between ma-n3">
+    <TransitionGroup tag="div" class="d-flex flex-wrap justify-sm-space-between ma-n3">
       <v-col v-for="index in model.length + 1" :key="index" :md="fieldMd">
         <v-text-field clearable density="compact" class="mt-n5 mb-n5"
                       :label="`${prompt} #${index}`"
@@ -10,7 +10,7 @@
                       :rules="index - 1 < required ? [v => !!v || `${required} ${prompt}s required`] : []"
                       @update:model-value="(val) => model[index - 1] = val"/>
       </v-col>
-    </div>
+    </TransitionGroup>
   </v-col>
 </template>
 
@@ -43,3 +43,14 @@ const shiftDown = (index: number) => model.value.splice(index - 1, 1);
 const shiftIfEmpty = (index: number) => !model.value[index - 1] && shiftDown(index);
 </script>
 
+<style>
+/*noinspection CssUnusedSymbol*/
+.v-enter-active, .v-leave-active {
+  transition: transform 0.5s;
+}
+
+/*noinspection CssUnusedSymbol*/
+.v-enter-from, .v-leave-to {
+  transform: translateY(-100%);
+}
+</style>
