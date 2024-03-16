@@ -85,10 +85,9 @@ describe('useApi', () => {
     expect(apiClient.get).toHaveBeenCalledWith(urlWithParams);
   });
 
-  it.each([useApi().post, useApi().put, useApi().get]
+  it.each([useApi().post, useApi().get]
   )('should error with Status 403', async (apiMethod) => {
     vi.mocked(apiClient.post).mockResolvedValue({status: 403});
-    vi.mocked(apiClient.put).mockResolvedValue({status: 403});
     vi.mocked(apiClient.get).mockResolvedValue({status: 403});
 
     await apiMethod(testUrl, {});

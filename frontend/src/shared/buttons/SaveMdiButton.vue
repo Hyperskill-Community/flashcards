@@ -2,11 +2,11 @@
   <v-tooltip :disabled="!tooltipText" :text="tooltipText" location="top">
     <template v-slot:activator="{ props }">
       <v-btn variant="text"
-             type="submit"
-             icon="mdi-send-circle-outline"
-             class = "submit-button mb-5 fill-height"
+             icon="mdi-content-save-outline"
+             class = "add-button ms-n6"
              v-bind="props"
              :disabled="disabled"
+             color="#0b0be5"
              @click="clickHandler"
              size="x-large"/>
     </template>
@@ -14,15 +14,12 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
+withDefaults(defineProps<({
   clickHandler: Function,
-  disabled:  {
-    type: Boolean,
-    default: false
-  },
-  tooltipText: {
-    type: String,
-    default: "Submit"
-  }
+  disabled?: boolean,
+  tooltipText?: string,
+})>(), {
+  disabled: false,
+  tooltipText: 'Save'
 });
 </script>

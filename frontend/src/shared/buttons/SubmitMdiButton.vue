@@ -2,9 +2,11 @@
   <v-tooltip :disabled="!tooltipText" :text="tooltipText" location="top">
     <template v-slot:activator="{ props }">
       <v-btn variant="text"
-             icon="mdi-open-in-app"
-             class = "open-button ms-n6"
+             type="submit"
+             icon="mdi-send-circle-outline"
+             class = "submit-button mb-5 fill-height"
              v-bind="props"
+             color="#0b0be5"
              :disabled="disabled"
              @click="clickHandler"
              size="x-large"/>
@@ -13,17 +15,12 @@
 </template>
 
 <script setup lang="ts">
-
-defineProps({
+withDefaults(defineProps<({
   clickHandler: Function,
-  disabled:  {
-    type: Boolean,
-    default: false
-  },
-  // no tooltip by default
-  tooltipText: {
-    type: String,
-    default: ""
-  }
+  disabled?: boolean,
+  tooltipText?: string,
+})>(), {
+  disabled: false,
+  tooltipText: 'Submit'
 });
 </script>

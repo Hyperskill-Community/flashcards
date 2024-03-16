@@ -26,7 +26,7 @@
     </template>
     <template v-slot:footer="{ page }">
       <pagination-footer :total-pages="totalPages" :page="page"
-                         @update:page="(newVal) => paginate(newVal)"/>
+                         @update:page="newVal => paginate(newVal)"/>
     </template>
   </v-data-iterator>
 </template>
@@ -34,9 +34,9 @@
 <script setup lang="ts">
 import {Category, CategoryRequest} from "@/feature/category/model/category";
 import CategoryCard from "@/feature/category/components/CategoryCard.vue";
-import AddMdiButton from "@/shared/components/AddMdiButton.vue";
+import AddMdiButton from "@/shared/buttons/AddMdiButton.vue";
 import {computed, ref, watch} from "vue";
-import SubmitMdiButton from "@/shared/components/SubmitMdiButton.vue";
+import SubmitMdiButton from "@/shared/buttons/SubmitMdiButton.vue";
 import useCategoriesService from "@/feature/category/composables/useCategoriesService";
 import PaginationFooter from "@/shared/components/PaginationFooter.vue";
 
@@ -90,7 +90,5 @@ const postNewCategory = async () => {
 };
 
 // calcs amount of pages needed for given amount of items
-const pageCount = (itemCount: number) => {
-  return Math.ceil(itemCount / props.itemsPerPage);
-};
+const pageCount = (itemCount: number) =>  Math.ceil(itemCount / props.itemsPerPage);
 </script>
