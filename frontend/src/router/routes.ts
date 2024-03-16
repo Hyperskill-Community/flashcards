@@ -17,8 +17,13 @@ const routes = [
     props: true,
   },
   {
+    path: '/export',
+    name: 'export',
+    component: () => import("@/shared/pages/DataExport.vue"),
+  },
+  {
     path: '/register',
-    name: 'axios-line-temp',
+    name: 'register',
     component: () => import("@/feature/registration/pages/RegistrationPage.vue"),
   },
   // Always leave this as last one,
