@@ -66,7 +66,7 @@ describe('useCategoriesService', () => {
 
   it('deleteCategory should return category removed', async () => {
     await useCategoriesService().deleteCategory('1');
-    expect(useApi().delete).toHaveBeenCalledWith('/categories/1', 'Category successfully removed');
+    expect(useApi().delete).toHaveBeenCalledWith('/categories/1');
   });
 
 });
