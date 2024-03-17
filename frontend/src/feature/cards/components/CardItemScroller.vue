@@ -6,7 +6,7 @@
     <template v-for="(item, index) in items" :key="item">
       <div
         :class="['cursor-pointer', 'pa-3', 'd-flex', 'justify-space-between', 'align-center',
-            'v-col-sm-12', {'bg-grey-lighten-2': index % 2 === 0}]"
+            'v-col-sm-12', {'bg-white': index % 2 === 0}]"
         @click="() => emit('openCard', item.id)">
         <v-avatar v-text="`${index + 1}`" color="primary" size="large" class="mr-5"/>
         {{ item.question }}

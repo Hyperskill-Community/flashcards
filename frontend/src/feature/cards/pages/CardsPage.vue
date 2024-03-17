@@ -1,22 +1,17 @@
 <template>
-  <v-container>
-    <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" color="containerBackground" fill-height>
-      <v-container :hidden="displayDetails || displayEdit">
-        <v-card-title v-text="`Cards in ${categoryName}`" class="text-center text-h4"/>
-        <v-form @submit.prevent="filter.set = filter.input">
-          <v-text-field clearable @click:clear="filter.input=''" v-model="filter.input"
-                        label="Filter on title, tags and question" prepend-inner-icon="mdi-magnify"/>
-        </v-form>
-        <card-item-scroller :categoryId="categoryId" :filter="filter.set" :reload="toggleReload" @openCard="openCard"/>
-      </v-container>
-      <v-container v-if="displayDetails">
-        <card-details :card="card" @close="displayDetails = false" @edit="toggleEdit"/>
-      </v-container>
-      <v-container v-if="displayEdit">
-        <card-edit :card="card" @close="toggleEdit" @update="updateCard"/>
-      </v-container>
+  <v-container :hidden="displayDetails || displayEdit">
+    <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" color="secondary" fill-height>
+      <v-card-title v-text="`Cards in ${categoryName}`" class="text-center text-h4"/>
+      <v-form @submit.prevent="filter.set = filter.input">
+        <v-text-field clearable @click:clear="filter.input=''" v-model="filter.input"
+                      label="Filter on title, tags and question" prepend-inner-icon="mdi-magnify"/>
+      </v-form>
+      <card-item-scroller :categoryId="categoryId" :filter="filter.set" :reload="toggleReload" @openCard="openCard"/>
     </v-card>
   </v-container>
+
+  <card-details v-if="displayDetails" :card="card" @close="displayDetails = false" @edit="toggleEdit"/>
+  <card-edit v-if="displayEdit" :card="card" @close="toggleEdit" @update="updateCard"/>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <v-text-field clearable
+  <v-textarea clearable rows="1" auto-grow dense
                 @click:clear="() => updateValue('')"
                 :model-value="modelValue"
                 :label="prompt"
