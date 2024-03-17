@@ -69,7 +69,7 @@ const router = useRouter();
 const putUri = getPutUri(props.category);
 const deleteUri = getDeleteUri(props.category);
 const editRequested = ref(false);
-const updateRequest = ref({name: "", description: ""});
+const updateRequest = ref({name: props.category.name, description: props.category.description!});
 
 const toggleColor = computed(() => props.expanded ? '#43a047' : '#eeeeee');
 

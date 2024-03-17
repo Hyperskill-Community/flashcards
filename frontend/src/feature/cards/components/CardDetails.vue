@@ -1,56 +1,52 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="12" md="8" lg="8">
-      <v-card color="secondary" class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between">
-        <v-card-title v-text="card.title" class="align-self-center"/>
-        <v-card-subtitle class="pa-2 ma-2 d-flex justify-space-between">
-          <v-card-text v-text="'Tags: '"/>
-          <v-list class="ma-0 pa-0 d-flex flex-row flex-wrap">
-            <v-list-item v-for="tag in card.tags" :key="tag" :title="tag"/>
-          </v-list>
-        </v-card-subtitle>
+  <base-card-page>
+    <v-card-title v-text="card.title" class="align-self-center"/>
+    <v-card-subtitle class="pa-2 ma-2 d-flex justify-space-between">
+      <v-card-text v-text="'Tags: '"/>
+      <v-list class="ma-0 pa-2 d-flex flex-row flex-wrap">
+        <v-list-item v-for="tag in card.tags" :key="tag" :title="tag"/>
+      </v-list>
+    </v-card-subtitle>
 
-        <v-card-text>
-          <h4 class="pa-2 ma-2">{{ card.question }}</h4>
-          <v-container class="pa-0 mt-2">
-            <v-list v-if="card.type !== CardType.SIMPLEQA" class="pa-0 d-flex flex-column flex-wrap">
-              <v-list-item v-for="(option, index) in card.options" :key="option"
-                           :title="parseOption(index, option)"
-                           @click="toggleOption(option)"
-                           :disabled="answerShown"
-                           class="cursor-pointer"
-                           :class="{'correct': answerShown && isCorrect(option),
+    <v-card-text>
+      <h4 class="pa-2 ma-2">{{ card.question }}</h4>
+      <v-container class="pa-2 mt-2">
+        <v-text-field v-if="card.type === CardType.SIMPLEQA" v-model="providedAnswer"
+                      density="compact" label="Your Answer"
+                      :class="{'correct': answerShown && isCorrect(providedAnswer),
+                                     'error': answerShown && !isCorrect(providedAnswer)}"/>
+        <v-list v-else class="pa-0 d-flex flex-column flex-wrap">
+          <v-list-item v-for="(option, index) in card.options" :key="option"
+                       :title="parseOption(index, option)"
+                       @click="toggleOption(option)"
+                       :disabled="answerShown"
+                       class="cursor-pointer"
+                       :class="{'correct': answerShown && isCorrect(option),
                                       'error': selected.includes(option) && answerShown && !isCorrect(option),
                                       'selected': !answerShown && selected.includes(option)}"/>
-            </v-list>
-            <v-text-field v-else v-model="providedAnswer"
-                          :class="{'correct': answerShown && isCorrect(providedAnswer),
-                                     'error': answerShown && !isCorrect(providedAnswer)}"/>
-          </v-container>
-        </v-card-text>
+        </v-list>
+      </v-container>
+    </v-card-text>
 
-        <v-container>
-          <v-row class="pa-2 d-flex justify-space-between align-center">
-            <v-btn @click="highlightCorrectAnswers()" :disabled="!selected && !providedAnswer"
-                   prepend-icon="mdi-check-circle" color="green" variant="text">
-              Check Answer
-            </v-btn>
-            <v-card-subtitle v-show="answerShown" v-text="showCorrectAnswer()"/>
-          </v-row>
-        </v-container>
+    <v-container>
+      <v-row class="pa-3 d-flex justify-space-around">
+        <v-btn @click="highlightCorrectAnswers()" :disabled="!selected && !providedAnswer"
+               prepend-icon="mdi-check-circle" color="green" variant="outlined">
+          Check Answer
+        </v-btn>
+      </v-row>
+    </v-container>
 
-        <v-card-actions class="pa-2 ma-0">
-          <v-spacer/>
-          <edit-mdi-button tooltip-text="Edit Card"
-                           :click-handler="() => emit('edit', true)"/>
-          <delete-mdi-button :click-handler="() => {}" tooltip-text="Delete Card - not implemented"/>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <back-mdi-button tooltip-text="Back to Category"
-                           :click-handler="() => emit('close', true)"/>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+    <v-card-actions class="pa-2 ma-0">
+      <v-spacer/>
+      <edit-mdi-button tooltip-text="Edit Card"
+                       :click-handler="() => emit('edit', true)"/>
+      <delete-mdi-button :click-handler="() => {}" tooltip-text="Delete Card - not implemented"/>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <back-mdi-button tooltip-text="Back to Category"
+                       :click-handler="() => emit('close', true)"/>
+    </v-card-actions>
+  </base-card-page>
 </template>
 
 <script setup lang="ts">
@@ -59,6 +55,7 @@ import DeleteMdiButton from "@/shared/buttons/DeleteMdiButton.vue";
 import {Card, CardType} from "@/feature/cards/model/card";
 import BackMdiButton from "@/shared/buttons/BackMdiButton.vue";
 import {ref, shallowRef} from "vue";
+import BaseCardPage from "@/shared/pages/BaseCardPage.vue";
 
 const props = defineProps<({
   card: Card,
@@ -76,9 +73,6 @@ const providedAnswer = shallowRef('');
 const parseOption = (index: number, option: string) => `${String.fromCharCode(65 + index)}. ${option}`;
 const isCorrect = (option: string) => getCorrectAnswer()?.includes(option);
 const highlightCorrectAnswers = () => answerShown.value = !answerShown.value;
-const showCorrectAnswer = () => {
-  return `Correct answer${props.card.type === CardType.MULTIPLE_CHOICE ? 's' : ''}: ${getCorrectAnswer()}`;
-};
 
 const toggleOption = (option: string) => {
   const index = selected.value.indexOf(option);

@@ -22,6 +22,11 @@ const routes = [
     component: () => import("@/feature/dataio/pages/DataExport.vue"),
   },
   {
+    path: '/import',
+    name: 'import',
+    component: () => import("@/feature/dataio/pages/DataImport.vue"),
+  },
+  {
     path: '/register',
     name: 'register',
     component: () => import("@/feature/registration/pages/RegistrationPage.vue"),
