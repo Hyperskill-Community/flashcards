@@ -26,9 +26,10 @@ const useApi = () => {
       }
     },
 
-    get: async <R>(url: string, query: Record<string, string> = {},
+    get: async <R>(url: string, query?: Record<string, string>,
                    errorMessage?: string, customError?: ErrorState): Promise<R> => {
-      const urlWithParams = `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}`;
+      const urlWithParams = query ?
+        `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}` : url;
 
       try {
         const response = await apiClient.get(urlWithParams);
@@ -65,10 +66,12 @@ const useApi = () => {
       }
     },
 
-    delete: async (url: string, successMessage?: string,
+    delete: async (url: string, query?: Record<string, string>, successMessage?: string,
                    errorMessage?: string, customError?: ErrorState) => {
+      const urlWithParams = query ?
+        `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}` : url;
       try {
-        const response = await apiClient.delete(url);
+        const response = await apiClient.delete(urlWithParams);
         if (response.status != 200) {
           useErrorService().handleAndNotify(
             `Error status code ${response.status}!`, errorMessage?? 'Failed to delete');
