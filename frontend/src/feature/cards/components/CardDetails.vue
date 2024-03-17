@@ -73,9 +73,6 @@ const providedAnswer = shallowRef('');
 const parseOption = (index: number, option: string) => `${String.fromCharCode(65 + index)}. ${option}`;
 const isCorrect = (option: string) => getCorrectAnswer()?.includes(option);
 const highlightCorrectAnswers = () => answerShown.value = !answerShown.value;
-const showCorrectAnswer = () => {
-  return `Correct answer${props.card.type === CardType.MULTIPLE_CHOICE ? 's' : ''}: ${getCorrectAnswer()}`;
-};
 
 const toggleOption = (option: string) => {
   const index = selected.value.indexOf(option);
