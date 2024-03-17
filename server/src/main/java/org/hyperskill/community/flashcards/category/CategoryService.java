@@ -46,6 +46,13 @@ public class CategoryService {
         return new PageImpl<>(categories, pageRequest, count);
     }
 
+    public Set<Category> getCategories(String username) {
+        var usernameHasReadPermission = Criteria.where("username").is(username)
+                .and("permission").regex(".*r.*");
+        var categoriesQuery = new Query(Criteria.where("access").elemMatch(usernameHasReadPermission));
+        return Set.copyOf(mongoTemplate.find(categoriesQuery, Category.class, CATEGORY));
+    }
+
     public Category findById(String username, String categoryId) {
         return findById(username, categoryId, "r");
     }

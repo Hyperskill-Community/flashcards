@@ -25,6 +25,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -156,5 +157,9 @@ public class CardService {
                     var message = "Category %s doesn't have access rules for user %s".formatted(category.id(), username);
                     return new IllegalStateException(message);
                 });
+    }
+
+    public List<Card> getCards(String categoryName) {
+        return mongoTemplate.find(new Query(), Card.class, categoryName);
     }
 }
