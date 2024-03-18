@@ -10,7 +10,8 @@
     </v-card>
   </v-container>
 
-  <card-details v-if="displayDetails" :card="card" @close="displayDetails = false" @edit="toggleEdit"/>
+  <card-details v-if="displayDetails" :card="card" @close="displayDetails = false" @edit="toggleEdit"
+                @delete="deleteCard"/>
   <card-edit v-if="displayEdit" :card="card" @close="toggleEdit" @update="updateCard"/>
 </template>
 
@@ -44,6 +45,13 @@ const updateCard = async (newCard: Card) => {
   card.value = await useCardsService().putCard(props.categoryId, newCard);
   toggleReload.value = !toggleReload.value;
   toggleEdit();
+};
+
+const deleteCard = async (curCard: Card) => {
+  await useCardsService().deleteCard(props.categoryId, curCard);
+  toggleReload.value = !toggleReload.value;
+  displayEdit.value = false;
+  displayDetails.value = false;
 };
 
 const toggleEdit = () => {

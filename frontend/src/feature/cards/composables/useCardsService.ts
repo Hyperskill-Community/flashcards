@@ -18,15 +18,20 @@ const useCardsService = () => {
     return await useApi().get<number>(`${ENDPOINT}/count`, {categoryId: categoryId});
   };
 
-  const putCard = async (categoryId: string, data: Card) : Promise<Card>  => {
+  const putCard = async (categoryId: string, data: Card): Promise<Card> => {
     return await useApi().put(`${ENDPOINT}/${data.id}`, data, {categoryId: categoryId}, `Card ${data.question} successfully updated!`);
+  };
+
+  const deleteCard = async (categoryId: string, data: Card) => {
+    await useApi().delete(`${ENDPOINT}/${data.id}`, {categoryId: categoryId}, `Card ${data.question} successfully deleted!`);
   };
 
   return {
     getCards,
     getCardById,
     getCardCount,
-    putCard
+    putCard,
+    deleteCard
   };
 };
 export default useCardsService;
