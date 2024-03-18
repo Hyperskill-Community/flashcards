@@ -23,7 +23,7 @@ const useCategoriesService = () => {
   };
 
   const deleteCategory = async (id: string)  => {
-    return await useApi().delete(`${ENDPOINT}/${id}`, 'Category successfully removed');
+    return await useApi().delete(`${ENDPOINT}/${id}`);
   };
 
   return {
