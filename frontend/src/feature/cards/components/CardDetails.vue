@@ -41,7 +41,7 @@
       <v-spacer/>
       <edit-mdi-button tooltip-text="Edit Card"
                        :click-handler="() => emit('edit', true)"/>
-      <delete-mdi-button :click-handler="() => emit('delete', card)"/>
+      <delete-mdi-button tooltip-text="Delete Card" :click-handler="() => emit('delete', card)"/>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <back-mdi-button tooltip-text="Back to Category"
                        :click-handler="() => emit('close', true)"/>
