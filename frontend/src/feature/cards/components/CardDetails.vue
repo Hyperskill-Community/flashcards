@@ -41,7 +41,7 @@
       <v-spacer/>
       <edit-mdi-button tooltip-text="Edit Card"
                        :click-handler="() => emit('edit', true)"/>
-      <delete-mdi-button :click-handler="() => {}" tooltip-text="Delete Card - not implemented"/>
+      <delete-mdi-button tooltip-text="Delete Card" :click-handler="() => emit('delete', card)"/>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <back-mdi-button tooltip-text="Back to Category"
                        :click-handler="() => emit('close', true)"/>
@@ -64,6 +64,7 @@ const props = defineProps<({
 const emit = defineEmits<({
   'close': [val: boolean],
   'edit': [val: boolean],
+  'delete': [val: Card],
 })>();
 
 const answerShown = shallowRef(false);
