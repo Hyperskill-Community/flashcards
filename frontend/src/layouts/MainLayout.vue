@@ -1,7 +1,7 @@
 <template>
   <v-app>
+    <side-navigation/>
     <v-main>
-      <side-navigation/>
       <router-view/>
       <toast-layer/>
     </v-main>

@@ -1,7 +1,7 @@
 <template>
-  <v-col :md="md">
+  <v-col :md="md" cols="12">
     <TransitionGroup tag="div" class="d-flex flex-wrap justify-sm-space-between ma-n3">
-      <v-col v-for="index in model.length + 1" :key="index" :md="fieldMd">
+      <v-col v-for="index in model.length + 1" :key="index" :md="fieldMd" cols="12">
         <v-text-field clearable density="compact" class="mt-n5 mb-n5"
                       :label="`${prompt} #${index}`"
                       :model-value="model[index - 1]"
