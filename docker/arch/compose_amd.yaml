@@ -15,6 +15,9 @@ services:
       - '8000:8000'
     environment:
       MONGO_HOST: flashcards-mongodb
+      SPRING_SECURITY_OAUTH2_AUTHORIZATIONSERVER_CLIENT_CLIENT_1_REGISTRATION_REDIRECT_URIS:
+        'http://${HOST_IP:-127.0.0.1}:8080/login/oauth2/code/spring'
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: INFO  # switch to TRACE for debugging
     depends_on:
       - mongodb
     networks:
