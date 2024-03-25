@@ -5,6 +5,7 @@ plugins {
     id("org.springframework.boot") version libs.versions.spring.boot
     id("io.spring.dependency-management") version libs.versions.spring.dependency.management
     id("org.sonarqube") version libs.versions.sonar.gradle
+    id("com.gorylenko.gradle-git-properties") version "2.4.1"
     jacoco
 }
 
@@ -69,6 +70,10 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:mongodb")
+}
+
+springBoot {
+    buildInfo()
 }
 
 tasks.withType<BootRun> {
