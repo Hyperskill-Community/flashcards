@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.info.GitProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 import java.time.ZoneId;
 
@@ -19,6 +20,7 @@ public class FlashcardsApplication {
     }
 
    @Bean
+   @Profile("!test")
    public CommandLineRunner logBuildInfo(BuildProperties buildProperties, GitProperties gitProperties) {
          return args -> {
              log.info("Build-Info: Group: {} Artifact: {} Version: {}, Buildtime: {}", buildProperties.getGroup(), buildProperties.getArtifact(),

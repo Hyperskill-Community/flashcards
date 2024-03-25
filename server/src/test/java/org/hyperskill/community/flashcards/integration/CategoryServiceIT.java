@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataMongoTest
 @ContextConfiguration(classes = TestMongoConfiguration.class)
+@TestPropertySource(properties = {"spring.profiles.active=test"})
 class CategoryServiceIT {
 
     @Autowired

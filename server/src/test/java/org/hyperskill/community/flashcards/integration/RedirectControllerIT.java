@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Set;
@@ -37,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest({RedirectController.class, CategoryController.class,
         AuthenticationResolver.class, ObservabilityConfiguration.class})
+@TestPropertySource(properties = {"spring.profiles.active=test"})
 class RedirectControllerIT {
 
     // needed since otherwise test tries to connect to Authorization server on Spring security context creation
