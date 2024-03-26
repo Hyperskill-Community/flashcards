@@ -3,6 +3,9 @@
     <classpathModifications>
       <entry path="$PROJECT_DIR$/frontend/build/distributions/flashcards-client.jar" />
     </classpathModifications>
+    <envs>
+      <env name="HOST_IP" value="192.168.2.102" />
+    </envs>
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="flashcards.flashcards-server.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="org.hyperskill.community.flashcards.FlashcardsApplication" />

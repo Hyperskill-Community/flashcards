@@ -5,6 +5,7 @@
     </classpathModifications>
     <envs>
       <env name="DEV_MODE" value="true" />
+      <env name="HOST_IP" value="192.168.2.102" />
     </envs>
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="flashcards.flashcards-server.main" />
