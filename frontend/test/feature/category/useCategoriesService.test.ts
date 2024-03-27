@@ -9,7 +9,8 @@ vi.mock('@/shared/composables/useApi', () => {
       post: vi.fn(),
       put: vi.fn(),
       delete: vi.fn(),
-    })};
+    })
+  };
 });
 
 describe('useCategoriesService', () => {
@@ -18,17 +19,17 @@ describe('useCategoriesService', () => {
     id: '1',
     name: 'Test Category',
     description: 'Test Description',
-    actions: [{action: ActionType.READ, uri: '/read' }]
+    actions: [{action: ActionType.READ, uri: '/read'}]
   };
 
   const writeCat: Category = {
     id: '2',
     name: 'Other Category',
     description: 'Other Description',
-    actions: [{action: ActionType.WRITE, uri: '/write' }]
+    actions: [{action: ActionType.WRITE, uri: '/write'}]
   };
 
-  const page : CategoryPage = {
+  const page: CategoryPage = {
     categories: [readCat, writeCat],
     currentPage: 1,
     totalElements: 2,
@@ -54,7 +55,7 @@ describe('useCategoriesService', () => {
   it('postNewCategory should return category created', async () => {
     const newCat = {name: 'New Category', description: 'New Description'};
     await useCategoriesService().postNewCategory(newCat);
-    expect(useApi().post).toHaveBeenCalledWith('/categories', newCat, 'Category New Category successfully created!');
+    expect(useApi().post).toHaveBeenCalledWith('/categories', newCat, undefined, 'Category New Category successfully created!');
   });
 
 
