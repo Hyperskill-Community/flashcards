@@ -13,16 +13,16 @@ const useCategoriesService = () => {
     return await useApi().get<Category>(`${ENDPOINT}/${id}`);
   };
 
-  const postNewCategory = async (data: CategoryRequest)  => {
-    return await useApi().post(ENDPOINT, data, `Category ${data.name} successfully created!`);
+  const postNewCategory = async (data: CategoryRequest) => {
+    return await useApi().post(ENDPOINT, data,undefined, `Category ${data.name} successfully created!`);
   };
 
-  const putCategory = async (id: string, data: CategoryRequest) : Promise<Category>  => {
+  const putCategory = async (id: string, data: CategoryRequest): Promise<Category> => {
     return await useApi().put(`${ENDPOINT}/${id}`, data, {},
       `Category ${data.name} successfully updated!`);
   };
 
-  const deleteCategory = async (id: string)  => {
+  const deleteCategory = async (id: string) => {
     return await useApi().delete(`${ENDPOINT}/${id}`);
   };
 

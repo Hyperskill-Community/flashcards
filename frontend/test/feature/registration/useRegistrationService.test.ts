@@ -18,6 +18,6 @@ describe('useRegistrationService', () => {
     const email = 'email@test.com';
     const password = 'password';
     await useRegistrationService().postNewUser(email, password);
-    expect(useApi().post).toHaveBeenCalledWith('/register', {email, password}, `User ${email} registered successfully!`, 'Failed to register user');
+    expect(useApi().post).toHaveBeenCalledWith('/register', {email, password},undefined, `User ${email} registered successfully!`, 'Failed to register user');
   });
 });
