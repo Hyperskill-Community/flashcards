@@ -2,12 +2,16 @@
   <v-container :hidden="displayDetails || displayEdit">
     <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" color="secondary" fill-height>
       <v-card-title v-text="`Cards in ${categoryName}`" class="text-center text-h4"/>
-      <v-select
-        v-model="cardType"
-        label="Select type of new card"
-        :items="[CardType.SIMPLEQA, CardType.MULTIPLE_CHOICE, CardType.SINGLE_CHOICE]"
-      ></v-select>
-      <add-mdi-button tooltip-text="create card" :click-handler="addCard"/>
+      <div class="d-flex flex-row justify-space-between gc-12">
+        <v-select
+          v-model="cardType"
+          label="Select type of new card"
+          :items="[CardType.SIMPLEQA, CardType.MULTIPLE_CHOICE, CardType.SINGLE_CHOICE]"
+        ></v-select>
+        <add-mdi-button tooltip-text="create card" :click-handler="addCard"/>
+      </div>
+
+
       <v-form @submit.prevent="filter.set = filter.input">
         <v-text-field clearable @click:clear="filter.input=''" v-model="filter.input"
                       label="Filter on title, tags and question" prepend-inner-icon="mdi-magnify"/>
@@ -23,7 +27,7 @@
 
 <script setup lang="ts">
 import {ref, shallowRef} from "vue";
-import {Card, CardType} from "@/feature/cards/model/card.ts";
+import {Card, CardType, generateNewCard} from "@/feature/cards/model/card.ts";
 import useCardsService from "@/feature/cards/composables/useCardsService.ts";
 import CardDetails from "@/feature/cards/components/CardDetails.vue";
 import CardItemScroller from "@/feature/cards/components/CardItemScroller.vue";
@@ -52,31 +56,7 @@ const openCard = async (id: string) => {
 };
 
 const addCard = async () => {
-  card.value = {} as Card;
-
-  // shared fields of all types of card
-  card.value.tags = [];
-  card.value.title = 'new card';
-  card.value.question = 'New card?';
-
-  switch (cardType.value) {
-    case CardType.SIMPLEQA:
-      card.value.type = CardType.SIMPLEQA;
-      card.value.answer = 'New card';
-      break;
-    case CardType.MULTIPLE_CHOICE:
-      card.value.type = CardType.MULTIPLE_CHOICE;
-      card.value.correctOptions = [0];
-      card.value.options = ['choice 1'];
-      break;
-    case CardType.SINGLE_CHOICE:
-      card.value.type = CardType.SINGLE_CHOICE;
-      card.value.options = ['choice 1'];
-      card.value.correctOption = 0;
-      break;
-    default:
-      break;
-  }
+  card.value = generateNewCard(cardType.value);
   displayCreate.value = true;
   displayEdit.value = true;
 };

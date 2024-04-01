@@ -27,7 +27,7 @@ const useCardsService = () => {
   };
 
   const createCard = async (categoryId: string, data: Card) => {
-    await useApi().post(`${ENDPOINT}`, data,{categoryId: categoryId}, `Card ${data.question} successfully created!`);
+    await useApi().post(`${ENDPOINT}`, data, `Card ${data.question} successfully created!`, '',{categoryId: categoryId});
   };
 
   return {

@@ -11,8 +11,8 @@ const useApi = () => {
   };
 
   return {
-    post: async <R>(url: string, requestData: R, query?: Record<string, string>, successMessage?: string,
-                    errorMessage?: string, customError?: ErrorState) => {
+    post: async <R>(url: string, requestData: R, successMessage?: string,
+                    errorMessage?: string, query?: Record<string, string>, customError?: ErrorState) => {
       try {
         const urlWithParams = query ?
           `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}` : url;

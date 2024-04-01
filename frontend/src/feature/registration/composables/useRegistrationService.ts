@@ -7,7 +7,7 @@ const useRegistrationService = () => {
       email: email,
       password: password,
     };
-    await useApi().post("/register", data, undefined,`User ${email} registered successfully!`,
+    await useApi().post("/register", data,`User ${email} registered successfully!`,
       'Failed to register user');
   };
 

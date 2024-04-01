@@ -55,7 +55,7 @@ describe('useCategoriesService', () => {
   it('postNewCategory should return category created', async () => {
     const newCat = {name: 'New Category', description: 'New Description'};
     await useCategoriesService().postNewCategory(newCat);
-    expect(useApi().post).toHaveBeenCalledWith('/categories', newCat, undefined, 'Category New Category successfully created!');
+    expect(useApi().post).toHaveBeenCalledWith('/categories', newCat, 'Category New Category successfully created!');
   });
 
 
