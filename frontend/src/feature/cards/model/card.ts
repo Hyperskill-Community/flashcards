@@ -42,6 +42,35 @@ export const clone = (card: Card) : Card => {
   };
 };
 
+export const generateNewCard = (cardType: CardType) : Card =>{
+  const card = {} as Card;
+
+  // shared fields of all types of card
+  card.tags = [];
+  card.title = '';
+  card.question = '';
+
+  switch (cardType) {
+    case CardType.SIMPLEQA:
+      card.type = CardType.SIMPLEQA;
+      card.answer = 'New card';
+      break;
+    case CardType.MULTIPLE_CHOICE:
+      card.type = CardType.MULTIPLE_CHOICE;
+      card.correctOptions = [0];
+      card.options = ['choice 1'];
+      break;
+    case CardType.SINGLE_CHOICE:
+      card.type = CardType.SINGLE_CHOICE;
+      card.options = ['choice 1'];
+      card.correctOption = 0;
+      break;
+    default:
+      break;
+  }
+  return card;
+};
+
 export const translateType = (type: CardType) : string => {
   switch (type) {
     case CardType.SIMPLEQA:

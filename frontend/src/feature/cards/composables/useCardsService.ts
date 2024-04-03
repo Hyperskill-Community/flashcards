@@ -26,12 +26,17 @@ const useCardsService = () => {
     await useApi().delete(`${ENDPOINT}/${data.id}`, {categoryId: categoryId}, `Card ${data.question} successfully deleted!`);
   };
 
+  const createCard = async (categoryId: string, data: Card) => {
+    await useApi().post(`${ENDPOINT}`, data, `Card ${data.question} successfully created!`, '',{categoryId: categoryId});
+  };
+
   return {
     getCards,
     getCardById,
     getCardCount,
     putCard,
-    deleteCard
+    deleteCard,
+    createCard,
   };
 };
 export default useCardsService;
