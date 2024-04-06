@@ -53,16 +53,16 @@ export const generateNewCard = (cardType: CardType) : Card =>{
   switch (cardType) {
     case CardType.SIMPLEQA:
       card.type = CardType.SIMPLEQA;
-      card.answer = 'New card';
+      card.answer = '';
       break;
     case CardType.MULTIPLE_CHOICE:
       card.type = CardType.MULTIPLE_CHOICE;
-      card.correctOptions = [0];
-      card.options = ['choice 1'];
+      card.correctOptions = [];
+      card.options = [''];
       break;
     case CardType.SINGLE_CHOICE:
       card.type = CardType.SINGLE_CHOICE;
-      card.options = ['choice 1'];
+      card.options = [''];
       card.correctOption = 0;
       break;
     default:
