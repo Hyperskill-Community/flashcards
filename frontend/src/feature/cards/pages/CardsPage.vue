@@ -96,9 +96,7 @@ const editForm = () => {
   uiState.value.display = 'form';
 };
 
-const closeForm = () => {
-  uiState.value.formMode === 'edit' ?
-    uiState.value.display = 'details' :
-    uiState.value.display = 'cards';
+const closeForm = () => { // switch display to details for edit mode, cards for add mode
+  uiState.value.display = uiState.value.formMode === 'edit' ? 'details' : 'cards';
 };
 </script>
