@@ -26,7 +26,7 @@
 
     <v-card-actions class="pa-2 ma-0">
       <v-spacer/>
-      <save-mdi-button :disabled="!formValid" :click-handler="() => emit('update', newCard)"/>
+      <save-mdi-button :disabled="!formValid" :click-handler="emitAction"/>
       <cancel-mdi-button tooltip-text="Reset content"
                          :click-handler="resetNewCard"/>
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -50,15 +50,21 @@ import BaseCardPage from "@/shared/pages/BaseCardPage.vue";
 
 const props = defineProps<({
   card: Card,
+  mode: 'edit' | 'add',
 })>();
 
 const emit = defineEmits<({
   'close': [val: boolean],
+  'post': [val: Card],
   'update': [val: Card],
 })>();
 
 const newCard = ref<Card>(clone(props.card));
 const formValid = ref(false);
+
+const emitAction = () => props.mode === 'edit'
+  ? emit('update', newCard.value)
+  : emit('post', newCard.value);
 
 const resetNewCard = () => newCard.value = clone(props.card);
 </script>

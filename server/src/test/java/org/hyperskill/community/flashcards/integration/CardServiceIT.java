@@ -28,7 +28,6 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -47,7 +46,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DataMongoTest
 @EnableMongoAuditing
 @ContextConfiguration(classes = TestMongoConfiguration.class)
-@TestPropertySource(properties = {"spring.profiles.active=test"})
 class CardServiceIT {
 
     private static final String PATH = "/json/cards.json";
