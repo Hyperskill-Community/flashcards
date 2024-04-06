@@ -17,7 +17,8 @@ describe('errorService', () => {
   });
 
   it('should handle and throw errors correctly', () => {
-    const error = new Error('Test Error');
+    const testErrorMessage = 'Test Error';
+    const error = new Error(testErrorMessage);
     const axiosError = {
       isAxiosError: true,
       response: {
@@ -28,9 +29,9 @@ describe('errorService', () => {
       }
     };
     expect(() => useErrorService().handleAndThrow(axiosError)).toThrowError('Not Found');
-    expect(useToastService().showError).toHaveBeenCalledWith('Not Found','Error status 404');
-    expect(() => useErrorService().handleAndThrow(error)).toThrowError('Unknown Error');
-    expect(useToastService().showError).toHaveBeenCalledWith('Service Unavailable','Unknown Error');
+    expect(useToastService().showError).toHaveBeenCalledWith('Not Found', 'Error status 404');
+    expect(() => useErrorService().handleAndThrow(error)).toThrowError(testErrorMessage);
+    expect(useToastService().showError).toHaveBeenCalledWith('Service Unavailable', testErrorMessage);
   });
 
   it('should handle and notify errors correctly', () => {

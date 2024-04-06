@@ -43,7 +43,7 @@ describe('useCategoriesService', () => {
   it('getCategories should return categories in page', async () => {
     vi.mocked(useApi().get).mockResolvedValue(page);
     await expect(useCategoriesService().getCategories()).resolves.toEqual(page);
-    expect(useApi().get).toHaveBeenCalledWith('/categories', {page: '0'});
+    expect(useApi().get).toHaveBeenCalledWith('/categories', {query: {page: '0'}});
   });
 
   it('getCategoryById should return category by id', async () => {
@@ -55,14 +55,16 @@ describe('useCategoriesService', () => {
   it('postNewCategory should return category created', async () => {
     const newCat = {name: 'New Category', description: 'New Description'};
     await useCategoriesService().postNewCategory(newCat);
-    expect(useApi().post).toHaveBeenCalledWith('/categories', newCat, 'Category New Category successfully created!');
+    expect(useApi().post).toHaveBeenCalledWith('/categories', newCat,
+      {successMessage: 'Category New Category successfully created!'});
   });
 
 
   it('putCategory should return category updated', async () => {
     const updatedCat = {name: 'Updated Category', description: 'Updated Description'};
     await useCategoriesService().putCategory('1', updatedCat);
-    expect(useApi().put).toHaveBeenCalledWith('/categories/1', updatedCat, {}, 'Category Updated Category successfully updated!');
+    expect(useApi().put).toHaveBeenCalledWith('/categories/1', updatedCat,
+      {successMessage: 'Category Updated Category successfully updated!'});
   });
 
   it('deleteCategory should return category removed', async () => {

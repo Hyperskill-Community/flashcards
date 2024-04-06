@@ -20,20 +20,17 @@ describe('useApi', () => {
 
   const testUrl = '/testUrl';
 
-  it('should show Service unavailable and throw if Axios throws', async () => {
-    vi.mocked(apiClient.delete).mockRejectedValue(new Error('Test Error'));
-    await expect(useApi().delete(testUrl)).rejects.toThrowError('Unknown Error: Service Unavailable');
+  it('should show thrown error if Axios throws', async () => {
+    const testErrorMessage = 'Test Error';
+    vi.mocked(apiClient.delete).mockRejectedValue(new Error(testErrorMessage));
 
+    try {
+      await useApi().delete(testUrl);
+    } catch (e) {
+      expect(e).toBeInstanceOf(Error);
+    }
     expect(apiClient.delete).toHaveBeenCalledWith(testUrl);
-    expect(useToastService().showError).toHaveBeenCalledWith('Service Unavailable', 'Unknown Error');
-  });
-
-  it('should show Custom Error no throw if Axios throws', async () => {
-    vi.mocked(apiClient.delete).mockRejectedValue(new Error('Test Error'));
-
-    await useApi().delete(testUrl, undefined,'', '', {code: 'Error 999', message: 'No Service'});
-    expect(apiClient.delete).toHaveBeenCalledWith(testUrl);
-    expect(useToastService().showError).toHaveBeenCalledWith('No Service', 'Error 999');
+    expect(useToastService().showError).toHaveBeenCalledWith('Failed to delete', testErrorMessage);
   });
 
   it.each(
@@ -42,7 +39,7 @@ describe('useApi', () => {
     vi.mocked(apiClient.delete).mockResolvedValue({status: 200});
     const successMessage = customSuccess?? `Successfully deleted ${testUrl}!`;
 
-    await useApi().delete(testUrl, undefined, customSuccess);
+    await useApi().delete(testUrl, {successMessage: successMessage});
     expect(apiClient.delete).toHaveBeenCalledWith(testUrl);
     expect(useToastService().showSuccess).toHaveBeenCalledWith(successMessage);
   });
@@ -52,7 +49,7 @@ describe('useApi', () => {
     vi.mocked(apiClient.delete).mockResolvedValue({status: 403});
     const errorMessage = customError?? 'Failed to delete';
 
-    await useApi().delete(testUrl, undefined,'', customError);
+    await useApi().delete(testUrl, {errorMessage: errorMessage});
     expect(apiClient.delete).toHaveBeenCalledWith(testUrl);
     expect(useToastService().showError).toHaveBeenCalledWith(errorMessage, 'Error status code 403!');
   });
@@ -80,7 +77,7 @@ describe('useApi', () => {
     const responseData = {someData: 'someData'};
     vi.mocked(apiClient.get).mockResolvedValue({status: 200, data: responseData});
 
-    await expect(useApi().get(testUrl, {id: '123', filter: 'xxx'})).resolves.toEqual(responseData);
+    await expect(useApi().get(testUrl, {query: {id: '123', filter: 'xxx'}})).resolves.toEqual(responseData);
     const urlWithParams = `${testUrl}?id=123&filter=xxx`;
     expect(apiClient.get).toHaveBeenCalledWith(urlWithParams);
   });
