@@ -64,7 +64,7 @@ const addCard = async () => {
 const updateCard = async (newCard: Card) => {
   newCard.tags = newCard.tags.filter(tag => !!tag);
   if (displayCreate.value) {
-    await useCardsService().createCard(props.categoryId, newCard);
+    await useCardsService().postNewCard(props.categoryId, newCard);
     card.value = {} as Card;
   } else {
     card.value = await useCardsService().putCard(props.categoryId, newCard);

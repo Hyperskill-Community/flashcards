@@ -1,87 +1,85 @@
 import apiClient from '@/plugins/axios';
-import {ErrorState, useErrorService} from "@/shared/composables/errorService";
+import {useErrorService} from "@/shared/composables/errorService";
 import {useToastService} from "@/shared/composables/toastService";
+
 
 const useApi = () => {
 
-  const handleNonAxiosError = (error: any, customError?: ErrorState) => {
-    customError
-      ? useErrorService().handleAndNotify(customError.code, customError.message)
-      : useErrorService().handleAndThrow(error);
+  interface ApiOptions {
+    successMessage?: string;
+    errorMessage?: string;
+    query?: Record<string, string>;
+  }
+
+  const joinUrlAndQueryParams = (url: string, query?: Record<string, string>) => {
+    return query
+      ? `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}`
+      : url;
   };
 
   return {
-    post: async <R>(url: string, requestData: R, successMessage?: string,
-                    errorMessage?: string, query?: Record<string, string>, customError?: ErrorState) => {
+    post: async <R>(url: string, requestData: R, options: ApiOptions = {}) => {
+      const urlWithParams = joinUrlAndQueryParams(url, options.query);
+      const errorMessage = options.errorMessage ?? 'Failed to post';
       try {
-        const urlWithParams = query ?
-          `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}` : url;
         const response = await apiClient.post(urlWithParams, requestData);
         if (response.status !== 200 && response.status !== 201) {
-          useErrorService().handleAndNotify(
-            `Error status code ${response.status}!`, errorMessage ?? 'Failed to post');
+          useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage);
         } else {
-          useToastService().showSuccess(successMessage ?? `Successfully posted to ${url}!`);
+          useToastService().showSuccess(options.successMessage ?? `Successfully posted to ${url}!`);
         }
       } catch (error: any) {
-        handleNonAxiosError(error, customError);
+        useErrorService().handleAndThrow(error, errorMessage);
       }
     },
 
-    get: async <R>(url: string, query?: Record<string, string>,
-                   errorMessage?: string, customError?: ErrorState): Promise<R> => {
-      const urlWithParams = query ?
-        `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}` : url;
-
+    get: async <R>(url: string, options: ApiOptions = {}): Promise<R> => {
+      const urlWithParams = joinUrlAndQueryParams(url, options.query);
+      const errorMessage = options.errorMessage ?? 'Failed to load ${urlWithParams}';
       try {
         const response = await apiClient.get(urlWithParams);
         if (response.status !== 200) {
-          useErrorService().handleAndNotify(
-            `Error status code ${response.status}!`, errorMessage ?? `Failed to load ${urlWithParams}`);
+          useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage);
           return {} as R;
         } else {
           return response.data;
         }
       } catch (error: any) {
-        handleNonAxiosError(error, customError);
+        useErrorService().handleAndThrow(error, errorMessage);
         return {} as R;
       }
     },
 
-    put: async <R, S>(url: string, requestData: R, query?: Record<string, string>, successMessage?: string,
-                      errorMessage?: string, customError?: ErrorState): Promise<S> => {
-      const urlWithParams = query ?
-        `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}` : url;
+    put: async <R, S>(url: string, requestData: R, options: ApiOptions = {}): Promise<S> => {
+      const urlWithParams = joinUrlAndQueryParams(url, options.query);
+      const errorMessage = options.errorMessage ?? 'Failed to update';
       try {
         const response = await apiClient.put(urlWithParams, requestData);
         if (response.status != 200) {
-          useErrorService().handleAndNotify(
-            `Error status code ${response.status}!`, errorMessage ?? 'Failed to update');
+          useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage);
           return {} as S;
         } else {
-          useToastService().showSuccess(successMessage ?? `Successfully updated ${url}!`);
+          useToastService().showSuccess(options.successMessage ?? `Successfully updated ${url}!`);
           return response.data;
         }
       } catch (error: any) {
-        handleNonAxiosError(error, customError);
+        useErrorService().handleAndThrow(error, errorMessage);
         return {} as S;
       }
     },
 
-    delete: async (url: string, query?: Record<string, string>, successMessage?: string,
-                   errorMessage?: string, customError?: ErrorState) => {
-      const urlWithParams = query ?
-        `${url}?${Object.keys(query).map(key => key + '=' + query[key]).join('&')}` : url;
+    delete: async (url: string, options: ApiOptions = {}) => {
+      const urlWithParams = joinUrlAndQueryParams(url, options.query);
+      const errorMessage = options.errorMessage ?? 'Failed to delete';
       try {
         const response = await apiClient.delete(urlWithParams);
         if (response.status != 200) {
-          useErrorService().handleAndNotify(
-            `Error status code ${response.status}!`, errorMessage ?? 'Failed to delete');
+          useErrorService().handleAndNotify(`Error status code ${response.status}!`, errorMessage);
         } else {
-          useToastService().showSuccess(successMessage ?? `Successfully deleted ${url}!`);
+          useToastService().showSuccess(options.successMessage ?? `Successfully deleted ${url}!`);
         }
       } catch (error: any) {
-        handleNonAxiosError(error, customError);
+        useErrorService().handleAndThrow(error, errorMessage);
       }
     }
   };

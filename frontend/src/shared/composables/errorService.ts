@@ -11,7 +11,7 @@ export const useErrorService = () => {
     const errorState = {} as ErrorState;
     errorState.code = (error.isAxiosError && error.response)
       ? `Error status ${error.response.status}`
-      : 'Unknown Error';
+      : error.message ?? 'Unknown Error';
     errorState.message = (error.isAxiosError && error.response?.data)
       ? error.response.data.message
       : message ?? 'Service Unavailable';

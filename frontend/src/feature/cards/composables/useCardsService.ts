@@ -7,27 +7,30 @@ const useCardsService = () => {
 
   const getCards = async (categoryId: string, titleFilter: string, page: number) => {
     return await useApi().get<CardPage>(ENDPOINT,
-      {categoryId: categoryId, page: String(page), titleFilter: titleFilter});
+      {query: {categoryId: categoryId, page: String(page), titleFilter: titleFilter}});
   };
 
   const getCardById = async (cardId: string, categoryId: string) => {
-    return await useApi().get<Card>(`${ENDPOINT}/${cardId}`, {categoryId: categoryId});
+    return await useApi().get<Card>(`${ENDPOINT}/${cardId}`, {query: {categoryId: categoryId}});
   };
 
   const getCardCount = async (categoryId: string) => {
-    return await useApi().get<number>(`${ENDPOINT}/count`, {categoryId: categoryId});
+    return await useApi().get<number>(`${ENDPOINT}/count`, {query: {categoryId: categoryId}});
   };
 
   const putCard = async (categoryId: string, data: Card): Promise<Card> => {
-    return await useApi().put(`${ENDPOINT}/${data.id}`, data, {categoryId: categoryId}, `Card ${data.question} successfully updated!`);
+    return await useApi().put(`${ENDPOINT}/${data.id}`, data,
+      {query: {categoryId: categoryId}, successMessage: `Card ${data.question} successfully updated!`});
   };
 
   const deleteCard = async (categoryId: string, data: Card) => {
-    await useApi().delete(`${ENDPOINT}/${data.id}`, {categoryId: categoryId}, `Card ${data.question} successfully deleted!`);
+    await useApi().delete(`${ENDPOINT}/${data.id}`,
+      {query: {categoryId: categoryId}, successMessage: `Card ${data.question} successfully deleted!`});
   };
 
-  const createCard = async (categoryId: string, data: Card) => {
-    await useApi().post(`${ENDPOINT}`, data, `Card ${data.question} successfully created!`, '',{categoryId: categoryId});
+  const postNewCard = async (categoryId: string, data: Card) => {
+    await useApi().post(`${ENDPOINT}`, data,
+      {query: {categoryId: categoryId}, successMessage: `Card ${data.question} successfully created!`});
   };
 
   return {
@@ -36,7 +39,7 @@ const useCardsService = () => {
     getCardCount,
     putCard,
     deleteCard,
-    createCard,
+    postNewCard,
   };
 };
 export default useCardsService;

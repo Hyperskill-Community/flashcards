@@ -6,7 +6,7 @@ const useCategoriesService = () => {
   const ENDPOINT = '/categories';
 
   const getCategories = async (page: number = 0) => {
-    return await useApi().get<CategoryPage>(ENDPOINT, {page: String(page)});
+    return await useApi().get<CategoryPage>(ENDPOINT, {query: {page: String(page)}});
   };
 
   const getCategoryById = async (id: string) => {
@@ -14,12 +14,12 @@ const useCategoriesService = () => {
   };
 
   const postNewCategory = async (data: CategoryRequest) => {
-    return await useApi().post(ENDPOINT, data, `Category ${data.name} successfully created!`);
+    return await useApi().post(ENDPOINT, data, {successMessage:`Category ${data.name} successfully created!`});
   };
 
   const putCategory = async (id: string, data: CategoryRequest): Promise<Category> => {
-    return await useApi().put(`${ENDPOINT}/${id}`, data, {},
-      `Category ${data.name} successfully updated!`);
+    return await useApi().put(`${ENDPOINT}/${id}`, data,
+      {successMessage: `Category ${data.name} successfully updated!`});
   };
 
   const deleteCategory = async (id: string) => {
