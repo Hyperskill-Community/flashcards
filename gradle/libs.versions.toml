@@ -2,6 +2,6 @@
 spring-boot = "3.2.4"
 spring-dependency-management = "1.1.4"
 node-gradle = "7.0.2"
-sonar-gradle = "4.4.1.3373"
-node-js = "21.7.1"
+sonar-gradle = "5.0.0.4638"
+node-js = "21.7.2"
 graalvm-buildtools = "0.10.1"

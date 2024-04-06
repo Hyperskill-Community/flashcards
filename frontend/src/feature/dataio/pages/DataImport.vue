@@ -20,7 +20,7 @@
           <v-form @submit.prevent class="d-flex align-center justify-lg-center">
             <v-file-input density="compact" v-model="filePath" label="Choose .json file to import"
                           accept="application/json" prepend-icon="mdi-camera" class="v-col-sm-10"/>
-            <submit-mdi-button :disabled="!filePath.length" :clickHandler="exportData"
+            <submit-mdi-button :disabled="!filePath.length" :clickHandler="importData"
                                tooltip-text="Import Json data"/>
           </v-form>
         </v-col>
@@ -36,7 +36,7 @@ import BaseCardPage from "@/shared/pages/BaseCardPage.vue";
 
 const filePath = ref<File[]>([]);
 
-const exportData = () => {
+const importData = () => {
   console.log(filePath.value[0].text());
 };
 </script>

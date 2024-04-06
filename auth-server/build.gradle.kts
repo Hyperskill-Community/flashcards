@@ -40,10 +40,10 @@ tasks.withType<Test> {
 }
 
 val dockerHubRepo = "wisskirchenj/"
-// On ARM64 (!) uncomment the following lines to build JVM AMD64 image, since then default paketo builder is used
 tasks.named<BootBuildImage>("bootBuildImage") {
-    builder.set("dashaun/builder:tiny")
+//    buildpacks.set(listOf("paketobuildpacks/java:beta"))
+    buildpacks.set(listOf("paketobuildpacks/java-native-image:beta"))
+    builder.set("paketobuildpacks/builder-jammy-buildpackless-tiny")
     imageName.set(dockerHubRepo + rootProject.name + project.name + ":" + version)
     createdDate.set("now")
-    environment.put("BP_NATIVE_IMAGE", "true")
 }

@@ -18,27 +18,28 @@
     "roboto-fontface": "*",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
-    "vuetify": "^3.5.11"
+    "vuetify": "^3.5.14"
   },
   "devDependencies": {
     "@babel/types": "^7.24.0",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.4",
+    "@typescript-eslint/eslint-plugin": "^7.5.0",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitest/coverage-v8": "^1.4.0",
     "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/test-utils": "^2.4.5",
     "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.23.0",
+    "eslint-plugin-vue": "^9.24.0",
     "flush-promises": "^1.0.2",
     "jsdom": "^24.0.0",
     "resize-observer-polyfill": "^1.5.1",
-    "sass": "^1.72.0",
+    "sass": "^1.74.1",
     "sonar-scanner": "^3.1.0",
-    "typescript": "^5.4.3",
+    "typescript": "^5.4.4",
     "unplugin-fonts": "^1.0.3",
-    "vite": "^5.2.6",
+    "vite": "^5.2.8",
     "vite-plugin-vuetify": "^2.0.3",
     "vitest": "^1.4.0",
-    "vue-tsc": "^2.0.7"
+    "vue-tsc": "^2.0.10"
   }
 }
