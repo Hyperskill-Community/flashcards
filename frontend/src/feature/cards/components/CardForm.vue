@@ -1,6 +1,6 @@
 <template>
   <base-card-page>
-    <v-card-title class="text-center text-h4">Edit card of type {{ translateType(card.type) }}</v-card-title>
+    <v-card-title class="text-center text-h4">{{ mode }} card of type {{ translateType(card.type) }}</v-card-title>
     <v-card-subtitle class="text-center">Submit Changes with Enter or Save button</v-card-subtitle>
 
     <v-card-text>
@@ -50,7 +50,7 @@ import BaseCardPage from "@/shared/pages/BaseCardPage.vue";
 
 const props = defineProps<({
   card: Card,
-  mode: 'edit' | 'add',
+  mode: 'Edit' | 'Add',
 })>();
 
 const emit = defineEmits<({
@@ -62,7 +62,7 @@ const emit = defineEmits<({
 const newCard = ref<Card>(clone(props.card));
 const formValid = ref(false);
 
-const emitAction = () => props.mode === 'edit'
+const emitAction = () => props.mode === 'Edit'
   ? emit('update', newCard.value)
   : emit('post', newCard.value);
 

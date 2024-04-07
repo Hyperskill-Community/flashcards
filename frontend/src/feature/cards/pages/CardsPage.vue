@@ -45,10 +45,10 @@ const props = defineProps<({
 const categoryName = useRoute().query.name;
 const filter = ref({input: "", set: ""});
 const uiState = ref<{
-  display: 'cards' | 'form' | 'details', formMode: 'edit' | 'add', selectActive: boolean
+  display: 'cards' | 'form' | 'details', formMode: 'Edit' | 'Add', selectActive: boolean
 }>({
   display: 'cards',
-  formMode: 'edit',
+  formMode: 'Edit',
   selectActive: false
 });
 const toggleReload = shallowRef(false);
@@ -64,7 +64,7 @@ const addButtonClicked = () => {
   // If no card type selection shown, show it, else open add form with empty card of selected type
   if (uiState.value.selectActive) {
     card.value = emptyCard(cardType.value);
-    uiState.value.formMode = 'add';
+    uiState.value.formMode = 'Add';
     uiState.value.display = 'form';
   }
   uiState.value.selectActive = !uiState.value.selectActive;
@@ -92,11 +92,11 @@ const reloadAndShowCards = () => {
 };
 
 const editForm = () => {
-  uiState.value.formMode = 'edit';
+  uiState.value.formMode = 'Edit';
   uiState.value.display = 'form';
 };
 
 const closeForm = () => { // switch display to details for edit mode, cards for add mode
-  uiState.value.display = uiState.value.formMode === 'edit' ? 'details' : 'cards';
+  uiState.value.display = uiState.value.formMode === 'Edit' ? 'details' : 'cards';
 };
 </script>

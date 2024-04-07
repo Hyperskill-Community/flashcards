@@ -10,7 +10,7 @@
 
     <v-card-text>
       <h4 class="pa-2 ma-2">{{ card.question }}</h4>
-      <v-container class="pa-2 mt-2">
+      <v-form @submit.prevent @keydown.enter="highlightCorrectAnswers" class="pa-2 mt-2">
         <v-text-field v-if="card.type === CardType.SIMPLEQA" v-model="providedAnswer"
                       density="compact" label="Your Answer"
                       :class="{'correct': answerShown && isCorrect(providedAnswer),
@@ -25,17 +25,15 @@
                                       'error': selected.includes(option) && answerShown && !isCorrect(option),
                                       'selected': !answerShown && selected.includes(option)}"/>
         </v-list>
-      </v-container>
+        <v-row class="mt-3 pa-3 d-flex justify-space-around">
+          <v-btn @click="highlightCorrectAnswers" :disabled="!selected && !providedAnswer"
+                 prepend-icon="mdi-check-circle" color="green" variant="outlined">
+            Check Answer
+          </v-btn>
+        </v-row>
+      </v-form>
     </v-card-text>
 
-    <v-container>
-      <v-row class="pa-3 d-flex justify-space-around">
-        <v-btn @click="highlightCorrectAnswers()" :disabled="!selected && !providedAnswer"
-               prepend-icon="mdi-check-circle" color="green" variant="outlined">
-          Check Answer
-        </v-btn>
-      </v-row>
-    </v-container>
 
     <v-card-actions class="pa-2 ma-0">
       <v-spacer/>

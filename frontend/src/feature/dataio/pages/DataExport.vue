@@ -12,19 +12,17 @@
     <v-card-item>
       <v-img src="@/assets/folder.jpg" aspect-ratio="2.25" class="mx-auto"/>
       <v-label class="float-right text-sm-subtitle-2 text-grey">Photo by&nbsp;<a
-        href="https://unsplash.com/@qwitka?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Maksym Kaharlytskyi</a>&nbsp;on&nbsp;<a
+        href="https://unsplash.com/@qwitka?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Maksym
+        Kaharlytskyi</a>&nbsp;on&nbsp;<a
         href="https://unsplash.com/photos/file-cabinet-Q9y3LRuuxmg?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
       </v-label>
     </v-card-item>
 
     <v-card-text class="mt-5 mb-5">
       <v-row justify="center">
-        <v-form cols="12" sm="6" md="4">
-          <input type="submit" hidden/><!-- Required for the form to submit on enter -->
-          <v-btn color="black" border @click="exportData" variant="text">
-            Start Export
-          </v-btn>
-        </v-form>
+        <v-btn color="black" border @click="exportData" variant="text">
+          Start Export
+        </v-btn>
       </v-row>
     </v-card-text>
 
