@@ -42,33 +42,14 @@ export const clone = (card: Card) : Card => {
   };
 };
 
-export const generateNewCard = (cardType: CardType) : Card =>{
-  const card = {} as Card;
-
-  // shared fields of all types of card
-  card.tags = [];
-  card.title = '';
-  card.question = '';
-
-  switch (cardType) {
-    case CardType.SIMPLEQA:
-      card.type = CardType.SIMPLEQA;
-      card.answer = '';
-      break;
-    case CardType.MULTIPLE_CHOICE:
-      card.type = CardType.MULTIPLE_CHOICE;
-      card.correctOptions = [];
-      card.options = [''];
-      break;
-    case CardType.SINGLE_CHOICE:
-      card.type = CardType.SINGLE_CHOICE;
-      card.options = [''];
-      card.correctOption = 0;
-      break;
-    default:
-      break;
-  }
-  return card;
+export const emptyCard = (cardType: CardType) : Card =>{
+  return {
+    type: cardType,
+    question: '',
+    tags: [],
+    options: [],
+    correctOptions: [],
+  };
 };
 
 export const translateType = (type: CardType) : string => {

@@ -3,6 +3,7 @@
     <div class="d-flex flex-wrap justify-sm-space-between ma-n3">
       <v-radio-group v-for="index in Array.from({ length: groupSize }, (_, ind) => ind)" :key="index"
                      :model-value="model"
+                     :rules="[v => v != undefined || 'Choose!']"
                      @update:model-value="val => model = val!">
         <v-radio :value="index" class="ml-n4 mt-n2 mb-n2" label="correct" color="green"/>
       </v-radio-group>
