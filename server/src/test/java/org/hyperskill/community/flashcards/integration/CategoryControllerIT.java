@@ -19,6 +19,7 @@ import static org.hyperskill.community.flashcards.TestUtils.TEST1;
 import static org.hyperskill.community.flashcards.TestUtils.TEST2;
 import static org.hyperskill.community.flashcards.TestUtils.jwtUser;
 import static org.hyperskill.community.flashcards.TestUtils.oidc;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -61,7 +62,8 @@ class CategoryControllerIT {
     @Test
     void getCategoriesNotOwner_givesEmptyResponse() throws Exception {
         mockMvc.perform(get("/api/categories")
-                        .with(jwt().jwt(jwtUser(TEST2))))
+                        .with(jwt().jwt(jwtUser(TEST2)))
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(0))
                 .andExpect(jsonPath("$.isLast").value(true))
@@ -115,13 +117,13 @@ class CategoryControllerIT {
     @Test
     void createCategory_creates() throws Exception {
         var result = mockMvc.perform(post("/api/categories")
-                .with(oidc(TEST1)).contentType("application/json")
+                .with(oidc(TEST1)).with(csrf()).contentType("application/json")
                 .content("{\"name\":\"test\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         var id = Objects.requireNonNull(result.getResponse().getHeader("Location")).split("/")[3];
         mockMvc.perform(get("/api/categories/" + id)
-                        .with(oidc(TEST1)))
+                        .with(oidc(TEST1)).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("test"));
     }
@@ -129,13 +131,13 @@ class CategoryControllerIT {
     @Test
     void updateCategory_updates() throws Exception {
         var result = mockMvc.perform(post("/api/categories")
-                        .with(oidc(TEST1)).contentType("application/json")
+                        .with(oidc(TEST1)).with(csrf()).contentType("application/json")
                         .content("{\"name\":\"to-update\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         var id = Objects.requireNonNull(result.getResponse().getHeader("Location")).split("/")[3];
         mockMvc.perform(put("/api/categories/" + id)
-                        .with(oidc(TEST1)).contentType("application/json")
+                        .with(oidc(TEST1)).with(csrf()).contentType("application/json")
                 .content("{\"name\":\"updated\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("updated"));
@@ -144,16 +146,16 @@ class CategoryControllerIT {
     @Test
     void deleteCategory_deletes() throws Exception {
         var result = mockMvc.perform(post("/api/categories")
-                        .with(oidc(TEST1)).contentType("application/json")
+                        .with(oidc(TEST1)).with(csrf()).contentType("application/json")
                         .content("{\"name\":\"to-delete\"}"))
                 .andExpect(status().isCreated())
                 .andReturn();
         var id = Objects.requireNonNull(result.getResponse().getHeader("Location")).split("/")[3];
         mockMvc.perform(delete("/api/categories/" + id)
-                        .with(oidc(TEST1)))
+                        .with(oidc(TEST1)).with(csrf()))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/api/categories/" + id)
-                        .with(oidc(TEST1)))
+                        .with(oidc(TEST1)).with(csrf()))
                 .andExpect(status().isNotFound());
     }
 
