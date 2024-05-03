@@ -42,7 +42,7 @@ tasks.withType<Test> {
 val dockerHubRepo = "wisskirchenj/"
 tasks.named<BootBuildImage>("bootBuildImage") {
 //    buildpacks.set(listOf("paketobuildpacks/java:beta"))
-    buildpacks.set(listOf("paketobuildpacks/java-native-image:beta"))
+    buildpacks.set(listOf("paketobuildpacks/java-native-image:latest"))
     builder.set("paketobuildpacks/builder-jammy-buildpackless-tiny")
     imageName.set(dockerHubRepo + rootProject.name + project.name + ":" + version)
     createdDate.set("now")
