@@ -1,14 +1,23 @@
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
-    java
+    application
     id("org.springframework.boot") version libs.versions.spring.boot
     id("io.spring.dependency-management") version libs.versions.spring.dependency.management
+    id("com.gorylenko.gradle-git-properties") version libs.versions.git.gradle
     id("org.graalvm.buildtools.native") version libs.versions.graalvm.buildtools
+}
+
+graalvmNative {
+    testSupport.set(false) // seems to not work on 2024-06-02
 }
 
 group = "org.hyperskill.community"
 version = "0.0.1-SNAPSHOT"
+
+application {
+    mainClass.set("org.hyperskill.community.authserver.AuthServerApplication")
+}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -22,6 +31,10 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+springBoot {
+    buildInfo()
 }
 
 dependencies {
