@@ -3,9 +3,9 @@ package org.hyperskill.community.flashcards.card;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.client.ListCollectionNamesIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.MongoIterable;
 import org.bson.Document;
 import org.hyperskill.community.flashcards.registration.User;
 import org.hyperskill.community.flashcards.registration.UserDto;
@@ -40,7 +40,7 @@ class ExampleDataInitializerTest {
     MongoDatabase mongoDatabase;
 
     @Mock
-    MongoIterable<String> mongoIterable;
+    ListCollectionNamesIterable mongoIterable;
 
     @Mock
     MongoCollection<Document> mongoCollection;

@@ -22,6 +22,9 @@ import java.util.Set;
 public sealed interface Card permits QuestionAndAnswer, SingleChoiceQuiz, MultipleChoiceQuiz {
 
     String ID_KEY = "_id";
+    String QUESTION_KEY = "question";
+    String TAGS_KEY = "tags";
+    String TITLE_KEY = "title";
 
     String id();
 

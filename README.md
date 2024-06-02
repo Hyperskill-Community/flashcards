@@ -92,13 +92,13 @@ respectively by clicking the task under verification in the gradle tool window.
 ## Technology / External Libraries
 
 - Java 21
-- Spring Boot 3.2.1
+- Spring Boot 3.2.5
 - Mongo DB and Spring Authorization-server containerized via docker-compose
 - Vue 3 SPA-Frontend using component framework Vuetify 3
 - Packaging with Vite
 - Lombok
 - Testcontainers
-- Gradle 8.5
+- Gradle 8.7
 - Support for Native image on GraalVM (currently only arch-server)
 
 ## Program description

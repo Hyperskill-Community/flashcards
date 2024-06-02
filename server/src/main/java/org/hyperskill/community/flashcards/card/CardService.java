@@ -29,22 +29,28 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import static org.hyperskill.community.flashcards.card.model.Card.QUESTION_KEY;
+import static org.hyperskill.community.flashcards.card.model.Card.TAGS_KEY;
+import static org.hyperskill.community.flashcards.card.model.Card.TITLE_KEY;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class CardService {
+    public static final String CATEGORY_ID_NON_NULL = "Category ID cannot be null";
+    public static final String CARD_ID_NON_NULL = "Card ID cannot be null";
     private static final int PAGE_SIZE = 20;
+
     private final MongoTemplate mongoTemplate;
     private final CategoryService categoryService;
     private final CardMapper mapper;
 
     public Page<Card> getCardsByCategory(String username, String categoryId, int page, String titleFilter) {
-        Objects.requireNonNull(categoryId, "Category ID cannot be null");
+        Objects.requireNonNull(categoryId, CATEGORY_ID_NON_NULL);
 
         final var category = categoryService.findById(username, categoryId);
-        var pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by("question"));
+        var pageRequest = PageRequest.of(page, PAGE_SIZE, Sort.by(QUESTION_KEY));
         var query = createFilterQuery(titleFilter);
         var count = mongoTemplate.count(query, category.name());
         var cards = mongoTemplate.find(query.with(pageRequest), Card.class, category.name());
@@ -59,9 +65,9 @@ public class CardService {
         if (StringUtils.hasText(filter)) {
             var pattern = ".*" + filter + ".*";
             var criteria = new Criteria().orOperator(
-                    where("title").regex(pattern, "i"),
-                    where("tags").regex(pattern, "i"),
-                    where("question").regex(pattern, "i")
+                    where(TITLE_KEY).regex(pattern, "i"),
+                    where(TAGS_KEY).regex(pattern, "i"),
+                    where(QUESTION_KEY).regex(pattern, "i")
             );
             query.addCriteria(criteria);
         }
@@ -80,8 +86,8 @@ public class CardService {
     }
 
     public Card getCardById(String username, String cardId, String categoryId) {
-        Objects.requireNonNull(cardId, "Card ID cannot be null");
-        Objects.requireNonNull(categoryId, "Category ID cannot be null");
+        Objects.requireNonNull(cardId, CARD_ID_NON_NULL);
+        Objects.requireNonNull(categoryId, CATEGORY_ID_NON_NULL);
 
         var category = categoryService.findById(username, categoryId);
         var card = Optional.ofNullable(mongoTemplate.findById(cardId, Card.class, category.name()))
@@ -90,7 +96,7 @@ public class CardService {
     }
 
     public long deleteCardById(String username, String cardId, String categoryId) {
-        Objects.requireNonNull(cardId, "Card ID cannot be null");
+        Objects.requireNonNull(cardId, CARD_ID_NON_NULL);
 
         var collection = getCollectionName(username, categoryId, "d");
         var query = Query.query(where(Card.ID_KEY).is(cardId));
@@ -98,8 +104,8 @@ public class CardService {
     }
 
     public Card updateCardById(String username, String cardId, CardRequest request, String categoryId) {
-        Objects.requireNonNull(cardId, "Card ID cannot be null");
-        Objects.requireNonNull(categoryId, "Category ID cannot be null");
+        Objects.requireNonNull(cardId, CARD_ID_NON_NULL);
+        Objects.requireNonNull(categoryId, CATEGORY_ID_NON_NULL);
 
         var category = categoryService.findById(username, categoryId, "w");
         var cardBeforeUpdate = getCardById(username, cardId, categoryId);
@@ -128,7 +134,7 @@ public class CardService {
      * @return category name
      */
     private String getCollectionName(String username, String categoryId, String permission) {
-        Objects.requireNonNull(categoryId, "Category ID cannot be null");
+        Objects.requireNonNull(categoryId, CATEGORY_ID_NON_NULL);
         return categoryService.findById(username, categoryId, permission).name();
     }
 
@@ -136,9 +142,9 @@ public class CardService {
         Objects.requireNonNull(request, "Update request cannot be null");
 
         var update = new Update()
-                .set("title", request.title())
-                .set("question", request.question())
-                .set("tags", request.tags());
+                .set(TITLE_KEY, request.title())
+                .set(QUESTION_KEY, request.question())
+                .set(TAGS_KEY, request.tags());
 
         return switch (request) {
             case QuestionAndAnswerRequestDto qna -> update.set("answer", qna.answer());

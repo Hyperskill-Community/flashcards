@@ -3,8 +3,7 @@
     <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" color="secondary" fill-height>
       <v-card-title v-text="`Cards in ${categoryName}`" class="text-center text-h4"/>
       <v-row class="mr-0">
-        <v-col md="7"/>
-        <v-col cols="12" md="3">
+        <v-col cols="12" md="10">
             <v-select v-if="uiState.selectActive" v-model="cardType" label="Select type of new card"
                       :items="[CardType.SIMPLEQA, CardType.MULTIPLE_CHOICE, CardType.SINGLE_CHOICE]"/>
         </v-col>
