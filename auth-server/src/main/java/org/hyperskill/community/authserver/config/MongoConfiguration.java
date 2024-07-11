@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import java.util.Objects;
+import java.util.Optional;
 
 @Configuration
 @Slf4j
@@ -15,10 +15,7 @@ public class MongoConfiguration {
 
     @Bean
     public MongoTemplate mongoTemplate(Environment env) {
-        var host = env.getProperty("MONGO_HOST");
-        if (Objects.isNull(host)) {
-            host = "localhost";
-        }
+        var host = Optional.ofNullable(env.getProperty("MONGO_HOST")).orElse("localhost");
         var connectionString = "mongodb://%s:27017".formatted(host);
         log.info("Connecting to MongoDB at {}", connectionString);
         return new MongoTemplate(MongoClients.create(connectionString), "cards");
