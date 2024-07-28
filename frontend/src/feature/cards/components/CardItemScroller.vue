@@ -34,11 +34,13 @@ const emit = defineEmits<({
 
 const items = ref<CardItem[]>([]);
 const pagePointer = ref({current: 0, isLast: false});
+const doneCallback = ref<Function>(() => {});
 
 watch(() => props.filter, async () => await loadFiltered());
 watch(() => props.reload, async () => await loadFiltered());
 
 const fetchCardsPage = async ({done}: { done: Function }) => {
+  doneCallback.value = done;
   if (pagePointer.value.isLast) {
     done('empty');
     return;
@@ -46,14 +48,13 @@ const fetchCardsPage = async ({done}: { done: Function }) => {
   const cardResponse = await useCardsService().getCards(props.categoryId, props.filter, pagePointer.value.current);
   pagePointer.value.current = cardResponse.currentPage + 1;
   pagePointer.value.isLast = cardResponse.isLast;
-  const newItems = cardResponse.cards.filter(cardItem => !items.value.some(item => item.id === cardItem.id));
-  items.value = [...items.value, ...newItems];
+  items.value = [...items.value, ...cardResponse.cards];
   done('ok');
 };
 
 const loadFiltered = async () => {
   pagePointer.value = {current: 0, isLast: false}; // reset the page pointer
   items.value = []; // clear the items array
-  await fetchCardsPage({done: () => {}}); // trigger new load with filter
+  doneCallback.value('ok'); // reset internal state of VInfiniteScroller (see https://github.com/vuetifyjs/vuetify/issues/19935)
 };
 </script>

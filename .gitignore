@@ -9,6 +9,7 @@ out/
 *.p12
 *.key
 *.csr
+*.crt
 
 ### IntelliJ IDEA ###
 .idea/libraries/
