@@ -1,17 +1,33 @@
 <template>
-  <v-infinite-scroll :items="items"
-                     :onLoad="fetchCardsPage"
-                     :max-height="'60vh'"
-                     empty-text="No more cards">
-    <template v-for="(item, index) in items" :key="item">
+  <v-infinite-scroll
+    :items="items"
+    :onLoad="fetchCardsPage"
+    :max-height="'60vh'"
+    empty-text="No more cards"
+  >
+    <template
+      v-for="(item, index) in items"
+      :key="item"
+    >
       <div
         :class="['cursor-pointer', 'pa-3', 'd-flex', 'justify-space-between', 'align-center',
-            'v-col-sm-12', {'bg-white': index % 2 === 0}]"
-        @click="() => emit('openCard', item.id)">
-        <v-avatar v-text="`${index + 1}`" color="primary" size="large" class="mr-5"/>
+                 'v-col-sm-12', {'bg-white': index % 2 === 0}]"
+        @click="() => emit('openCard', item.id)"
+      >
+        <v-avatar
+          color="primary"
+          size="large"
+          class="mr-5"
+          v-text="`${index + 1}`"
+        />
         {{ item.question }}
-        <v-spacer/>
-        <v-avatar v-text="item.type.toUpperCase()" color="primary" size="large" class="mr-10"/>
+        <v-spacer />
+        <v-avatar
+          color="primary"
+          size="large"
+          class="mr-10"
+          v-text="item.type.toUpperCase()"
+        />
       </div>
     </template>
   </v-infinite-scroll>
@@ -34,12 +50,12 @@ const emit = defineEmits<({
 
 const items = ref<CardItem[]>([]);
 const pagePointer = ref({current: 0, isLast: false});
-const doneCallback = ref<Function>(() => {});
+const doneCallback = ref<(status: 'empty' | 'ok') => void>(() => {});
 
 watch(() => props.filter, async () => await loadFiltered());
 watch(() => props.reload, async () => await loadFiltered());
 
-const fetchCardsPage = async ({done}: { done: Function }) => {
+const fetchCardsPage = async ({done}: { done: (status: 'empty' | 'ok') => void }) => {
   doneCallback.value = done;
   if (pagePointer.value.isLast) {
     done('empty');

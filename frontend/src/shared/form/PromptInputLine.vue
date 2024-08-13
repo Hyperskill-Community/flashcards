@@ -1,11 +1,17 @@
 <template>
-  <v-textarea clearable rows="1" auto-grow dense
-                @click:clear="() => updateValue('')"
-                :model-value="modelValue"
-                :label="prompt"
-                @update:modelValue="updateValue"
-                :rules="required ? [v => !!v || 'must not be empty'] : []"
-                :class="`v-col-sm-${inputWidth} ${inputClass}`" density="compact"/>
+  <v-textarea
+    clearable
+    rows="1"
+    auto-grow
+    dense
+    :model-value="modelValue"
+    :label="prompt"
+    :rules="required ? [v => !!v || 'must not be empty'] : []"
+    :class="`v-col-sm-${inputWidth} ${inputClass}`"
+    density="compact"
+    @click:clear="() => updateValue('')"
+    @update:model-value="updateValue"
+  />
 </template>
 
 <script setup lang="ts">
@@ -17,6 +23,7 @@ withDefaults(defineProps<({
   inputClass?: string,
 })>(), {
   inputWidth: 12,
+  inputClass: '',
 });
 
 const emit = defineEmits<({

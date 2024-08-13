@@ -1,33 +1,61 @@
 <template>
   <base-card-page>
-    <v-card-title v-text="card.title" class="align-self-center"/>
+    <v-card-title
+      class="align-self-center"
+      v-text="card.title"
+    />
     <v-card-subtitle class="pa-2 ma-2 d-flex justify-space-between">
-      <v-card-text v-text="'Tags: '"/>
+      <v-card-text v-text="'Tags: '" />
       <v-list class="ma-0 pa-2 d-flex flex-row flex-wrap">
-        <v-list-item v-for="tag in card.tags" :key="tag" :title="tag"/>
+        <v-list-item
+          v-for="tag in card.tags"
+          :key="tag"
+          :title="tag"
+        />
       </v-list>
     </v-card-subtitle>
 
     <v-card-text>
-      <h4 class="pa-2 ma-2">{{ card.question }}</h4>
-      <v-form @submit.prevent @keydown.enter="highlightCorrectAnswers" class="pa-2 mt-2">
-        <v-text-field v-if="card.type === CardType.SIMPLEQA" v-model="providedAnswer"
-                      density="compact" label="Your Answer"
-                      :class="{'correct': answerShown && isCorrect(providedAnswer),
-                                     'error': answerShown && !isCorrect(providedAnswer)}"/>
-        <v-list v-else class="pa-0 d-flex flex-column flex-wrap">
-          <v-list-item v-for="(option, index) in card.options" :key="option"
-                       :title="parseOption(index, option)"
-                       @click="toggleOption(option)"
-                       :disabled="answerShown"
-                       class="cursor-pointer"
-                       :class="{'correct': answerShown && isCorrect(option),
-                                      'error': selected.includes(option) && answerShown && !isCorrect(option),
-                                      'selected': !answerShown && selected.includes(option)}"/>
+      <h4 class="pa-2 ma-2">
+        {{ card.question }}
+      </h4>
+      <v-form
+        class="pa-2 mt-2"
+        @submit.prevent
+        @keydown.enter="highlightCorrectAnswers"
+      >
+        <v-text-field
+          v-if="card.type === CardType.SIMPLEQA"
+          v-model="providedAnswer"
+          density="compact"
+          label="Your Answer"
+          :class="{'correct': answerShown && isCorrect(providedAnswer),
+                   'error': answerShown && !isCorrect(providedAnswer)}"
+        />
+        <v-list
+          v-else
+          class="pa-0 d-flex flex-column flex-wrap"
+        >
+          <v-list-item
+            v-for="(option, index) in card.options"
+            :key="option"
+            :title="parseOption(index, option)"
+            :disabled="answerShown"
+            class="cursor-pointer"
+            :class="{'correct': answerShown && isCorrect(option),
+                     'error': selected.includes(option) && answerShown && !isCorrect(option),
+                     'selected': !answerShown && selected.includes(option)}"
+            @click="toggleOption(option)"
+          />
         </v-list>
         <v-row class="mt-3 pa-3 d-flex justify-space-around">
-          <v-btn @click="highlightCorrectAnswers" :disabled="!selected && !providedAnswer"
-                 prepend-icon="mdi-check-circle" color="green" variant="outlined">
+          <v-btn
+            :disabled="!selected && !providedAnswer"
+            prepend-icon="mdi-check-circle"
+            color="green"
+            variant="outlined"
+            @click="highlightCorrectAnswers"
+          >
             Check Answer
           </v-btn>
         </v-row>
@@ -36,13 +64,20 @@
 
 
     <v-card-actions class="pa-2 ma-0">
-      <v-spacer/>
-      <edit-mdi-button tooltip-text="Edit Card"
-                       :click-handler="() => emit('edit', true)"/>
-      <delete-mdi-button tooltip-text="Delete Card" :click-handler="() => emit('delete', card)"/>
+      <v-spacer />
+      <edit-mdi-button
+        tooltip-text="Edit Card"
+        :click-handler="() => emit('edit', true)"
+      />
+      <delete-mdi-button
+        tooltip-text="Delete Card"
+        :click-handler="() => emit('delete', card)"
+      />
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <back-mdi-button tooltip-text="Back to Category"
-                       :click-handler="() => emit('close', true)"/>
+      <back-mdi-button
+        tooltip-text="Back to Category"
+        :click-handler="() => emit('close', true)"
+      />
     </v-card-actions>
   </base-card-page>
 </template>

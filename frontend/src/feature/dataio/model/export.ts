@@ -1,4 +1,4 @@
 export type UserExport = {
   username: string,
-  categories: Object[],
+  categories: object[],
 };

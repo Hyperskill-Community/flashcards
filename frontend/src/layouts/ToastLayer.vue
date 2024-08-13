@@ -1,8 +1,12 @@
 <template>
   <div class="layer">
     <transition-group name="slide">
-      <toast-notification v-for="[key, toast] in toasts.entries()" :key="key"
-                          :notification="toast" :notification-key="key"/>
+      <toast-notification
+        v-for="[key, toast] in toasts.entries()"
+        :key="key"
+        :notification="toast"
+        :notification-key="key"
+      />
     </transition-group>
   </div>
 </template>

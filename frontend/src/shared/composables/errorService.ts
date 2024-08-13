@@ -4,10 +4,20 @@ export type ErrorState = {
   code: string,
   message: string
 };
+export type ApiError = {
+  isAxiosError: boolean,
+  response: {
+    status: number,
+    data: {
+      message: string
+    }
+  },
+  message: string
+}
 
 export const useErrorService = () => {
 
-  const handleError = (error: any, message?: string): ErrorState => {
+  const handleError = (error: ApiError, message?: string): ErrorState => {
     const errorState = {} as ErrorState;
     errorState.code = (error.isAxiosError && error.response)
       ? `Error status ${error.response.status}`
@@ -18,8 +28,8 @@ export const useErrorService = () => {
     return errorState;
   };
 
-  const handleAndThrow = (error: any, message?: string) => {
-    const newError = handleError(error, message);
+  const handleAndThrow = (error: unknown, message?: string) => {
+    const newError = handleError(error as ApiError, message);
     useToastService().showError(newError.message, newError.code);
     throw new Error(Object.values(newError).join(': '), {cause: error});
   };

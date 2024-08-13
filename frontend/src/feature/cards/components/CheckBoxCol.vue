@@ -1,10 +1,16 @@
 <template>
   <v-col :md="md">
     <div class="d-flex flex-wrap justify-sm-space-between ma-n3">
-      <v-checkbox v-for="index in Array.from({ length: groupSize }, (_, ind) => ind)" :key="index"
-                  class="mt-n4 mb-n4 ml-n4" color="green"
-                  label="correct" :value="index"
-                  :model-value="model" @update:model-value="val => model = val!"/>
+      <v-checkbox
+        v-for="index in Array.from({ length: groupSize }, (_, ind) => ind)"
+        :key="index"
+        class="mt-n4 mb-n4 ml-n4"
+        color="green"
+        label="correct"
+        :value="index"
+        :model-value="model"
+        @update:model-value="val => model = val!"
+      />
     </div>
   </v-col>
 </template>

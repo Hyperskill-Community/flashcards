@@ -3,7 +3,7 @@ const routes = [
   {
     path: '/',
     name: 'welcome',
-    component: () => import('@/shared/pages/Welcome.vue'),
+    component: () => import('@/shared/pages/WelcomePage.vue'),
   },
   {
     path: '/categories',

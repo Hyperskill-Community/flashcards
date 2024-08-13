@@ -3,12 +3,13 @@ import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 import router from "@/router";
 import mediaQuery from 'css-mediaquery';
+import resizePolyfill from 'resize-observer-polyfill';
 
 const vuetify = createVuetify({
   components,
   directives,
 });
-global.ResizeObserver = require('resize-observer-polyfill');
+global.ResizeObserver = resizePolyfill;
 
 export const mountOptions = {
   global: {plugins: [vuetify, router],}
@@ -28,7 +29,7 @@ afterEach(() => {
   window.matchMedia = createMatchMedia('576px');
 });
 
-export const createMatchMedia = (width: any) =>
+export const createMatchMedia = (width: unknown) =>
   (query: string) => ({
     matches: mediaQuery.match(query, {
       width,

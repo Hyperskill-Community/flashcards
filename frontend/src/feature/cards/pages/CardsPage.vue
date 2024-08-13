@@ -1,30 +1,72 @@
 <template>
   <v-container :hidden="uiState.display !== 'cards'">
-    <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" color="secondary" fill-height>
-      <v-card-title v-text="`Cards in ${categoryName}`" class="text-center text-h4"/>
+    <v-card
+      class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between"
+      color="secondary"
+      fill-height
+    >
+      <v-card-title
+        class="text-center text-h4"
+        v-text="`Cards in ${categoryName}`"
+      />
       <v-row class="mr-0">
-        <v-col cols="12" md="10">
-            <v-select v-if="uiState.selectActive" v-model="cardType" label="Select type of new card"
-                      :items="[CardType.SIMPLEQA, CardType.MULTIPLE_CHOICE, CardType.SINGLE_CHOICE]"/>
+        <v-col
+          cols="12"
+          md="10"
+        >
+          <v-select
+            v-if="uiState.selectActive"
+            v-model="cardType"
+            label="Select type of new card"
+            :items="[CardType.SIMPLEQA, CardType.MULTIPLE_CHOICE, CardType.SINGLE_CHOICE]"
+          />
         </v-col>
-        <v-col md="1"/>
-        <v-col cols="12" md="1" class="mb-4">
-          <add-mdi-button tooltip-text="Create new card" :click-handler="addButtonClicked"/>
+        <v-col md="1" />
+        <v-col
+          cols="12"
+          md="1"
+          class="mb-4"
+        >
+          <add-mdi-button
+            tooltip-text="Create new card"
+            :click-handler="addButtonClicked"
+          />
         </v-col>
       </v-row>
 
       <v-form @submit.prevent="filter.set = filter.input">
-        <v-text-field clearable @click:clear="filter.input=''" v-model="filter.input"
-                      label="Filter on title, tags and question" prepend-inner-icon="mdi-magnify"/>
+        <v-text-field
+          v-model="filter.input"
+          clearable
+          label="Filter on title, tags and question"
+          prepend-inner-icon="mdi-magnify"
+          @click:clear="filter.input=''"
+        />
       </v-form>
-      <card-item-scroller :categoryId="categoryId" :filter="filter.set" :reload="toggleReload" @openCard="openCard"/>
+      <card-item-scroller
+        :category-id="categoryId"
+        :filter="filter.set"
+        :reload="toggleReload"
+        @open-card="openCard"
+      />
     </v-card>
   </v-container>
 
-  <card-details v-if="uiState.display === 'details'" :card="card"
-                @close="uiState.display = 'cards'" @edit="editForm" @delete="deleteCard"/>
-  <card-form v-if="uiState.display === 'form'" :mode="uiState.formMode" :card="card"
-             @close="closeForm" @update="updateCard" @post="addCard"/>
+  <card-details
+    v-if="uiState.display === 'details'"
+    :card="card"
+    @close="uiState.display = 'cards'"
+    @edit="editForm"
+    @delete="deleteCard"
+  />
+  <card-form
+    v-if="uiState.display === 'form'"
+    :mode="uiState.formMode"
+    :card="card"
+    @close="closeForm"
+    @update="updateCard"
+    @post="addCard"
+  />
 </template>
 
 <script setup lang="ts">

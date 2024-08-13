@@ -1,9 +1,13 @@
 <template>
   <div class="notification">
-    <div v-text="notification.header" :class="notification.type" class="pa-3 font-weight-bold"/>
+    <div
+      :class="notification.type"
+      class="pa-3 font-weight-bold"
+      v-text="notification.header"
+    />
     <div class="pa-3">
-      <b>{{ notification.title}}</b><br>
-      {{notification.message}}
+      <b>{{ notification.title }}</b><br>
+      {{ notification.message }}
     </div>
   </div>
 </template>

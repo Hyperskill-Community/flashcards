@@ -28,7 +28,7 @@ const useApi = () => {
         } else {
           useToastService().showSuccess(options.successMessage ?? `Successfully posted to ${url}!`);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         useErrorService().handleAndThrow(error, errorMessage);
       }
     },
@@ -44,7 +44,7 @@ const useApi = () => {
         } else {
           return response.data;
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         useErrorService().handleAndThrow(error, errorMessage);
         return {} as R;
       }
@@ -62,7 +62,7 @@ const useApi = () => {
           useToastService().showSuccess(options.successMessage ?? `Successfully updated ${url}!`);
           return response.data;
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         useErrorService().handleAndThrow(error, errorMessage);
         return {} as S;
       }
@@ -78,7 +78,7 @@ const useApi = () => {
         } else {
           useToastService().showSuccess(options.successMessage ?? `Successfully deleted ${url}!`);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         useErrorService().handleAndThrow(error, errorMessage);
       }
     }
