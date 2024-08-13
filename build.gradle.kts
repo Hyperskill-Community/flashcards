@@ -6,6 +6,10 @@ plugins {
     id("org.graalvm.buildtools.native") version libs.versions.graalvm.buildtools
 }
 
+graalvmNative {
+    testSupport.set(false)
+}
+
 repositories {
     mavenCentral()
 }

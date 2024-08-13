@@ -22,13 +22,14 @@ describe('ErrorNotFound.vue', () => {
 
   it('redirects to home page when "Go Home" button is clicked', async () => {
     const wrapper = mount(ErrorNotFound, mountOptions);
+    vi.spyOn(router, 'push');
     await wrapper.findComponent('.v-btn').trigger('click');
-    expect(wrapper.vm.$route.path).toBe('/');
+    expect(router.push).toHaveBeenCalledWith('/');
   });
 
   it('is mounted if route is not found', async () => {
-    await router.push('/not-there');
     const wrapper = mount(MainLayout, mountOptions);
+    await router.push('/not-there');
     expect(wrapper.text()).toContain('404');
   });
 });

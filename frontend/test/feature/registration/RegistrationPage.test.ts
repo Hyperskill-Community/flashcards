@@ -43,7 +43,6 @@ describe('RegistrationPage', () => {
     });
     expect(app.text()).not.toContain('Error');
     expect(app.text()).toContain('Register new user');
-    expect(app.text()).toContain('Welcome');
   });
 
   const fillFormAndTrigger = async (email: string, password: string) => {

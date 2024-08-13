@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -46,6 +47,7 @@ class RegistrationIT {
         // user not existing
         assertThrows(UsernameNotFoundException.class, () -> userDetailsService.loadUserByUsername(username));
         mockMvc.perform(post("/api/register")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
                                 new UserDto(username, "12345678"))))
@@ -57,11 +59,13 @@ class RegistrationIT {
     @Test
     void registerUnauthenticatedExistingUser_Gives400() throws Exception {
         mockMvc.perform(post("/api/register")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
                                 new UserDto("test@xyz.de", "12345678"))))
                 .andExpect(status().isOk());
-        mockMvc.perform(post("/api/register") // and again
+        mockMvc.perform(post("/api/register")
+                        .with(csrf()) // and again
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
                                 new UserDto("test@xyz.de", "12345678"))))
@@ -71,6 +75,7 @@ class RegistrationIT {
     @Test
     void registerUnauthenticatedInvalidDto_Gives400() throws Exception {
         mockMvc.perform(post("/api/register") // and again
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
                                 new UserDto("wrong", "1234"))))

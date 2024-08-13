@@ -1,9 +1,22 @@
 <template>
   <v-container>
-    <v-card class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between" fill-height color="containerBackground">
-      <v-card-title v-text="'Your accessible categories'" class="text-center text-h4"/>
-      <category-iterator :categories="items" :items-per-page="4" :total="totalItems" @reload="fetchCategories"
-      @loadNext="page => fetchNextPageFromServer(page)" @loadCount="id => loadCount(id)"/>
+    <v-card
+      class="pa-2 ma-2 mx-auto d-flex flex-column justify-space-between"
+      fill-height
+      color="containerBackground"
+    >
+      <v-card-title
+        class="text-center text-h4"
+        v-text="'Your accessible categories'"
+      />
+      <category-iterator
+        :categories="items"
+        :items-per-page="4"
+        :total="totalItems"
+        @reload="fetchCategories"
+        @load-next="page => fetchNextPageFromServer(page)"
+        @load-count="id => loadCount(id)"
+      />
     </v-card>
   </v-container>
 </template>

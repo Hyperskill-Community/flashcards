@@ -1,14 +1,29 @@
 <template>
-  <v-col :md="md" cols="12">
-    <TransitionGroup tag="div" class="d-flex flex-wrap justify-sm-space-between ma-n3">
-      <v-col v-for="index in model.length + 1" :key="index" :md="fieldMd" cols="12">
-        <v-text-field clearable density="compact" class="mt-n5 mb-n5"
-                      :label="`${prompt} #${index}`"
-                      :model-value="model[index - 1]"
-                      @click:clear="shiftDown(index)"
-                      @blur="shiftIfEmpty(index)"
-                      :rules="index - 1 < required ? [v => !!v || `${required} ${prompt}s required`] : []"
-                      @update:model-value="(val) => model[index - 1] = val"/>
+  <v-col
+    :md="md"
+    cols="12"
+  >
+    <TransitionGroup
+      tag="div"
+      class="d-flex flex-wrap justify-sm-space-between ma-n3"
+    >
+      <v-col
+        v-for="index in model.length + 1"
+        :key="index"
+        :md="fieldMd"
+        cols="12"
+      >
+        <v-text-field
+          clearable
+          density="compact"
+          class="mt-n5 mb-n5"
+          :label="`${prompt} #${index}`"
+          :model-value="model[index - 1]"
+          :rules="index - 1 < required ? [v => !!v || `${required} ${prompt}s required`] : []"
+          @click:clear="shiftDown(index)"
+          @blur="shiftIfEmpty(index)"
+          @update:model-value="(val) => model[index - 1] = val"
+        />
       </v-col>
     </TransitionGroup>
   </v-col>

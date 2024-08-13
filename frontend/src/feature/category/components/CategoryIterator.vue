@@ -1,32 +1,74 @@
 <template>
-  <v-data-iterator :items="categories" item-value="category.name" :items-per-page="itemsPerPage" :page="pageRef.page">
-    <template v-slot:header>
+  <v-data-iterator
+    :items="categories"
+    item-value="category.name"
+    :items-per-page="itemsPerPage"
+    :page="pageRef.page"
+  >
+    <template #header>
       <v-row>
-        <v-col cols="12" sm="12" md="11">
-          <v-form v-if="addRequested" @submit.prevent class="d-flex align-center">
-            <v-text-field v-model="newCategory.name" label="Category name" class="v-col-sm-4"/>
-            <v-text-field v-model="newCategory.description" label="Description (optional)" class="v-col-sm-6"/>
-            <submit-mdi-button :disabled="!newCategory.name" :clickHandler="postNewCategory"/>
+        <v-col
+          cols="12"
+          sm="12"
+          md="11"
+        >
+          <v-form
+            v-if="addRequested"
+            class="d-flex align-center"
+            @submit.prevent
+          >
+            <v-text-field
+              v-model="newCategory.name"
+              label="Category name"
+              class="v-col-sm-4"
+            />
+            <v-text-field
+              v-model="newCategory.description"
+              label="Description (optional)"
+              class="v-col-sm-6"
+            />
+            <submit-mdi-button
+              :disabled="!newCategory.name"
+              :click-handler="postNewCategory"
+            />
           </v-form>
         </v-col>
-        <v-col cols="12" sm="12" md="1">
-          <add-mdi-button :click-handler="addCategory" tooltipText="Create new category"/>
+        <v-col
+          cols="12"
+          sm="12"
+          md="1"
+        >
+          <add-mdi-button
+            :click-handler="addCategory"
+            tooltip-text="Create new category"
+          />
         </v-col>
       </v-row>
     </template>
-    <template v-slot:default="{items}">
+    <template #default="{items}">
       <v-row>
-        <v-col v-for="item in items" :key="item.raw.category.name" cols="12" sm="12" md="6">
-          <category-card :category="item.raw.category"
-                         v-model:expanded="item.raw.expanded"
-                         @loadCount="emit('loadCount', $event)"
-                         @reload="emit('reload', true);"/>
+        <v-col
+          v-for="item in items"
+          :key="item.raw.category.name"
+          cols="12"
+          sm="12"
+          md="6"
+        >
+          <category-card
+            v-model:expanded="item.raw.expanded"
+            :category="item.raw.category"
+            @load-count="emit('loadCount', $event)"
+            @reload="emit('reload', true);"
+          />
         </v-col>
       </v-row>
     </template>
-    <template v-slot:footer="{ page }">
-      <pagination-footer :total-pages="totalPages" :page="page"
-                         @update:page="newVal => paginate(newVal)"/>
+    <template #footer="{ page }">
+      <pagination-footer
+        :total-pages="totalPages"
+        :page="page"
+        @update:page="newVal => paginate(newVal)"
+      />
     </template>
   </v-data-iterator>
 </template>

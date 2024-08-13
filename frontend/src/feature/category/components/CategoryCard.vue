@@ -1,42 +1,70 @@
 <template>
   <v-card color="secondary">
     <v-card-title class="ml-3">
-      <h4 v-text="category.name"/>
+      <h4 v-text="category.name" />
     </v-card-title>
 
     <v-card-text class="ml-3">
       {{ category.description || "No description available" }}
     </v-card-text>
 
-      <v-card-actions class="ma-4">
-        <v-switch :model-value="expanded" label="Show details"
-                  :color="toggleColor" :disabled="editRequested"
-                  density="compact" inset @click="expand"/>
-        <v-spacer/>
-        <open-mdi-button tooltip-text="Open Category"
-                         :clickHandler="openCategory"/>
-        <edit-mdi-button tooltip-text="Rename Category"
-                         :disabled="!putUri"
-                         :clickHandler="editCategory"/>
-        <delete-mdi-button tooltip-text="Delete Category"
-                           :disabled="!deleteUri"
-                           :clickHandler="deleteCategory"/>
-      </v-card-actions>
-    <v-divider/>
+    <v-card-actions class="ma-4">
+      <v-switch
+        :model-value="expanded"
+        label="Show details"
+        :color="toggleColor"
+        :disabled="editRequested"
+        density="compact"
+        inset
+        @click="expand"
+      />
+      <v-spacer />
+      <open-mdi-button
+        tooltip-text="Open Category"
+        :click-handler="openCategory"
+      />
+      <edit-mdi-button
+        tooltip-text="Rename Category"
+        :disabled="!putUri"
+        :click-handler="editCategory"
+      />
+      <delete-mdi-button
+        tooltip-text="Delete Category"
+        :disabled="!deleteUri"
+        :click-handler="deleteCategory"
+      />
+    </v-card-actions>
+    <v-divider />
     <v-container v-if="editRequested">
-      <v-form @submit.prevent class="d-flex justify-space-between align-center">
-        <v-text-field density="compact" v-model="updateRequest.name" label="Category name"/>
-        <v-text-field density="compact" v-model="updateRequest.description" label="Description"/>
-        <submit-mdi-button :disabled="!updateRequest.name && ! updateRequest.description"
-                           :clickHandler="performUpdate"/>
+      <v-form
+        class="d-flex justify-space-between align-center"
+        @submit.prevent
+      >
+        <v-text-field
+          v-model="updateRequest.name"
+          density="compact"
+          label="Category name"
+        />
+        <v-text-field
+          v-model="updateRequest.description"
+          density="compact"
+          label="Description"
+        />
+        <submit-mdi-button
+          :disabled="!updateRequest.name && ! updateRequest.description"
+          :click-handler="performUpdate"
+        />
       </v-form>
     </v-container>
     <v-expand-transition>
       <div v-if="expanded && !editRequested">
-        <v-list density="compact" :lines="false">
-          <v-list-item :title="`🔥 Your access: ${getAccess(category)}`"/>
-          <v-list-item :title="`🍔 #Cards in Category: ${category.numberOfCards}`"/>
-          <v-list-item :title="`🧲 Id: ${category.id}`"/>
+        <v-list
+          density="compact"
+          :lines="false"
+        >
+          <v-list-item :title="`🔥 Your access: ${getAccess(category)}`" />
+          <v-list-item :title="`🍔 #Cards in Category: ${category.numberOfCards}`" />
+          <v-list-item :title="`🧲 Id: ${category.id}`" />
         </v-list>
       </div>
     </v-expand-transition>
@@ -75,7 +103,9 @@ const toggleColor = computed(() => props.expanded ? '#43a047' : '#eeeeee');
 
 const expand = () => {
   // if props.expanded is false, emit loadCount to load card count from server
-  props.expanded || emit('loadCount', props.category.id);
+  if (!props.expanded) {
+    emit('loadCount', props.category.id);
+  }
   emit('update:expanded', !props.expanded);
 };
 

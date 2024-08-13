@@ -5,7 +5,7 @@ plugins {
     id("org.springframework.boot") version libs.versions.spring.boot
     id("io.spring.dependency-management") version libs.versions.spring.dependency.management
     id("org.sonarqube") version libs.versions.sonar.gradle
-    id("com.gorylenko.gradle-git-properties") version "2.4.1"
+    id("com.gorylenko.gradle-git-properties") version libs.versions.git.gradle
     jacoco
 }
 
@@ -23,13 +23,16 @@ tasks.jacocoTestReport {
     }
 }
 
+jacoco {
+    reportsDirectory = layout.buildDirectory.dir("reports/jacoco")
+}
+
 val sonarToken: String by project
 sonar {
     properties {
         property("sonar.token", sonarToken)
         property("sonar.projectKey", "flashcards-server")
         property("sonar.projectName", "Flashcards Server")
-        property("sonar.jacoco.reportPaths", "build/reports/jacoco")
         property("sonar.junit.reportPaths", "build/test-results/test")
         property("sonar.host.url", "http://localhost:9000")
     }
@@ -38,7 +41,6 @@ sonar {
 tasks.sonar {
     dependsOn(tasks.jacocoTestReport)
 }
-
 
 configurations {
     compileOnly {
@@ -76,6 +78,17 @@ springBoot {
     buildInfo()
 }
 
+tasks.register<Exec>("createTLSCerts") {
+    group = "build"
+    description = "Run the certificate creation script"
+    workingDir = file("${projectDir}/src/main/resources/certs")
+    commandLine = listOf("bash", "./create-cert-key-pair.bash")
+    // Only create cert keypairs if server.crt does not exist yet
+    onlyIf {
+        !File("${projectDir}/src/main/resources/certs/server.crt").exists()
+    }
+}
+
 tasks.withType<BootRun> {
     workingDir = rootProject.projectDir
 }
@@ -86,4 +99,5 @@ tasks.withType<Test> {
 
 tasks.named("processResources") {
     dependsOn(":select-compose-file")
+    dependsOn("createTLSCerts")
 }

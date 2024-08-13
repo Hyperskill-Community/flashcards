@@ -70,7 +70,7 @@ describe('CategoryIterator', () => {
     await wrapper.findComponent('.submit-button').trigger('click');
     expect(useCategoriesService().postNewCategory).toHaveBeenCalledWith(newCategory);
   });
-2;
+
   it('should not post new category on form submit if name is empty', async () => {
     const wrapper = mount(CategoryIterator, {
       ...mountOptions,

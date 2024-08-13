@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <side-navigation/>
+    <side-navigation />
     <v-main>
-      <router-view/>
-      <toast-layer/>
+      <router-view />
+      <toast-layer />
     </v-main>
   </v-app>
 </template>
