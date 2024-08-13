@@ -21,8 +21,7 @@
 
 <script setup lang="ts">
 withDefaults(defineProps<({
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-  clickHandler: Function,
+  clickHandler: () => void,
   disabled?: boolean,
   tooltipText?: string,
 })>(), {
